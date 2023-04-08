@@ -48,7 +48,7 @@
                         <li>
                             <a href="index.php" class="nav-link link-dark">
                                 <i class="bi bi-person-circle"></i>
-                                <span class="sidebar-item-text">Quản lý tài khoản</span>
+                                <span class="sidebar-item-text">Quản lý quyền KH</span>
                             </a>
                         </li>
 
@@ -73,15 +73,6 @@
                             </a>
                         </li>
  
-
-                        <li>
-                            <a href="warehouse.php" class="nav-link link-dark">
-                                <i class="bi bi-archive"></i>
-                                <span class="sidebar-item-text">Quản lý kho</span>
-                            </a>
-                        </li>
-
-
                         <hr style="width: 100%;">
 
                         <li>

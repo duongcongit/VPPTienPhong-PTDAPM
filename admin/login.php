@@ -40,13 +40,13 @@
                 <input type="text" placeholder="Username " required class="form-control" id="admin" name="admin"> 
             </div>
             <small id="userNotification"></small>
-            <div class="d-flex align-items-center input-field mt-3 mb-4">
-                <span class="fas fa-lock p-2"></span> 
-                <input type="password" placeholder="Mật Khẩu" required class="form-control" id="pwd" name="pass">  
-            </div>
-            <div class="my-3"> 
-                <input type="submit" value="Đăng nhập" class="btn btn-primary" name= "btnLogIn" id="btnLogIn"> 
-            </div>
+                <div class="d-flex align-items-center input-field mt-3 mb-4">
+                    <span class="fas fa-lock p-2"></span> 
+                    <input type="password" placeholder="Mật Khẩu" required class="form-control" id="pwd" name="pass">  
+                </div>
+                <div class="my-3"> 
+                    <input type="submit" value="Đăng nhập" class="btn btn-primary" name= "btnLogIn" id="btnLogIn"> 
+                </div>
             <small> 
             <?php
                     require '../config/session.php';    

@@ -34,7 +34,8 @@
 <!--  -->
 <div class="alert alert-success alert-dismissible d-flex align-items-center
 <?php
-if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) && !isset($_SESSION['upProdStockSucsess'])) {
+if(!isset($_SESSION['editSuccessStatus']))
+{
     echo "d-none";
 }
 ?>
@@ -43,13 +44,9 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
     <div>
         <p class="d-inline">
             <?php
-            if (isset($_SESSION['addProdSucsess'])) {
-                echo $_SESSION['addProdSucsess'];
-                unset($_SESSION['addProdSucsess']);
-            }
-            if (isset($_SESSION['editProdSucsess'])) {
-                echo $_SESSION['editProdSucsess'];
-                unset($_SESSION['editProdSucsess']);
+            if (isset($_SESSION['editSuccessStatus'])) {
+                echo $_SESSION['editSuccessStatus'];
+                unset($_SESSION['editSuccessStatus']);
             }
             ?>
         </p>
@@ -66,13 +63,7 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
     <div class="col-md-12">
         <ul class="nav">
             <li class="nav-item">
-                <a type="button" class="nav-mng-product nav-link active <?php echo ($tableType == "all" ? "active" : "") ?>">Tất cả</a>
-            </li>
-            <li class="nav-item">
-                <a type="button" class="nav-mng-product nav-link <?php echo ($tableType == "active" ? "active" : "") ?>">Đang hoạt động</a>
-            </li>
-            <li class="nav-item">
-                <a type="button" class="nav-mng-product nav-link <?php echo ($tableType == "locked" ? "active" : "") ?>">Bị khóa</a>
+                <a type="button" class="nav-mng-product nav-link active">Tất cả tài khoản</a>
             </li>
         </ul>
         <hr class="mt-0">
@@ -83,24 +74,26 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
             <div class="input-group col-md-12 mb-3">
                 <div class=" col-lg-6 pe-4">
                     <div class="input-group mb-3">
-                        <select class="form-select select-ten">
-                            <option value="0" selected>Tên người dùng</option>
-                            <option value="1">Mã người dùng</option>
-                        </select>
-                        <input id="productNameSearch" type="text" class="form-control" placeholder="Nhập vào">
+                        <span class="pe-3">Tên người dùng</span>
+                        <input id="customerAddSearch" type="text" class="form-control" placeholder="Nhập vào" >
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-3 pe-4">
-                    <button class="btn btn-danger px-4">Tìm</button>
+                    <button class="btn btn-danger" style="padding-left:2.5rem;padding-right:2.5rem">Tìm</button>
+                </div>
+            </div>
+
+            <div class="input-group col-md-12 mb-3">
+                <div class=" col-lg-6 pe-4" >
+                    <div class="input-group mb-3">
+                        <span class="pe-3" style="margin-left:72px">Email</span>
+                        <input type="text" class="form-control" placeholder="Nhập vào">
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-3 pe-4">
                     <button class="btn btn-secondary px-4">Nhập lại</button>
                 </div>
             </div>
-            <div class="col-md-12 col-lg-6 pe-4">
-                    <div class="input-group mb-3">
-                        <span class="pe-3">Email</span>
-                        <input type="email" class="form-control" placeholder="Chọn danh mục sản phẩm">
-                    </div>
-                </div>
             
         </form>
     </div>
@@ -112,9 +105,6 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
                 $count_customer = count($customers);
             ?>
             <h3 class="ms-2" id="label-count-prod"><?php echo $count_customer ?> Tài khoản </h3>
-            <a type="button"  href="processDeleteAllAcc.php" onclick="return confirm('Xóa tài khoản sẽ xóa hết sản phẩm và giỏ hàng của tài khoản! Bạn có chắc chắn muốn xóa? ')" class="btn btn-danger ms-auto">
-                <i class="bi bi-trash-fill me-1"></i>Xóa tất cả các tài khoản
-            </a>
         </div>
         <!--  -->
         <table class="styled-table">
@@ -126,7 +116,8 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
                     <th>Địa chỉ</th>
                     <th>Email</th>
                     <th>Tên tài khoản</th>
-                    <th>Xóa tài khoản</th>
+                    <th>Quyền người dùng</th>
+                    <th>   </th>
                 </tr>
             </thead>
             <tbody id="table-products">
@@ -141,16 +132,17 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
                     echo "<th>{$user['address']}</th>";
                     echo "<th>{$user['email']}</th>";
                     echo "<th>{$user['username']}</th>";
-                    /*
-                    echo "<th><a href='$urlEdit'><i class='bi bi-pencil-square'></i></a></th>";
-                    echo "<th><a href='$urlDelete'></i><i class='bi bi-trash'></i></a></th>";  
-                    <th>
-                    <a onclick="return confirm('Xóa tài khoản sẽ xóa hết sản phẩm và giỏ hàng của tài khoản! Bạn có chắc chắn muốn xóa? ')" type="button"  class="btn ms-auto text-warning" 
-                        href="processDeleteAcc.php?id=<?php echo $row['id']; ?>">
-                        <i class="bi bi-trash"></i> 
-                    </a>
-                    </th>     
-                    */  
+                    echo '<th>';
+                        echo '<a onclick="showConfirmation(' . $user['customerID'] . ')" type="button" class="btn ms-auto text-warning">';
+                            echo '<i class="bi bi-gear ms-3" style="font-size:24px"></i>';
+                        echo '</a>';
+                    echo '</th>';
+                    if($user['status']==1){
+                        echo '<th><i class="bi bi-check-circle-fill text-success" style="font-size:24px"></i></th>';
+                    }
+                    else if($user['status']==2){
+                        echo '<th><i class="bi bi-x-circle-fill text-danger" style="font-size:24px"></i></th>';
+                    }
                 echo '</tr>';
                 }          
                 ?>
@@ -162,6 +154,61 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
 
 </div>
 <!-- Content end-->
+
+<!-- Định nghĩa hộp thoại xác nhận -->
+<div id="confirmation-dialog">
+    <div id="confirmation-dialog-content">
+        <p>Bạn thay trạng thái cho người dùng này thế nào:</p>
+        <div>
+            <input type="radio" id="choice1" name="choice" value="1">
+            <label for="choice1">Hoạt động bình thường</label>
+        </div>
+        <div>
+            <input type="radio" id="choice2" name="choice" value="2">
+            <label for="choice2">Khóa tài khoản</label>
+        </div>
+        <div id="confirmation-dialog-buttons">
+            <button type="button" onclick="confirmAction()">Xác nhận</button>
+            <button type="button" onclick="hideConfirmation()">Hủy</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var elementId=0;
+    
+    // Load the data first
+    window.addEventListener('DOMContentLoaded', function() {
+        // Code to load data goes here
+        // Once the data is loaded, attach event listeners to the confirmation buttons
+        var confirmationButtons = document.querySelectorAll('.confirmation-button');
+        for (var i = 0; i < confirmationButtons.length; i++) {
+            confirmationButtons[i].addEventListener('click', showConfirmation);
+        }
+    });
+
+    function showConfirmation(customerID) {
+        elementId = customerID;
+        document.getElementById("confirmation-dialog").style.display = "block";
+        console.log(elementId);
+    }
+
+    function hideConfirmation() {
+        document.getElementById("confirmation-dialog").style.display = "none";
+        elementId = 0;
+    }
+
+    function confirmAction() {
+        var choice = document.querySelector('input[name="choice"]:checked');
+        var id = elementId;
+        if (choice) {
+            window.location.href = "changeStatusCustomer.php?id="+ id + "&choice=" + choice.value;
+            hideConfirmation();
+        } else {
+            alert("Vui lòng chọn một lựa chọn.");
+        }
+    }
+</script>
 
 <?php
 include "partials/footerAdmin.php";

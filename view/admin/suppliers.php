@@ -39,7 +39,7 @@
 <!-- Modal edit stock end -->
 
 <div class="col-md-12 mt-2 mb-3 nav-page">
-    <h5 class="text-muted"><a href="./index.php">Trang quản trị</a> / </span><a href="">Quản lý nhà cung cấp</a></h5>
+    <h5 class="text-muted"><a href="./index.php">Trang quản trị hệ thống</a> / </span><a href="">Quản lý nhà cung cấp</a></h5>
 </div>
 <!--  -->
 <div class="alert alert-success alert-dismissible alert-update-success d-flex align-items-center d-none" role="alert">
@@ -56,10 +56,10 @@
 </div>
 
 
-<!--  -->
+<!-- Thông báo thêm NCC thành công  -->
 <div class="alert alert-success alert-dismissible d-flex align-items-center 
 <?php
-if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) && !isset($_SESSION['upProdStockSucsess'])) {
+if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'])&&!isset($_SESSION['successDeleteSupplier'])&&!isset($_SESSION['errorDeleteSupplier'])&&!isset($_SESSION['successUpdateSupplier'])&&!isset($_SESSION['errorUpdateSupplier'])) {
     echo "d-none";
 }
 ?>
@@ -68,14 +68,37 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
     <div>
         <p class="d-inline">
             <?php
-            if (isset($_SESSION['addProdSucsess'])) {
-                echo $_SESSION['addProdSucsess'];
-                unset($_SESSION['addProdSucsess']);
+            if (isset($_SESSION['successAddSupplier'])) {
+                echo $_SESSION['successAddSupplier'];
+                unset($_SESSION['successAddSupplier']);
             }
-            if (isset($_SESSION['editProdSucsess'])) {
-                echo $_SESSION['editProdSucsess'];
-                unset($_SESSION['editProdSucsess']);
+
+            if (isset($_SESSION['errorAddSupplier'])) {
+                echo $_SESSION['errorAddSupplier'];
+                unset($_SESSION['errorAddSupplier']);
             }
+
+            if (isset($_SESSION['successDeleteSupplier'])) {
+                echo $_SESSION['successDeleteSupplier'];
+                unset($_SESSION['successDeleteSupplier']);
+            }
+
+            if (isset($_SESSION['errorDeleteSupplier'])) {
+                echo $_SESSION['errorDeleteSupplier'];
+                unset($_SESSION['errorDeleteSupplier']);
+            }
+
+            if (isset($_SESSION['successUpdateSupplier'])) {
+                echo $_SESSION['successUpdateSupplier'];
+                unset($_SESSION['successUpdateSupplier']);
+            }
+
+            if (isset($_SESSION['errorUpdateSupplier'])) {
+                echo $_SESSION['errorUpdateSupplier'];
+                unset($_SESSION['errorUpdateSupplier']);
+            }
+
+            
             ?>
         </p>
     </div>
@@ -86,6 +109,7 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
         }
     </script>
 </div>
+
 <!--  -->
 <div class="col-md-12 manage-products shadow">
     <div class="col-md-12">
@@ -136,14 +160,11 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
             $count_suppliers = count($suppliers);
             ?>
             <h3 class="ms-2" id="label-count-prod"><?php echo $count_suppliers ?> Tài khoản </h3>
-            <a type="button"  href="processDeleteAllAcc.php" onclick="return confirm('Xóa tài khoản sẽ xóa hết sản phẩm và giỏ hàng của tài khoản! Bạn có chắc chắn muốn xóa? ')" class="btn btn-danger ms-auto">
-                <i class="bi bi-trash-fill me-1"></i>Thêm
+            <a type="button"  href="./addSupplier.php" class="btn btn-primary ms-auto">
+                <i class="bi bi-plus-circle-fill me-1"></i>Thêm
             </a>
-            <a type="button"  href="processDeleteAllAcc.php" onclick="return confirm('Xóa tài khoản sẽ xóa hết sản phẩm và giỏ hàng của tài khoản! Bạn có chắc chắn muốn xóa? ')" class="btn btn-danger ms-3">
-                <i class="bi bi-trash-fill me-1"></i>Sửa
-            </a>
-            <a type="button"  href="processDeleteAllAcc.php" onclick="return confirm('Xóa tài khoản sẽ xóa hết sản phẩm và giỏ hàng của tài khoản! Bạn có chắc chắn muốn xóa? ')" class="btn btn-danger ms-3">
-                <i class="bi bi-trash-fill me-1"></i>Xóa
+            <a type="button"  href="./addSupplier.php" onclick="return confirm('Xóa tài khoản sẽ xóa hết sản phẩm và giỏ hàng của tài khoản! Bạn có chắc chắn muốn xóa? ')" class="btn btn-danger ms-3">
+                <i class="bi bi-trash-fill me-1"></i>Xóa toàn bộ NCC
             </a>
         </div>
         <!--  -->
@@ -155,6 +176,7 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
                     <th>SDT</th>
                     <th>Địa chỉ</th>
                     <th>Email</th>
+                    <th>Sửa tài khoản</th>
                     <th>Xóa tài khoản</th>
                 </tr>
             </thead>
@@ -164,11 +186,24 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
                     foreach($suppliers as $supplier)
                         {
                             echo '<tr>';
-                            echo "<th scope='row'>{$supplier['supplierID']}</th>";
-                            echo "<th>{$supplier['supplierName']}</th>";
-                            echo "<th>{$supplier['phone']}</th>";
-                            echo "<th>{$supplier['address']}</th>";
-                            echo "<th>{$supplier['email']}</th>";
+                                echo "<th scope='row'>{$supplier['supplierID']}</th>";
+                                echo "<th>{$supplier["supplierName"]}</th>";
+                                echo "<th>{$supplier['phone']}</th>";
+                                echo "<th>{$supplier['address']}</th>";
+                                echo "<th>{$supplier['email']}</th>";
+                                //Sửa thông tin NCC
+                                echo "<th>";
+                                echo '<a onclick="return confirm(\'Bạn muốn sửa thông tin nhà cung cấp ' . $supplier['supplierName'] . ' ?\')" type="button" class="btn text-warning " href="updateSupplier.php?id=' . $supplier['supplierID'] . '">';
+                                    echo '<i class="bi bi-pencil-square text-primary" style="font-size:20px"></i>';
+                                echo '</a>';
+                                echo '</th>';
+
+                                //Xóa NCC
+                                echo "<th>";
+                                echo '<a onclick="return confirm(\'Bạn có chắc chắn muốn xóa nhà cung cấp ' . $supplier['supplierName'] . ' ?\')" type="button" class="btn ms-auto text-warning" href="deleteSupplier.php?id=' . $supplier['supplierID'] . '">';
+                                    echo '<i class="bi bi-trash text-danger" style="font-size:20px"></i>';
+                                echo '</a>';
+                                echo '</th>';
                             echo '</tr>';
                         }    
                 ?> 
