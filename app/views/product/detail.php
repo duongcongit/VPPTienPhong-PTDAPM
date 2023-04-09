@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../../app/assets/css/style.css">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                         </i>
                     </div>
                     <div class="logo">
-                    <a class="navbar-brand" href="./index.php"><img src="../assets/images/logo.png" alt="" style="width: 150px;"></a>
+                    <a class="navbar-brand" href="./index.php"><img src="../../app/assets/images/logo.png" alt="" style="width: 150px;"></a>
                     </div>
                     <div class="search-bar d-none d-md-flex m-auto">
                         <form class="d-flex align-items-center">
@@ -97,7 +97,7 @@
         <div class="row" style="max-width: 1200px;margin: auto;">
             <div class="col-sm-12 col-md-6 product-image row">
                 <div class="col-md-12">
-                    <img src="../assets/images/products/bam_lo.jpg" alt="Product">
+                    <img src="../../app/assets/images/products/bam_lo.jpg" alt="Product">
                 </div>
                 <div class="col-sm-12 col-md-12">
 
@@ -106,38 +106,41 @@
 
             <!--  -->
             <div class="col-md-6 product-detail mt-2 row">
-                <h2 class="product-name">Bấm kim 50LA - 210 tờ</h2>
+                <h2 class="product-name"><?php echo $productDetails['productName']; ?></h2>
                 <hr class="p-0 m-0 me-auto d-none d-md-flex" style="width: 50%;">
-                <h3 class="product-price mt-3" style="font-weight: bold;">90,000đ</h3>
+                <h3 class="product-price mt-3" style="font-weight: bold;"><?php echo $productDetails['price']; ?>đ</h3>
                 <div class="col-md-12 mt-3">
-                    <strong class="mt-5 mb-5">Đơn vị tính: </strong><span>Cái</span>
+                    <strong class="mt-5 mb-5">Đã bán: </strong><span><?php echo $productDetails['sold']; ?></span>
                 </div>
                 <div class="col-md-12 mt-3">
-                    <strong>NSX: </strong><span>VPP Tiền Phong</span>
+                    <strong class="mt-5 mb-5">Kho: </strong><span><?php echo $productDetails['stock']; ?></span>
+                </div>
+                <div class="col-md-12 mt-3">
+                    <strong>NSX: </strong><span><?php echo $productDetails['supplierName']; ?></span>
                 </div>
                 <!--  -->
                 <div class="col-md-12 mt-3">
                     <strong>Giao hàng thu tiền (COD):</strong>
                     <div class="col-md-12 row">
                         <div class="col">
-                            <img style="width: 100px;" src="./images/express/logo-ghn.jpg" alt="">
+                            <img style="width: 100px;" src="../../app/assets/images/express/logo-ghn.jpg" alt="">
                         </div>
                         <div class="col">
-                            <img style="width: 100px;" src="./images/express/logo-ghtk.jpg" alt="">
+                            <img style="width: 100px;" src="../../app/assets/images/express/logo-ghtk.jpg" alt="">
                         </div>
                         <div class="col">
-                            <img style="width: 100px;" src="./images/express/logo-ninja-van.jpg" alt="">
+                            <img style="width: 100px;" src="../../app/assets/images/express/logo-ninja-van.jpg" alt="">
                         </div>
                     </div>
                     <div class="col-md-12 row">
                         <div class="col">
-                            <img style="width: 100px;" src="./images/express/logo-shipchung.jpg" alt="">
+                            <img style="width: 100px;" src="../../app/assets/images/express/logo-shipchung.jpg" alt="">
                         </div>
                         <div class="col">
-                            <img style="width: 100px;" src="./images/express/logo-viettle-post.jpg" alt="">
+                            <img style="width: 100px;" src="../../app/assets/images/express/logo-viettle-post.jpg" alt="">
                         </div>
                         <div class="col">
-                            <img style="width: 100px;" src="./images/express/logo-vn-post.jpg" alt="">
+                            <img style="width: 100px;" src="../../app/assets/images/express/logo-vn-post.jpg" alt="">
                         </div>
                     </div>
                 </div>
@@ -177,7 +180,7 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        <strong class="product-name fs-5">Bấm kim 50LA - 210 tờ</strong>
+                        <strong class="product-name fs-5"><?php echo $productDetails['productName']; ?></strong>
                         <p>
                             - Kw trio là thương hiệu văn phòng phẩm uy tín tại Đài Loan trong lĩnh vực sản xuất các loại
                             máy bấm kim, bấm lổ, kim bấm văn phòng
