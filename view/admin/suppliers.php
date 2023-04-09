@@ -59,7 +59,7 @@
 <!-- Thông báo thêm NCC thành công  -->
 <div class="alert alert-success alert-dismissible d-flex align-items-center 
 <?php
-if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'])&&!isset($_SESSION['successDeleteSupplier'])&&!isset($_SESSION['errorDeleteSupplier'])&&!isset($_SESSION['successUpdateSupplier'])&&!isset($_SESSION['errorUpdateSupplier'])) {
+if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'])&&!isset($_SESSION['successDeleteSupplier'])&&!isset($_SESSION['errorDeleteSupplier'])&&!isset($_SESSION['successUpdateSupplier'])&&!isset($_SESSION['errorUpdateSupplier'])&&!isset($_SESSION['successDeleteAllSupplier'])&&!isset($_SESSION['errorDeleteAllSupplier'])) {
     echo "d-none";
 }
 ?>
@@ -98,6 +98,16 @@ if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'
                 unset($_SESSION['errorUpdateSupplier']);
             }
 
+            if (isset($_SESSION['successDeleteAllSupplier'])) {
+                echo $_SESSION['successDeleteAllSupplier'];
+                unset($_SESSION['successDeleteAllSupplier']);
+            }
+
+            if (isset($_SESSION['errorDeleteAllSupplier'])) {
+                echo $_SESSION['errorDeleteAllSupplier'];
+                unset($_SESSION['errorDeleteAllSupplier']);
+            }
+
             
             ?>
         </p>
@@ -115,13 +125,7 @@ if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'
     <div class="col-md-12">
         <ul class="nav">
             <li class="nav-item">
-                <a type="button" class="nav-mng-product nav-link active <?php echo ($tableType == "all" ? "active" : "") ?>">Tất cả</a>
-            </li>
-            <li class="nav-item">
-                <a type="button" class="nav-mng-product nav-link <?php echo ($tableType == "active" ? "active" : "") ?>">Đang hoạt động</a>
-            </li>
-            <li class="nav-item">
-                <a type="button" class="nav-mng-product nav-link <?php echo ($tableType == "locked" ? "active" : "") ?>">Bị khóa</a>
+                <a type="button" class="nav-mng-product nav-link active" style="font-size:20px">Tất cả tài khoản</a>
             </li>
         </ul>
         <hr class="mt-0">
@@ -132,25 +136,26 @@ if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'
             <div class="input-group col-md-12 mb-3">
                 <div class=" col-lg-6 pe-4">
                     <div class="input-group mb-3">
-                        <select class="form-select select-ten">
-                            <option value="0" selected>Tên người dùng</option>
-                            <option value="1">Mã người dùng</option>
-                        </select>
-                        <input id="productNameSearch" type="text" class="form-control" placeholder="Nhập vào">
+                        <span class="pe-3" style="margin-left:72px;font-size:18px">Mã NCC</span>
+                        <input id="customerAddSearch" type="text" class="form-control" placeholder="Nhập vào" >
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-3 pe-4">
-                    <button class="btn btn-danger px-4">Tìm</button>
+                    <button class="btn btn-danger" style="padding-left:2.5rem;padding-right:2.5rem">Tìm</button>
+                </div>
+            </div>
+
+            <div class="input-group col-md-12 mb-3">
+                <div class=" col-lg-6 pe-4" >  
+                    <div class="input-group mb-3">
+                        <span class="pe-3" style="margin-left:-1px;font-size:18px">Tên nhà cung cấp</span>
+                        <input type="text" class="form-control" placeholder="Nhập vào">
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-3 pe-4">
                     <button class="btn btn-secondary px-4">Nhập lại</button>
                 </div>
             </div>
-            <div class="col-md-12 col-lg-6 pe-4">
-                    <div class="input-group mb-3">
-                        <span class="pe-3">Email</span>
-                        <input type="email" class="form-control" placeholder="Chọn danh mục sản phẩm">
-                    </div>
-                </div>
-            
         </form>
     </div>
 
@@ -163,7 +168,7 @@ if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'
             <a type="button"  href="./addSupplier.php" class="btn btn-primary ms-auto">
                 <i class="bi bi-plus-circle-fill me-1"></i>Thêm
             </a>
-            <a type="button"  href="./addSupplier.php" onclick="return confirm('Xóa tài khoản sẽ xóa hết sản phẩm và giỏ hàng của tài khoản! Bạn có chắc chắn muốn xóa? ')" class="btn btn-danger ms-3">
+            <a type="button"  href="./deleteAllSupplier.php" onclick="return confirm('Bạn có chắc chắn muốn xóa tất cả nhà cung cấp?')" class="btn btn-danger ms-3">
                 <i class="bi bi-trash-fill me-1"></i>Xóa toàn bộ NCC
             </a>
         </div>

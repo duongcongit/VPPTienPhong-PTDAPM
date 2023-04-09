@@ -34,56 +34,64 @@
         }
 
         // Hàm lấy dữ liệu theo ID
-        public function getUserById($id = null) {
+        public function getEmployeeById($id) {
             $connection = $this->connectDb();
-            $querySelect = "SELECT * FROM nhanvien WHERE maNV='$id'";
+            $querySelect = "SELECT * FROM employees WHERE employeeID='$id'";
             $results = mysqli_query($connection, $querySelect);
-            $user = [];
+            $employee = [];
             if (mysqli_num_rows($results) > 0) {
-                $users = mysqli_fetch_all($results, MYSQLI_ASSOC);
-                $user = $users[0];
+                $employees = mysqli_fetch_all($results, MYSQLI_ASSOC);
+                $employee = $employees[0];
             }
             $this->closeDb($connection);
     
-            return $user;
+            return $employee;
         }
         
 
-        // Hàm thêm 
-        public function insert($arr = []) {
+        //Hàm thêm nhân viên
+        public function insertEmployee($arr = []) {
             $connection = $this->connectDb();
-            $queryInsert = "INSERT INTO nhanvien(`hovaten`,`chucvu`,`phongban`,`luong`,`ngayvaolam`) 
-            VALUES ('{$arr['hovaten']}','{$arr['chucvu']}','{$arr['phongban']}','{$arr['luong']}','{$arr['ngayvaolam']}')";
-            $isInsert = mysqli_query($connection, $queryInsert);
+            $sql_add_employee = "INSERT INTO employees (employeeID, fullname, gender,address, phone, email,username,password,status) VALUES ('{$arr['employeeID']}', '{$arr['employeeName']}', '{$arr['employeeGender']}', '{$arr['employeeAddress']}','{$arr['employeePhone']}', '{$arr['employeeEmail']}','{$arr['employeeUsername']}','{$arr['employeePass']}',1);";
+            echo $sql_add_employee;
+            $insert_employee = mysqli_query($connection,$sql_add_employee);
             $this->closeDb($connection);
-            return $isInsert;
+            return $insert_employee;
         }
 
-        // Hàm sửa
-        public function update($arr = []) {
+
+         //Hàm sửa thông tin nhân viên
+         public function updateEmployee($arr = []) {
             $connection = $this->connectDb();
-            $queryUpdate = "UPDATE nhanvien
-        SET `hovaten` = '{$arr['hovaten']}',`chucvu` = '{$arr['chucvu']}',`phongban` = '{$arr['phongban']}',`luong` = '{$arr['luong']}',
-        `ngayvaolam` = '{$arr['ngayvaolam']}'
-        WHERE `maNV` = {$arr['maNV']}";
+            $queryUpdate = "UPDATE employees
+            SET `fullname` = '{$arr['employeeName']}',`gender` = '{$arr['employeeGender']}',`address` = '{$arr['employeeAddress']}',`phone` = '{$arr['employeePhone']}',`email` = '{$arr['employeeEmail']}',`username` = '{$arr['employeeUsername']}',`password` = '{$arr['employeePass']}',`status` = '{$arr['employeeStatus']}'
+            WHERE `employeeID` = {$arr['employeeId']}";        
             $isUpdate = mysqli_query($connection, $queryUpdate);
             $this->closeDb($connection);
     
             return $isUpdate;
         }
 
-        // Ham xóa
-        public function delete($id = null) {
+        // Ham xóa tất cả nhân viên
+        public function deleteAllEmployee() {
             $connection = $this->connectDb();
-    
-            $queryDelete = "DELETE FROM nhanvien WHERE maNV = '$id'";
+            $queryDelete = "DELETE FROM employees";
             $isDelete = mysqli_query($connection, $queryDelete);
-    
-            $this->closeDb($connection);
-    
+            $this->closeDb($connection);      
             return $isDelete;
         }
+
         
+        // Ham xóa nhân viên với Id cụ thể
+        public function deleteEmployee($id=null) {
+            $connection = $this->connectDb();
+            $queryDelete = "DELETE FROM employees WHERE employeeID = '$id'";
+            $isDelete = mysqli_query($connection, $queryDelete);
+            $this->closeDb($connection);
+                        
+            return $isDelete;
+        }
+
 
         //-------Supplier---------------------
          // Định nghĩa các phương thức để sau này nhận các thao tác tương ứng với các action
@@ -142,7 +150,6 @@
             $queryUpdate = "UPDATE suppliers
         SET `supplierName` = '{$arr['supplierName']}',`address` = '{$arr['supplierAddress']}',`phone` = '{$arr['supplierPhone']}',`email` = '{$arr['supplierEmail']}'
         WHERE `supplierId` = {$arr['supplierId']}";
-            echo $queryUpdate;  
             $isUpdate = mysqli_query($connection, $queryUpdate);
             $this->closeDb($connection);
     
@@ -152,7 +159,7 @@
         // Ham xóa tất cả NCC
         public function deleteAllSupplier() {
             $connection = $this->connectDb();
-            $queryDelete = "DELETE * FROM suppliers";
+            $queryDelete = "DELETE FROM suppliers";
             $isDelete = mysqli_query($connection, $queryDelete);
             $this->closeDb($connection);      
             return $isDelete;

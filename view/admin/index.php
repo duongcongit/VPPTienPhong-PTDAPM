@@ -63,7 +63,7 @@ if(!isset($_SESSION['editSuccessStatus']))
     <div class="col-md-12">
         <ul class="nav">
             <li class="nav-item">
-                <a type="button" class="nav-mng-product nav-link active">Tất cả tài khoản</a>
+                <a type="button" class="nav-mng-product nav-link active" style="font-size:20px">Tất cả tài khoản</a>
             </li>
         </ul>
         <hr class="mt-0">
@@ -74,7 +74,7 @@ if(!isset($_SESSION['editSuccessStatus']))
             <div class="input-group col-md-12 mb-3">
                 <div class=" col-lg-6 pe-4">
                     <div class="input-group mb-3">
-                        <span class="pe-3">Tên người dùng</span>
+                        <span class="pe-3" style="font-size:18px">Tên người dùng</span>
                         <input id="customerAddSearch" type="text" class="form-control" placeholder="Nhập vào" >
                     </div>
                 </div>
@@ -86,7 +86,7 @@ if(!isset($_SESSION['editSuccessStatus']))
             <div class="input-group col-md-12 mb-3">
                 <div class=" col-lg-6 pe-4" >
                     <div class="input-group mb-3">
-                        <span class="pe-3" style="margin-left:72px">Email</span>
+                        <span class="pe-3" style="margin-left:80px;font-size:18px">Email</span>
                         <input type="text" class="form-control" placeholder="Nhập vào">
                     </div>
                 </div>
@@ -117,7 +117,7 @@ if(!isset($_SESSION['editSuccessStatus']))
                     <th>Email</th>
                     <th>Tên tài khoản</th>
                     <th>Quyền người dùng</th>
-                    <th>   </th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody id="table-products">
@@ -138,10 +138,10 @@ if(!isset($_SESSION['editSuccessStatus']))
                         echo '</a>';
                     echo '</th>';
                     if($user['status']==1){
-                        echo '<th><i class="bi bi-check-circle-fill text-success" style="font-size:24px"></i></th>';
+                        echo '<th><i class="bi bi-check-circle-fill text-success ms-3" style="font-size:24px"></i></th>';
                     }
                     else if($user['status']==2){
-                        echo '<th><i class="bi bi-x-circle-fill text-danger" style="font-size:24px"></i></th>';
+                        echo '<th><i class="bi bi-x-circle-fill text-danger ms-3" style="font-size:24px"></i></th>';
                     }
                 echo '</tr>';
                 }          

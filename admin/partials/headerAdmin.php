@@ -53,8 +53,8 @@
                         </li>
 
                         <li>
-                            <a href="employee.php" class="nav-link link-dark">
-                                <i class="bi bi-person-circle"></i>
+                            <a href="employees.php" class="nav-link link-dark">
+                                <i class="bi bi-people"></i>
                                 <span class="sidebar-item-text">Quản lý nhân viên</span>
                             </a>
                         </li>
