@@ -13,6 +13,6 @@ class Product extends Controller{
         $productDetails = $productModel->getProductDetail($id);
 
         require_once _DIR_ROOT.'/app/views/product/detail.php';
-        // $this->render('product/detail', $productDetails);
+        // $this->render('product/detail', '');
     }
 }
