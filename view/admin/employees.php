@@ -17,18 +17,6 @@
     <h5 class="text-muted"><a href="./index.php">Trang quản trị</a> / </span><a href="">Quản lý nhân viên</a></h5>
 </div>
 <!--  -->
-<div class="alert alert-success alert-dismissible alert-update-success d-flex align-items-center d-none" role="alert">
-    <i class="bi bi-check-circle-fill me-2" width="24" height="24"></i>
-    <div>
-        <p id="alert-success-content" class="d-inline"></p><strong id="alert-success-taget"></strong><span> thành công!</span>
-    </div>
-    <button type="button" class="btn-close" onclick="removeAlert()"></button>
-    <script>
-        function removeAlert() {
-            $(".alert-update-success").addClass("d-none");
-        }
-    </script>
-</div>
 
 
 <!--  -->

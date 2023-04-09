@@ -3,7 +3,27 @@ require_once '../model/AdminModel.php';
 
 class AdminController
 {
+    public function login()
+    {
+        require_once '../view/admin/login.php';
+    }
 
+    public function loginProcess(){
+        $adminModel = new AdminModel();
+        if(empty($_POST['admin']) || empty($_POST['pass'])) {
+            $_SESSION['error'] = 'Bạn cần điền đầy đủ thông tin!';
+            header('location:login.php');
+            exit();
+        }
+        $user = htmlspecialchars($_POST['admin']);
+        $password = htmlspecialchars($_POST['pass'], ENT_QUOTES);
+
+        $res = $adminModel->loginProcess($user,$password);
+        if($res==1){
+            header('location:index.php');
+        }
+
+    }
     //Các hàm lấy view
     public function index()
     {
@@ -67,12 +87,21 @@ class AdminController
 
 
     //-------Product--------------
+    //View thêm sản phẩm
     public function addProduct()
     {
         $adminModel = new AdminModel();
-        //Lay category
         $categories = $adminModel->getAllCategory();
-        $error = '';
+        $suppliers = $adminModel->getAllSuppliers();
+
+        //gọi view
+        require_once '../view/admin/addProduct.php';
+    }
+
+    //Xử lý thêm sản phẩm CHUA XONG
+    public function addProductProcess()
+    {
+        $adminModel = new AdminModel();
         //xử lý submit form
         if (isset($_POST['btnAddProduct'])) {
             $prodName = $_POST['prodNameAdd'];
@@ -176,11 +205,6 @@ class AdminController
                 }
             }
 
-            //gọi model để insert dữ liệu vào database
-            $productModel = new ProductModel();
-            //gọi phương thức để insert dữ liệu
-            //nên tạo 1 mảng tạm để lưu thông tin của
-            //đối tượng dựa theo cấu trúc bảng
             $arr_products = [
                 'hovaten' => $hoVaTen,
                 'chucvu' => $chucVu,
@@ -188,7 +212,7 @@ class AdminController
                 'luong' => $luong,
                 'ngayvaolam' => $ngayVaoLam
             ];
-            $isInsert = $productModel->insert($arr_products);
+            $isInsert = $adminModel->insert($arr_products);
 
             if ($isInsert) {
                 $_SESSION['success'] = "Thêm mới sản phẩm thành công";
@@ -199,7 +223,7 @@ class AdminController
             exit();
         }
         //gọi view
-        require_once '../view/admin/addProduct.php';
+        require_once '../view/admin/products.php';
     }
 
 
@@ -351,12 +375,14 @@ class AdminController
             $employeePhone = $_POST['phoneEmployee'];
             $employeeUsername = $_POST['username'];
             $employeePass = $_POST['password'];
+            $employeeID='';
 
             //Random 5 character
             //x5 chuỗi -> shuffle -> 5 kí tự đầu
-            $s = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
-            $temp = "NV";
-            $employeeID = $temp . $s;
+
+            // $s = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
+            // $temp = "NV";
+            // $employeeID = $temp . $s;
 
             //gọi phương thức để insert dữ liệu
             //nên tạo 1 mảng tạm để lưu thông tin của

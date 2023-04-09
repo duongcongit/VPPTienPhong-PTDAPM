@@ -2,15 +2,31 @@
     require_once './../config/constants.php';
 
     class AdminModel{
-        private $employeeID;
-        private $fullname;
-        private $gender;
-        private $address;
-        private $phone;
-        private $email;
+        private $adminID;
+        private $adminName;
         private $username;
         private $password;
-        private $status;
+
+        public function loginProcess($user,$pass){
+            $conn = $this->connectDb();
+            // B2. Định nghĩa và thực hiện truy vấn
+            $sql = "SELECT * FROM admins WHERE username = '$user' AND password = '$pass'";
+            $result = mysqli_query($conn,$sql);
+
+            // B3. Xử lý và (KO PHẢI SHOW KẾT QUẢ) TRẢ VỀ KẾT QUẢ
+            if(mysqli_num_rows($result) == 1){
+                $row = mysqli_fetch_array($result);
+                if($pass == $row['password']){
+                    $_SESSION['adminID']=$row['adminID'];
+                    $_SESSION['adminName'] = $row['adminName'];
+                    return 1;
+                }
+                else{
+                    $_SESSION['error'] = 'Sai mật khẩu!';
+                }
+                    
+            }
+        }
 
 
         // --------------Employee----------------------
@@ -91,6 +107,9 @@
                         
             return $isDelete;
         }
+
+        //-----------------END_EMPLOYEE-----------------
+
 
 
         //-------Supplier---------------------
@@ -181,13 +200,13 @@
 
 
 
-        //-----Product------
+        //-----Product------ CHUA XONG
             // Định nghĩa các phương thức để sau này nhận các thao tác tương ứng với các action
             public function getAllProducts(){
                 // B1. Khởi tạo kết nối
                 $conn = $this->connectDb();
                 // B2. Định nghĩa và thực hiện truy vấn
-                $sql = "SELECT products.*,categories.name,product_image.imageURL
+                $sql = "SELECT products.*,categories.name,product_image.imageURL,product_image.label
                 FROM products,categories,product_image
                 WHERE products.categoryID = categories.categoryID AND products.productID = product_image.productID";
                 $result = mysqli_query($conn,$sql);
@@ -224,6 +243,8 @@
                 return $arr_categories;
             }
     
+
+            //Them san pham
             public function insertProduct($arr = []) {
                 $connection = $this->connectDb();
                 $sql_add_product = "INSERT INTO products (productID, productSKU, productName, categoryID, detail, price, stock, sold, status) VALUES (NULL, '$prodSKU', '$prodName', '$prodCategory', '$prodDetail', '$prodPrice', '$prodStock', '$prodSold', '$prodStatus');";

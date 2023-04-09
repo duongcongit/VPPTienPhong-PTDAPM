@@ -1,7 +1,7 @@
 <?php
     $controller = isset($_GET['controller']) ? $_GET['controller'] : 'admin';
     //lấy ra action
-    $action     = isset($_GET['action']) ? $_GET['action'] : 'login';
+    $action     = isset($_GET['action']) ? $_GET['action'] : 'addProductProcess';
     // Trường hợp đặc biệt  là controller và action ko xuất hiện trên URL, nó mặc định là Hiển thị Danh sách người dùng
     // http://localhost/project_mvc/index.php => http://localhost/project_mvc/index.php?controller=user&action=index
 
