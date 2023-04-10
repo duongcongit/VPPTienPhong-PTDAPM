@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th4 10, 2023 lúc 07:51 AM
+-- Thời gian đã tạo: Th4 10, 2023 lúc 08:25 PM
 -- Phiên bản máy phục vụ: 10.4.27-MariaDB
 -- Phiên bản PHP: 8.2.0
 
@@ -101,6 +101,7 @@ CREATE TABLE `employees` (
   `employeeID` int(11) NOT NULL,
   `fullname` varchar(255) NOT NULL,
   `gender` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `email` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,

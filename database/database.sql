@@ -17,6 +17,7 @@ CREATE TABLE employees (
     employeeID int AUTO_INCREMENT PRIMARY KEY NOT NULL,
     fullname varchar(255) NOT NULL,
     gender varchar(255) NOT NULL,
+    address varchar(255) NOT NULL,
     phone varchar(20) NOT NULL,
     email varchar(255) NOT NULL,
     username varchar(255) NOT NULL,
