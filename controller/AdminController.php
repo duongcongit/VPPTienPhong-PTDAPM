@@ -4,8 +4,7 @@ require_once '../model/ProductModel.php';
 require_once '../model/CustomerModel.php';
 require_once '../model/EmployeeModel.php';
 require_once '../model/SupplierModel.php';
-
-
+require_once '../model/CategoryModel.php';
 
 class AdminController
 {
@@ -42,8 +41,8 @@ class AdminController
 
     public function product()
     {
-        $adminModel = new AdminModel();
-        $products = $adminModel->getAllProducts();
+        $productModel = new ProductModel();
+        $products = $productModel->getAllProducts();
         // Sau khi truy vấn được dữ liệu,đổ ra
         //View product
         require_once '../view/admin/products.php';
@@ -96,18 +95,44 @@ class AdminController
     //View thêm sản phẩm
     public function addProduct()
     {
-        $adminModel = new AdminModel();
-        $categories = $adminModel->getAllCategory();
-        $suppliers = $adminModel->getAllSuppliers();
+        $productModel = new ProductModel();
+        $supplierModel = new SupplierModel();
+        $categoryModel = new CategoryModel();
+        $categories = $categoryModel->getAllCategory();
+        $suppliers = $supplierModel->getAllSuppliers();
 
         //gọi view
         require_once '../view/admin/addProduct.php';
     }
 
+    
+    public function addProductCate()
+    {
+        $customerModel = new CustomerModel();
+        // Lấy ra thông tin
+        if (isset($_GET['id']) && isset($_GET['choice'])) {
+            $id = $_GET['id'];
+            $status = $_GET['choice'];
+        }
+
+        //gọi model 
+        $res = $customerModel->changeStatusCustomer($id, $status);
+
+        if ($res) {
+            $_SESSION['editSuccessStatus'] = "Thay đổi trạng thái của khách hàng có mã #$id thành công";
+        }
+        if ($res) {
+            $_SESSION['editFailStatus'] = "Thay đổi trạng thái của khách hàng có mã #$id thất bại";
+        }
+        header("Location: index.php");
+        exit();
+    }
+
     //Xử lý thêm sản phẩm CHUA XONG
     public function addProductProcess()
     {
-        $adminModel = new AdminModel();
+        $productModel = new ProductModel();
+    
         //xử lý submit form
         if (isset($_POST['btnAddProduct'])) {
             $prodName = $_POST['prodNameAdd'];
@@ -126,9 +151,9 @@ class AdminController
             $prodStock = $_POST['prodStockAdd'];
             $prodSold = 0; // Default
 
-            $prodImg1 = $_POST['imageInsert1'];;
-            $prodImg2 = $_POST['imageInsert2'];;
-            $prodImg3 = $_POST['imageInsert3'];;
+            $prodImg1 = $_POST['imageInsert1'];
+            $prodImg2 = $_POST['imageInsert2'];
+            $prodImg3 = $_POST['imageInsert3'];
 
             $prodStatus = 1;
             $arr_product = [
@@ -143,26 +168,28 @@ class AdminController
                 'prodStatus'=>$prodStatus
             ];
 
-            $isInsert = $adminModel->insertProduct($arr_product);
+            $isInsert = $productModel->insertProduct($arr_product);
             $imageUrls = array_filter(array($_POST['imageInsert1'], $_POST['imageInsert2'], $_POST['imageInsert3']));
             $size = count($imageUrls);
             $isInsertImage = array();
             
             $temp = 'image';   
             for ($i = 0; $i < $size; $i++) {
-                $imgID = $prodID.($i+1);
-                $prodImgLabel = ($i+1).$temp.$prodID;
-                $isInsertImage[$i] = $adminModel->insertProductImage($imageUrls[$i], $prodID,$imgID,$prodImgLabel);
-            }
-            
-            if ($isInsert) {
-                //&& !in_array(false, $isInsertImage, true)
-                $_SESSION['success'] = "Thêm mới sản phẩm thành công";
-            } else {
-                $_SESSION['error'] = "Thêm mới sản phẩm thất bại";
+                $j=$i+1;
+                $imgID = $j.$temp.$prodID;
+                $isInsertImage[$i] = $productModel->insertProductImage($imgID,$imageUrls[$i],$prodID);
             }
 
-            // header("Location: product.php");
+            print_r($imageUrls);
+            
+            if ($isInsert &&  !in_array(false, $isInsertImage, true)) {
+                //&& !in_array(false, $isInsertImage, true)
+                $_SESSION['successAddProduct'] = "Thêm mới sản phẩm thành công";
+            } else {
+                $_SESSION['errorAddProduct'] = "Thêm mới sản phẩm thất bại";
+            }
+
+            header("Location: products.php");
             exit();
         }
         //gọi view

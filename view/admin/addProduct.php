@@ -10,24 +10,9 @@
     include "partials/loginCheck.php";
 ?>
 
-<!-- Content start-->
-<div class="col main-right container-fluid row ">
 
-<!--  -->
-<div class="col-md-12 mt-2 mb-3 nav-page">
-    <h5 class="text-muted"><a href="">Trang quản trị</a> / <a href="">Quản lý sản phẩm</a> / <b href="">Thêm sản phẩm</b></h5>
-</div>
-<!--  -->
-<div class="col-md-12 manage-products shadow">
-    <div class="col-md-12">
-        <i class="bi bi-plus-circle-fill fs-2 text-danger"></i>
-        <span>
-            <strong class="fs-4 ms-2">Thêm 1 sản phẩm mới</strong>
-            <p class="ms-5 text-danger" style="font-weight: 500;">Vui lòng điền đầy đủ thông tin sản phẩm.</p>
-        </span>
-    </div>
-
-    <?php
+<?php
+    //Cấu hình Cloudinary để lấy API Upload
     require 'cloudinary/vendor/autoload.php';
     use Cloudinary\Configuration\Configuration;
     use Cloudinary\Api\Upload\UploadApi;
@@ -74,50 +59,73 @@
                         $image_urls[] = $upload_result['secure_url'];
                     }
                 }
+                    }
+                }
+                // var_dump($image_urls[0]);
+                // print_r($image_urls);
             }
-        }
-        var_dump($image_urls[1]);
-    }
 
 ?>
 
+<!-- Content start-->
+<div class="col main-right container-fluid row ">
 
-        <form action="" method="POST" enctype="multipart/form-data" id ="myForm">
+<!--  -->
+<div class="col-md-12 mt-2 mb-3 nav-page">
+    <h5 class="text-muted"><a href="">Trang quản trị</a> / <a href="">Quản lý sản phẩm</a> / <b href="">Thêm sản phẩm</b></h5>
+</div>
+<!--  -->
+<div class="col-md-12 manage-products shadow">
+    <div class="col-md-12">
+        <i class="bi bi-plus-circle-fill fs-2 text-danger"></i>
+        <span>
+            <strong class="fs-4 ms-2">Thêm 1 sản phẩm mới</strong>
+            <p class="ms-5 text-danger" style="font-weight: 500;">Vui lòng điền đầy đủ thông tin sản phẩm.</p>
+        </span>
+        <div class="basic-info col-md-12 ms-5 container-fluid px-0 pb-5 ms-0">
+            <h5 class="mb-3"><strong>Hình ảnh</strong></h5>
+            <div class="col-md-12 d-flex justify-content-center mb-3 text-danger waring-no-image-add d-none" style="font-weight: 500;">
+                <i class="bi bi-exclamation-circle-fill">Chưa có ảnh nào, yêu cầu sản phẩm có ít nhất 1 hình ảnh!</i>
+            </div>
+            <p class="ms-4 mb-4"><span class="text-danger" style="font-weight: 500;">(*)</span>  Tối thiểu 1, tối đa 3 hình ảnh</p>
+        </div>
+    </div>
+
+        <form action="" method="POST" enctype="multipart/form-data" id ="myForm" class="ms-5">
             <!-- ảnh 1 -->
             <div class="input-group mb-3">
-                <input type="file" name="image1" accept="image/*">
-                <input type="hidden" value="<?php echo isset($image_urls[1]) ? $image_urls[1] : '' ?>" name="imageInsert1">
-                <?php if (isset($image_urls[1])): ?>
-                    <img src="<?php echo $image_urls[1] ?>" width="200">
+                <?php if (!isset($image_urls[0])): ?>
+                    <input type="file" name="image1" accept="image/*" class="me-3">
                 <?php endif ?>
-            </div>
+
+                
+                <?php if (isset($image_urls[0])): ?>
+                    <img src="<?php echo $image_urls[0] ?>" width="200" height ="200" class="me-3">
+                <?php endif ?>
 
             <!-- ảnh 2 -->
-            <div class="input-group mb-3">
-                <input type="file" name="image2" accept="image/*">
-                <input type="hidden" value="<?php echo isset($image_urls[2]) ? $image_urls[2] : '' ?>" name="imageInsert2">
-                <?php if (isset($image_urls[2])): ?>
-                    <img src="<?php echo $image_urls[2] ?>" width="200">
+
+                <?php if (!isset($image_urls[0])): ?>
+                   <input type="file" name="image2" accept="image/*" class="me-3">
                 <?php endif ?>
-            </div>
+
+                <?php if (isset($image_urls[1])): ?>
+                    <img src="<?php echo $image_urls[1] ?>" width="200" height="200" class="me-3">
+                <?php endif ?>
 
             <!-- ảnh 3 -->
-            <div class="input-group mb-3">
-                <input type="file" name="image3" accept="image/*">
-                <input type="hidden" value="<?php echo isset($image_urls[3]) ? $image_urls[3] : '' ?>" name="imageInsert3">
-                <?php if (isset($image_urls[3])): ?>
-                    <img src="<?php echo $image_urls[3] ?>" width="200">
+                <?php if (!isset($image_urls[0])): ?>
+                    <input type="file" name="image3" accept="image/*" class="me-3">
+                <?php endif ?>
+
+                <?php if (isset($image_urls[2])): ?>
+                    <img src="<?php echo $image_urls[2] ?>" width="200" height="200" class="me-3">
                 <?php endif ?>
             </div>
 
-            <input type="submit" value="Upload">
+            <input type="submit" value="Xem ảnh">
         </form>
 
-    <script>
-        var form = document.getElementById("myForm");
-        function handleForm(event) { event.preventDefault(); } 
-        form.addEventListener('submit', handleForm);
-    </script>
     <!--  -->
     <div class="col-md-12 d-flex justify-content-center">
         <div class="col-md-11">
@@ -190,15 +198,18 @@
 
 
                 <!--  -->
-                <hr>
-                <div class="basic-info col-md-12 container-fluid px-0 pb-5 ms-0">
+                <!-- <div class="basic-info col-md-12 container-fluid px-0 pb-5 ms-0">
                     <h5 class="mb-3"><strong>Hình ảnh</strong></h5>
                     <div class="col-md-12 d-flex justify-content-center mb-3 text-danger waring-no-image-add d-none" style="font-weight: 500;">
                         <i class="bi bi-exclamation-circle-fill">Chưa có ảnh nào, yêu cầu sản phẩm có ít nhất 1 hình ảnh!</i>
                     </div>
                     <p class="ms-4 mb-4"><span class="text-danger" style="font-weight: 500;">(*)</span>  Tối thiểu 1, tối đa 3 hình ảnh</p>
-                </div>
-
+                </div> -->
+                
+                <input type="hidden" value="<?php echo count($image_urls)>=1 ? $image_urls[0] : '' ?>" name="imageInsert1">
+                <input type="hidden" value="<?php echo count($image_urls)>=2 ? $image_urls[1] : '' ?>" name="imageInsert2">
+                <input type="hidden" value="<?php echo count($image_urls)>=3 ? $image_urls[2] : '' ?>" name="imageInsert3">
+                
                 <hr>
 
                 <div class="col-md-12 py-2 d-flex justify-content-end">
@@ -210,8 +221,11 @@
 
         </div>
     </div>
+
 </div>
 <!--  -->
+
+
 
 <!-- Content end-->
 
