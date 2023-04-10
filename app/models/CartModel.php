@@ -78,9 +78,60 @@ class CartModel
             $result = $conn->query($splInsert);
         } else {
             $quantity = $quantity + $existProduct['quantity'];
-            $sqlUpdate = "UPDATE cart SET quantity='{$quantity}' WHERE productID = '{$productID}'";
+            $sqlUpdate = "UPDATE cart SET quantity='{$quantity}', timeAdd='{$currentTime}' 
+            WHERE customerID='{$customerID}' AND productID = '{$productID}'";
             $result = $conn->query($sqlUpdate);
         }
+
+        $this->closeDb($conn);
+        return $result;
+    }
+
+    // Cập nhật số lượng sản phẩm trong giỏ hàng
+    public function updateProductQuantity($data)
+    {
+        $conn = $this->connectDb();
+        $customerID = $data['customerID'];
+        $productID = $data['productID'];
+        $quantity = $data['quantity'];
+        $currentTime = date("Y-m-d H:i:s");
+
+        $msg = "";
+
+        $sqlUpdate = "UPDATE cart SET quantity='{$quantity}', timeAdd='{$currentTime}' 
+        WHERE customerID='{$customerID}' AND productID = '{$productID}'";
+        $result = $conn->query($sqlUpdate);
+
+        $this->closeDb($conn);
+        return $result;
+    }
+
+    // Xóa một sản phẩm trong giỏ hàng
+    public function deleteProductInCart($data)
+    {
+        $conn = $this->connectDb();
+        $customerID = $data['customerID'];
+        $productID = $data['productID'];
+
+        $msg = "";
+
+        $sqlDelete = "DELETE FROM cart WHERE customerID='{$customerID}' AND productID = '{$productID}'";
+        $result = $conn->query($sqlDelete);
+
+        $this->closeDb($conn);
+        return $result;
+    }
+
+    // Xóa tất cả các sản phẩm trong giỏ hàng
+    public function deleteAllProductsInCart($data)
+    {
+        $conn = $this->connectDb();
+        $customerID = $data['customerID'];
+
+        $msg = "";
+
+        $sqlDelete = "DELETE FROM cart WHERE customerID='{$customerID}';";
+        $result = $conn->query($sqlDelete);
 
         $this->closeDb($conn);
         return $result;

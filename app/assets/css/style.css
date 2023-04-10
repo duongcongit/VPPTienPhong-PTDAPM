@@ -6,6 +6,7 @@ body {
     overflow-x: hidden;
 }
 
+/* HEADER */
 .navbar {
     max-width: 1200px;
     margin: auto;
@@ -40,6 +41,9 @@ body {
 }
 
 
+
+
+/* Home page */
 .banner {
     position: relative;
     height: 450px;
@@ -122,12 +126,9 @@ body {
     color: black;
 }
 
-
-
 .product-image {
     aspect-ratio : 1 / 1;
 }
-
 
 
 .btn-add-to-cart, .btn-add-to-cart-detail {
@@ -137,6 +138,7 @@ body {
 }
 
 
+/* Product detail page */
 
 .product-description>div>div  {
     padding: 15px;
@@ -146,4 +148,14 @@ body {
     border-bottom: 1px solid #ced4da;
 }
 
+/* Cart page */
+.cart-main {
+    /* background-color: rgb(240, 240, 240); */
+    min-height: 100vh;
+    max-width: 1200px;
+}
+
+.product-cart-attr, .cart-product-info, .cart-actions>div{
+    border-radius: 5px;
+}
 
