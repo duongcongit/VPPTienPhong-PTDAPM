@@ -1,103 +1,201 @@
 <?php
-include "../config/constants.php";
-
-include "./partials/loginCheck.php";
-include './partials/headerAdmin.php';
-
-
-// Check
-if (isset($_GET['productid']) && isset($_GET['productsku'])) {
-    $prodID = $_GET['productid'];
-    $prodSKU = $_GET['productsku'];
-
-    $sql = "SELECT products.*,categoryName
-    FROM products,categories
-    WHERE products.categoryID = categories.id
-    AND products.productID='$prodID' AND productSKU = '$prodSKU'";
-    $res = $conn->query($sql);
-    if ($res->num_rows > 0) {
-        $prodInf = $res->fetch_assoc();
+    if (!isset($_SESSION)) 
+    { 
+        session_start(); 
     } 
-    //
-} 
+    if (!isset($_SESSION['adminID'])) {
+        header("location: ./login.php");
+    }
+    include "partials/headerAdmin.php";
+    include "partials/loginCheck.php";
+?>
+
+
+<?php
+    //Cấu hình Cloudinary để lấy API Upload
+    require 'cloudinary/vendor/autoload.php';
+    use Cloudinary\Configuration\Configuration;
+    use Cloudinary\Api\Upload\UploadApi;
+    
+    Configuration::instance([
+        'cloud' => [
+            'cloud_name' => 'dhnr7g6h9', 
+            'api_key' => '495527574489912', 
+            'api_secret' => 'EbBF4Mwxe6RTiMbx6i0zGvFaADM'],
+        'url' => [
+            'secure' => true]]);
+    
+    $max_files = 3;
+    $image_urls = [];
+    
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $valid_types = ['image/jpeg', 'image/png', 'image/gif','image/jpg'];
+        $upload_errors = [];
+    
+        for ($i = 0; $i < $max_files; $i++) {
+            if (isset($_FILES['image'.$i])) {
+                $file_tmp = $_FILES['image'.$i]['tmp_name'];
+                $file_name = basename($_FILES['image'.$i]['name']);
+                $file_type = $_FILES['image'.$i]['type'];
+                $file_size = $_FILES['image'.$i]['size'];
+    
+                // Validate file type and size
+                if (!in_array($file_type, $valid_types)) {
+                    $upload_errors[] = "Invalid file type for image $i.";
+                } else {
+                    // Sanitize file name
+                    $file_name = preg_replace('/[^a-zA-Z0-9_.-]/', '', $file_name);
+    
+                    // Upload image to Cloudinary
+                    $upload_result = (new UploadApi())->upload($file_tmp, [
+                        'folder' => 'uploads'
+                    ]);
+    
+                    if (!$upload_result || isset($upload_result['error'])) {
+                        // handle error here
+                        $upload_errors[] = "Failed to upload image $i.";
+                    } else {
+                        // Get the image URL from the upload result
+                        $image_urls[] = $upload_result['secure_url'];
+                    }
+                }
+                    }
+                }
+                // print_r($image_urls);
+            }
 
 ?>
 
 <!-- Content start-->
-<div class="col main-right container-fluid row">
+<div class="col main-right container-fluid row ">
 
 <!--  -->
 <div class="col-md-12 mt-2 mb-3 nav-page">
-    <h5 class="text-muted"><a href="">Kênh người bán</a> / <a href="">Quản lý sản phẩm</a> / <b href="">Thêm sản phẩm</b></h5>
+    <h5 class="text-muted"><a href="">Trang quản trị</a> / <a href="">Quản lý sản phẩm</a> / <b href="">Cập nhật sản phẩm</b></h5>
 </div>
 <!--  -->
 <div class="col-md-12 manage-products shadow">
     <div class="col-md-12">
-        <i class="bi bi-pencil-fill fs-2 text-primary"></i>
+        <i class="bi bi-pencil-square fs-2 text-primary"></i>
         <span>
-            <strong class="fs-4 ms-2">Cập nhật thông tin sản phẩm</strong>
-            <p class="ms-5 text-danger" style="font-weight: 500;">! Chú ý: Các trường "*" là bắt buộc.</p>
+            <strong class="fs-4 ms-2">Cập nhật sản phẩm có ID: <?php echo $product['productID'] ?></strong>
+            <p class="ms-5 text-danger" style="font-weight: 500;">Vui lòng điền đầy đủ thông tin sản phẩm.</p>
         </span>
+        <hr>
+        <div class="basic-info col-md-12 ms-5 container-fluid px-0 pb-5 ms-0">
+            <h5 class="mb-3"><strong>Hình ảnh</strong></h5>
+            <p class="ms-4 mb-4"><span class="text-danger" style="font-weight: 500;">(*)</span>  Tối thiểu 1, tối đa 3 hình ảnh</p>
+        </div>
     </div>
+
+        <form action="" method="POST" enctype="multipart/form-data" id ="myForm" class="ms-5">
+            <!-- ảnh 1 -->
+            <div class="input-group mb-3">
+                <?php
+                if(isset($product['image1']) && (!isset($image_urls[0]))){
+                    echo '<img src="'.$product['image1'].'" width="200" height ="200" class="me-3 mb-3">';
+                }
+                ?>
+
+                <?php if (!isset($image_urls[0])): ?>
+                    <input type="file" name="image0" accept="image/*" class="me-3">
+                <?php endif ?>
+
+                <?php if (isset($image_urls[0])): ?>
+                    <img src="<?php echo $image_urls[0] ?>" width="200" height ="200" class="me-3">
+                <?php endif ?>
+
+            <!-- ảnh 2 -->
+
+
+                <?php
+                    if(isset($product['image2'])&& (!isset($image_urls[1]))){
+                        echo '<img src="'.$product['image2'].'" width="200" height ="200" class="me-3 mb-3">';
+                    }
+                ?>
+                    
+                <?php if (!isset($image_urls[0])): ?>
+                <input type="file" name="image1" accept="image/*" class="me-3">
+                <?php endif ?>
+
+                <?php if (isset($image_urls[1])): ?>
+                    <img src="<?php echo $image_urls[1] ?>" width="200" height="200" class="me-3">
+                <?php endif ?>
+
+
+
+                <!-- ảnh 3 -->
+                <?php
+                    if(isset($product['image3'])&& (!isset($image_urls[2]))){
+                        echo '<img src="'.$product['image3'].'" width="200" height ="200" class="me-3 mb-3">';
+                    }
+                ?>
+
+                <?php if (!isset($image_urls[0])): ?>
+                    <input type="file" name="image2" accept="image/*" class="me-3">
+                <?php endif ?>
+
+                <?php if (isset($image_urls[2])): ?>
+                    <img src="<?php echo $image_urls[2] ?>" width="200" height="200" class="me-3">
+                <?php endif ?>
+            </div>
+
+            <input type="submit" value="Xem ảnh">
+        </form>
+
     <!--  -->
     <div class="col-md-12 d-flex justify-content-center">
         <div class="col-md-11">
             <hr>
-            <form method="POST" action="./process-edit-product.php" enctype="multipart/form-data" autocomplete="off">
+            <form method="POST" action="updateProductProcess.php" enctype="multipart/form-data" autocomplete="off">
                 <div class="basic-info col-md-12">
-                    <!--  -->
-                    <div class="basic-info col-md-12">
-                        <h5><strong>Tình trạng kho hàng</strong></h5>
-                        <div class="col-md-12 pe-4 my-4">
-                            <div class="input-group mb-3">
-                                <span class="pe-3" dir="rtl" style="min-width: 161px;">Kho hàng</span>
-                                <input name="prodStockEdit" type="text" class="form-control" placeholder="Để trống = 0" value="<?php echo $prodInf['stock'] ?>">
-                            </div>
+                    <h5><strong>Tình trạng kho hàng</strong></h5>
+                    <div class="col-md-12 pe-4">
+                        <div class="input-group mb-3">
+                            <span class="pe-3" dir="rtl" style="min-width: 161px;">Kho hàng</span>
+                            <input name="prodStockUpdate" required type="number" class="form-control" value="<?php echo $product['stock'] ?>" placeholder="">
                         </div>
                     </div>
-                    <!--  -->
-                    <hr>
-                    <h5><strong>Thông tin cơ bản</strong></h5>
-                    <!-- Sent product ID -->
-                    <input type="hidden" name="productID" value="<?php echo $prodInf['productID']; ?>">
-                    <!--  -->
+                </div>
+
+                <hr>
+
+                <div class="basic-info col-md-12 mt-3">
+                    <h5><strong>Cập nhật thông tin cơ bản</strong></h5>
                     <div class="input-group mb-3 mt-5">
                         <div class="col-md-12 pe-4">
                             <div class="input-group mb-3">
-                                <span class="pe-3" dir="rtl" style="min-width: 161px;"><span class="text-danger" style="font-weight: 500;">*</span> Tên sản phẩm</span>
-                                <input name="prodNameEdit" type="text" class="form-control" placeholder="Nhập vào" value="<?php echo $prodInf['productName'] ?>" data-curr_prod_name="<?php echo $prodInf['productName'] ?>">
+                                <span class="pe-3" dir="rtl" style="min-width: 161px;"> Tên sản phẩm</span>
+                                <input name="prodNameUpdate" type="text" value ="<?php echo $product['productName'] ?>" required class="form-control" placeholder="">
                             </div>
-                            <p class="text-danger" id="prodNameEditHelp" dir="ltr" style="margin-left: 161px; font-weight: 500; font-size: 15px"></p>
+                            <p class="text-danger" id="prodNameUpdateHelp" dir="ltr" style="margin-left: 161px; font-weight: 500; font-size: 15px"></p>
                         </div>
                         <div class="col-md-12 pe-4">
                             <div class="input-group mb-3">
-                                <span class="pe-3" dir="rtl" style="min-width: 161px;"><span class="text-danger" style="font-weight: 500;">*</span> Mô tả sản phẩm</span>
-                                <textarea name="prodDetailEdit" class="form-control" rows="10" aria-label="With textarea" cols="40" placeholder="Mô tả sản phẩm ..."><?php echo $prodInf['detail'] ?></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12 pe-4">
-                            <div class="input-group mb-3">
-                                <span class="pe-1" dir="rtl" style="min-width: 161px;"><span class="text-danger" style="font-weight: 500;">*</span> Danh mục sản phẩm</span>
-                                <select name="prodCategoryEdit" class="form-select" style="max-width: 500px;">
-                                    <?php
-                                    //Lấy tất cả loại sản phẩm
-                                    $sql_get_all_category = "SELECT * FROM categories";
-                                    $res_cat = $conn->query($sql_get_all_category);
-                                    while ($cat = $res_cat->fetch_assoc() ) {
-                                    ?>
-                                        <option value="<?php echo $cat['id']; ?>" <?php echo ($prodInf['categoryID'] == "{$cat['id']}" ? "selected" : "") ?>><?php echo $cat['categoryName']; ?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
+                                <span class="pe-3" dir="rtl" style="min-width: 161px;"> Mô tả sản phẩm</span>
+                                <textarea name="prodDetailUpdate" class="form-control" value="<?php echo $product['detail'] ?>" required rows="10" aria-label="With textarea" cols="40" placeholder="<?php echo $product['detail'] ?>"><?php echo $product['detail'] ?></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 pe-4">
                             <div class="input-group mb-3">
-                                <span class="pe-3" dir="rtl" style="min-width: 161px;"><span class="text-danger" style="font-weight: 500;"></span> Mã SKU</span>
-                                <input name="prodSKUEdit" type="text" class="form-control" placeholder="Tùy chọn" value="<?php echo $prodInf['productSKU'] ?>" data-curr_prod_sku="<?php echo $prodInf['productSKU'] ?>">
+                                <span class="pe-1" dir="rtl" style="min-width: 161px;margin-right:10px"> Danh mục sản phẩm</span>
+                                <input readonly name="prodCategoryUpdate" class="form-select" value ="<?php echo $product['name'] ?>" required style="max-width: 500px;">
+                                </input>
                             </div>
-                            <p class="text-danger" id="prodSKUEditHelp" dir="ltr" style="margin-left: 161px; font-weight: 500; font-size: 15px"></p>
+                        </div>
+                        <div class="col-md-12 pe-4">
+                            <div class="input-group mb-3">
+                                <span class="pe-1" dir="rtl" style="min-width: 161px;margin-right:10px"> Chọn nhà cung cấp</span>
+                                <input name="prodSupplierUpdate" class="form-select" value="<?php echo $product['supplierName'] ?>" required style="max-width: 500px;" readonly></input>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 pe-4">
+                            <div class="input-group mb-3">
+                                <span class="pe-3" dir="rtl" style="min-width: 161px;"> Số lượng đã bán</span>
+                                <input name="prodSoldUpdate" type="text" value ="<?php echo $product['sold'] ?>" required class="form-control" placeholder="">
+                            </div>
+                            <p class="text-danger" id="prodNameUpdateHelp" dir="ltr" style="margin-left: 161px; font-weight: 500; font-size: 15px"></p>
                         </div>
                     </div>
                 </div>
@@ -105,165 +203,49 @@ if (isset($_GET['productid']) && isset($_GET['productsku'])) {
                 <hr>
                 <div class="basic-info col-md-12">
                     <h5><strong>Thông tin bán hàng</strong></h5>
-                    <div class="col-md-12 pe-4 mt-5 mb-5">
+                    <div class="col-md-12 pe-4 mt-3">
                         <div class="input-group mb-3">
                             <span class="pe-3" dir="rtl" style="min-width: 161px;">Giá </span>
                             <span class="input-group-text">đ</span>
-                            <input name="prodPriceEdit" type="text" class="form-control" placeholder="Để trống = 0" value="<?php echo $prodInf['price'] ?>">
+                            <input name="prodPriceUpdate"  value ="<?php echo $product['price'] ?>" required type="number" class="form-control" placeholder="">
                         </div>
                     </div>
                 </div>
+
+
                 <!--  -->
-                <hr>
-                <div class="basic-info col-md-12 container-fluid px-0 pb-5 ms-0">
-                    <h5 class="mb-5"><strong>Quản lý hình ảnh</strong></h5>
-                    <div class="col-md-12 d-flex justify-content-center mb-3 text-danger waring-no-image-edit d-none" style="font-weight: 500;">
+                <!-- <div class="basic-info col-md-12 container-fluid px-0 pb-5 ms-0">
+                    <h5 class="mb-3"><strong>Hình ảnh</strong></h5>
+                    <div class="col-md-12 d-flex justify-content-center mb-3 text-danger waring-no-image-Update d-none" style="font-weight: 500;">
                         <i class="bi bi-exclamation-circle-fill">Chưa có ảnh nào, yêu cầu sản phẩm có ít nhất 1 hình ảnh!</i>
                     </div>
-                    <p class="ms-4 mb-4"><span class="text-danger" style="font-weight: 500;">(*)</span> Tối thiểu 1, tối đa 3 hình ảnh</p>
-                    <div class="row ms-5">
-                        <!-- Image 1 -->
-                        <?php
-                        //Lấy ảnh của sản phẩm
-                        $sql_get_img1 = "SELECT * FROM product_image WHERE productID='{$prodInf['productID']}' AND image LIKE '1%';";
-                        $get_img1 = $conn->query($sql_get_img1);
-                        ?>
-                        <div class="card p-0 mb-3 me-3 d-flex justify-content-center" style="width: 200px;height: 200px;">
-                            <input type="file" name="prodImg1Edit" id="photo-1-input" onchange="loadPhoto1(event)">
-                            <label for="photo-1-input" type="button">
-                                <img id="photo-1-preview" src="
-                                <?php
-                                if ($get_img1->num_rows == 1) {
-                                    $img1 = $get_img1->fetch_assoc()['image'];
-                                    echo "../assets/img/products/" . $img1;
-                                } else {
-                                    echo "../assets/img/no-image.png";
-                                }
-                                ?>
-                                 " alt="" style="max-width: 100%;">
-                            </label>
-                            <!--  -->
-                            <div class="d-flex justify-content-between edit-pt-1" style="position: absolute;margin-left: 140px; top: 0; border: solid 1px rgb(72, 120, 224); border-radius: 5px; background-color: rgba(188, 199, 219, 0.8);">
-                                <label for="photo-1-input" type="button">
-                                    <i class="bi bi-pencil-fill text-primary fs-5 ms-2"></i>
-                                </label>
-                                <i class="bi bi-trash-fill text-danger fs-5 ms-2" id="del-photo-1-edit" type="button"></i>
-                                <input type="hidden" name="isphoto1editempty" value="<?php echo ($get_img1->num_rows == 1 ? $img1 : "TRUE") ?>">
-                            </div>
-                            <!--  -->
-                        </div>
-                        <!--  -->
-                        <script>
-                            var loadPhoto1 = function(event) {
-                                // $(".edit-pt-1").removeClass("d-none");
-                                // $("[name='isphoto1editempty']").val("FALSE");
-                                document.getElementById("photo-1-preview").src = URL.createObjectURL(event.target.files[0]);
-                                output.onload = function() {
-                                    URL.revokeObjectURL(output.src);
-                                };
-                            };
-                        </script>
-                        <!--  -->
-
-                        <!-- Image 2 -->
-                        <?php
-                        $sql_get_img2 = "SELECT * FROM product_image WHERE productID='{$prodInf['productID']}' AND image LIKE '2%';";
-                        $get_img2 = $conn->query($sql_get_img2);
-                        ?>
-                        <div class="card px-0 mb-3 me-3 d-flex justify-content-center align-items-center" style="width: 200px;height: 200px;background-size: contain;">
-                            <input type="file" name="prodImg2Edit" id="photo-2-input" onchange="loadPhoto2(event)">
-                            <label for="photo-2-input" type="button">
-                                <img id="photo-2-preview" src="
-                                <?php
-                                if ($get_img2->num_rows == 1) {
-                                    $img2 = $get_img2->fetch_assoc()['image'];
-                                    echo "../assets/img/products/" . $img2;
-                                } else {
-                                    echo "../assets/img/no-image.png";
-                                }
-                                ?>
-                                " alt="" style="max-width: 100%;">
-                            </label>
-                            <!--  -->
-                            <div class="d-flex justify-content-between edit-pt-2" style="position: absolute;margin-left: 140px; top: 0; border: solid 1px rgb(72, 120, 224); border-radius: 5px; background-color: rgba(188, 199, 219, 0.8);">
-                                <label for="photo-2-input" type="button">
-                                    <i class="bi bi-pencil-fill text-primary fs-5 ms-2"></i>
-                                </label>
-                                <i class="bi bi-trash-fill text-danger fs-5 ms-2" id="del-photo-2-edit" type="button"></i>
-                                <input type="hidden" name="isphoto2editempty" value="<?php echo ($get_img2->num_rows == 1 ? $img2 : "TRUE") ?>">
-                            </div>
-                            <!--  -->
-                        </div>
-                        <!--  -->
-                        <script>
-                            var loadPhoto2 = function(event) {
-                                // $(".edit-pt-2").removeClass("d-none");
-                                document.getElementById("photo-2-preview").src = URL.createObjectURL(event.target.files[0]);
-                                output.onload = function() {
-                                    URL.revokeObjectURL(output.src);
-                                };
-                            };
-                        </script>
-                        <!--  -->
-
-                        <!-- Image 2 -->
-                        <?php
-                        $sql_get_img3 = "SELECT * FROM product_image WHERE productID='{$prodInf['productID']}' AND image LIKE '3%';";
-                        $get_img3 = $conn->query($sql_get_img3);
-                        ?>
-                        <div class="card px-0 mb-3 me-3 d-flex justify-content-center align-items-center" style="width: 200px;height: 200px;background-size: contain;">
-                            <input type="file" name="prodImg3Edit" id="photo-3-input" onchange="loadPhoto3(event)">
-                            <label for="photo-3-input" type="button">
-                                <img id="photo-3-preview" src="
-                                <?php
-                                if ($get_img3->num_rows == 1) {
-                                    $img3 = $get_img3->fetch_assoc()['image'];
-                                    echo "../assets/img/products/" . $img3;
-                                } else {
-                                    echo "../assets/img/no-image.png";
-                                }
-                                ?>
-                                " alt="" style="max-width: 100%;">
-                            </label>
-                            <!--  -->
-                            <div class="d-flex justify-content-between edit-pt-3" style="position: absolute;margin-left: 140px; top: 0; border: solid 1px rgb(72, 120, 224); border-radius: 5px; background-color: rgba(188, 199, 219, 0.8);">
-                                <label for="photo-3-input" type="button">
-                                    <i class="bi bi-pencil-fill text-primary fs-5 ms-2"></i>
-                                </label>
-                                <i class="bi bi-trash-fill text-danger fs-5 ms-2" id="del-photo-3-edit" type="button"></i>
-                                <input type="hidden" name="isphoto3editempty" value="<?php echo ($get_img3->num_rows == 1 ? $img3 : "TRUE") ?>">
-                            </div>
-                            <!--  -->
-                        </div>
-                        <!--  -->
-                        <script>
-                            var loadPhoto3 = function(event) {
-                                // $(".edit-pt-3").removeClass("d-none");
-                                document.getElementById("photo-3-preview").src = URL.createObjectURL(event.target.files[0]);
-                                output.onload = function() {
-                                    URL.revokeObjectURL(output.src);
-                                };
-                            };
-                        </script>
-                        <!--  -->
-                    </div>
-                </div>
-
+                    <p class="ms-4 mb-4"><span class="text-danger" style="font-weight: 500;">(*)</span>  Tối thiểu 1, tối đa 3 hình ảnh</p>
+                </div> -->
+                
+                <input type="hidden" value="<?php echo count($image_urls)>=1 ? $image_urls[0] : '' ?>" name="imageUpdate0">
+                <input type="hidden" value="<?php echo count($image_urls)>=2 ? $image_urls[1] : '' ?>" name="imageUpdate1">
+                <input type="hidden" value="<?php echo count($image_urls)>=3 ? $image_urls[2] : '' ?>" name="imageUpdate2">
+                <input type="hidden" value="<?php echo $product['productID'] ?>" name="prodID">
+                
                 <hr>
 
                 <div class="col-md-12 py-2 d-flex justify-content-end">
-                    <a type="button" href="./index.php" class="btn btn-secondary px-4">Hủy cập nhật</a>
-                    <button class="btn btn-primary px-4 mx-3" id="btn-edit-product" type="submit" name="btnEditProduct">Cập nhật</button>
+                    <a type="button" href="index.php" class="btn btn-secondary px-4">Hủy và quay lại</a>
+                    <button class="btn btn-danger px-4 mx-3" id="btn-update-product" type="submit" name="btnUpdateProduct">Cập nhật sản phẩm</button>
                 </div>
             </form>
             <!--  -->
+
         </div>
     </div>
+
 </div>
 <!--  -->
+
+
 
 <!-- Content end-->
 
 <?php
-include "./partials/footerAdmin.php";
+include "partials/footerAdmin.php";
 ?>

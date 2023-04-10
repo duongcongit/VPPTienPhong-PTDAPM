@@ -2,8 +2,6 @@
     $controller = isset($_GET['controller']) ? $_GET['controller'] : 'admin';
     //lấy ra action
     $action     = isset($_GET['action']) ? $_GET['action'] : 'updateSupplierProcess';
-    // Trường hợp đặc biệt  là controller và action ko xuất hiện trên URL, nó mặc định là Hiển thị Danh sách người dùng
-    // http://localhost/project_mvc/index.php => http://localhost/project_mvc/index.php?controller=user&action=index
 
     $controller = ucfirst($controller); //URL của chúng ta thiết kế luôn có dạng chữ thường > ucfirst = upper case first => Chuyển kí tự đầu tiên
     // sang chữ IN HOA

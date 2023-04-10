@@ -22,6 +22,16 @@
             return $arr_categories;
         }
 
+        //---------ADMIN-----------
+        public function insertCategory($id, $name) {
+            $connection = $this->connectDb();
+            $sql_add_category = "INSERT INTO categories (categoryID, name) VALUES ('{$id}','{$name}');";
+            $insert_category = mysqli_query($connection,$sql_add_category);
+            $this->closeDb($connection);
+            return $insert_category;
+        }
+        //-------------------
+
         public function connectDb()
         {
             $connection = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD, DB_NAME);

@@ -13,9 +13,10 @@ class AdminController
         require_once '../view/admin/login.php';
     }
 
-    public function loginProcess(){
+    public function loginProcess()
+    {
         $adminModel = new AdminModel();
-        if(empty($_POST['admin']) || empty($_POST['pass'])) {
+        if (empty($_POST['admin']) || empty($_POST['pass'])) {
             $_SESSION['error'] = 'Bạn cần điền đầy đủ thông tin!';
             header('location:login.php');
             exit();
@@ -23,8 +24,8 @@ class AdminController
         $user = htmlspecialchars($_POST['admin']);
         $password = htmlspecialchars($_POST['pass'], ENT_QUOTES);
 
-        $res = $adminModel->loginProcess($user,$password);
-        if($res==1){
+        $res = $adminModel->loginProcess($user, $password);
+        if ($res == 1) {
             header('location:index.php');
         }
 
@@ -42,7 +43,11 @@ class AdminController
     public function product()
     {
         $productModel = new ProductModel();
+        $categoryModel = new CategoryModel();
+
         $products = $productModel->getAllProducts();
+        $categories = $categoryModel->getAllCategory();
+
         // Sau khi truy vấn được dữ liệu,đổ ra
         //View product
         require_once '../view/admin/products.php';
@@ -83,12 +88,37 @@ class AdminController
         if ($res) {
             $_SESSION['editSuccessStatus'] = "Thay đổi trạng thái của khách hàng có mã #$id thành công";
         }
-        if ($res) {
+        else{
             $_SESSION['editFailStatus'] = "Thay đổi trạng thái của khách hàng có mã #$id thất bại";
         }
         header("Location: index.php");
         exit();
     }
+    //-------------------------
+
+    //--------------Category-----------------
+    public function addCategory()
+    {
+        $categoryModel = new CategoryModel();
+        // Lấy ra thông tin
+        if (isset($_GET['id']) && isset($_GET['name'])) {
+            $cateID = $_GET['id'];
+            $cateName = $_GET['name'];
+        }
+
+        //gọi model 
+        $res = $categoryModel->insertCategory($cateID, $cateName);
+
+        if ($res) {
+            $_SESSION['addSuccessCate'] = "Thêm loại hàng $cateName thành công";
+        }
+        else{
+            $_SESSION['addFailCate'] = "Thêm loại hàng $cateName thất bại";
+        }
+        header("Location: products.php");
+        exit();
+    }
+    //----------------------------------
 
 
     //-------Product--------------
@@ -105,7 +135,7 @@ class AdminController
         require_once '../view/admin/addProduct.php';
     }
 
-    
+
     public function addProductCate()
     {
         $customerModel = new CustomerModel();
@@ -121,18 +151,18 @@ class AdminController
         if ($res) {
             $_SESSION['editSuccessStatus'] = "Thay đổi trạng thái của khách hàng có mã #$id thành công";
         }
-        if ($res) {
+        else{
             $_SESSION['editFailStatus'] = "Thay đổi trạng thái của khách hàng có mã #$id thất bại";
         }
         header("Location: index.php");
         exit();
     }
 
-    //Xử lý thêm sản phẩm CHUA XONG
+    //Xử lý thêm sản phẩm 
     public function addProductProcess()
     {
         $productModel = new ProductModel();
-    
+
         //xử lý submit form
         if (isset($_POST['btnAddProduct'])) {
             $prodName = $_POST['prodNameAdd'];
@@ -151,38 +181,38 @@ class AdminController
             $prodStock = $_POST['prodStockAdd'];
             $prodSold = 0; // Default
 
-            $prodImg1 = $_POST['imageInsert1'];
-            $prodImg2 = $_POST['imageInsert2'];
-            $prodImg3 = $_POST['imageInsert3'];
+            $prodImg1 = $_POST['imageInsert0'];
+            $prodImg2 = $_POST['imageInsert1'];
+            $prodImg3 = $_POST['imageInsert2'];
 
             $prodStatus = 1;
             $arr_product = [
-                'prodID'=>$prodID,
-                'prodName'=>$prodName,
-                'prodDetail'=>$prodDetail,
-                'prodCate'=>$prodCategory,
-                'prodSupplierID' =>$prodSupplierID,
+                'prodID' => $prodID,
+                'prodName' => $prodName,
+                'prodDetail' => $prodDetail,
+                'prodCate' => $prodCategory,
+                'prodSupplierID' => $prodSupplierID,
                 'prodPrice' => $prodPrice,
                 'prodStock' => $prodStock,
                 'prodSold' => $prodSold,
-                'prodStatus'=>$prodStatus
+                'prodStatus' => $prodStatus
             ];
 
             $isInsert = $productModel->insertProduct($arr_product);
-            $imageUrls = array_filter(array($_POST['imageInsert1'], $_POST['imageInsert2'], $_POST['imageInsert3']));
+            $imageUrls = array_filter(array($_POST['imageInsert0'], $_POST['imageInsert1'], $_POST['imageInsert2']));
             $size = count($imageUrls);
             $isInsertImage = array();
-            
-            $temp = 'image';   
+
+            $temp = 'image';
             for ($i = 0; $i < $size; $i++) {
-                $j=$i+1;
-                $imgID = $j.$temp.$prodID;
-                $isInsertImage[$i] = $productModel->insertProductImage($imgID,$imageUrls[$i],$prodID);
+                $j = $i + 1;
+                $imgID = $j . $temp . $prodID;
+                $isInsertImage[$i] = $productModel->insertProductImage($imgID, $imageUrls[$i], $prodID);
             }
 
             print_r($imageUrls);
-            
-            if ($isInsert &&  !in_array(false, $isInsertImage, true)) {
+
+            if ($isInsert && !in_array(false, $isInsertImage, true)) {
                 //&& !in_array(false, $isInsertImage, true)
                 $_SESSION['successAddProduct'] = "Thêm mới sản phẩm thành công";
             } else {
@@ -192,8 +222,109 @@ class AdminController
             header("Location: products.php");
             exit();
         }
-        //gọi view
-        require_once '../view/admin/products.php';
+
+    }
+
+    //Xu ly xoa sản phẩm
+    public function deleteProduct()
+    {
+        $productModel = new ProductModel();
+        //xử lý 
+        if (isset($_GET['id'])) {
+            $productId = $_GET['id'];
+            $isDeleteImage = $productModel->deleteProductImage($productId);
+            $isDelete = $productModel->deleteProduct($productId);
+            if ($isDelete && $isDeleteImage) {
+                $_SESSION['successDeleteProduct'] = 'Xóa sản phẩmm có id: ' . $productId . ' thành công';
+            } else {
+                $_SESSION['errorDeleteProduct'] = 'Xóa sản phẩm có id: ' . $productId . ' thất bại';
+            }
+            header("Location: products.php");
+            exit();
+        }
+    }
+
+    //Update sản phẩm
+    //Lấy dữ liệu đổ vào view
+    public function updateProduct()
+    {
+        $productModel = new ProductModel();
+        $categoryModel = new CategoryModel();
+        $supplierModel = new SupplierModel();
+
+        if (isset($_GET['id'])) {
+            //lấy ra thông tin nhân viên dựa theo id đã gắn trên url
+            $productId = $_GET['id'];
+            //gọi model để lấy ra đối tượng nhân viên theo id
+            $product = $productModel->getProductDetail($productId);
+            $suppliers = $supplierModel->getAllSuppliers();
+            $categories = $categoryModel->getAllCategory();
+
+        }
+        //truyền ra view
+        require_once '../view/admin/updateProduct.php';
+    }
+
+    //Thực hiện update
+    public function updateProductProcess()
+    {
+        $productModel = new ProductModel();
+
+        //xử lý submit form
+        if (isset($_POST['btnUpdateProduct'])) {
+            $prodID = $_POST['prodID'];
+            $prodName = $_POST['prodNameUpdate'];
+            $prodDetail = $_POST['prodDetailUpdate'];
+            // $prodCategory = $_POST['prodCategoryUpdate'];
+            // $prodSupplierID = $_POST['prodSupplierUpdate'];
+
+            $prodPrice = $_POST['prodPriceUpdate'];
+            $prodStock = $_POST['prodStockUpdate'];
+            $prodSold = $_POST['prodSoldUpdate'];
+
+            $prodStatus = 1;
+            $arr_product = [
+                'prodID' => $prodID,
+                'prodName' => $prodName,
+                'prodDetail' => $prodDetail,
+                // 'prodCate' => $prodCategory,
+                // 'prodSupplierID' => $prodSupplierID,
+                'prodPrice' => $prodPrice,
+                'prodStock' => $prodStock,
+                'prodSold' => $prodSold,
+                'prodStatus' => $prodStatus
+            ];
+
+            $imageUrls = array_filter(array($_POST['imageUpdate0'], $_POST['imageUpdate1'], $_POST['imageUpdate2']));
+            $size = count($imageUrls);
+            $isInsertImage = array();
+
+            $temp = 'image';
+            for ($i = 0; $i < $size; $i++) {
+                $j = $i + 1;
+                $imgID = $j . $temp . $prodID;
+                $tmp= $productModel->checkImageURLByID($imgID);
+                echo $tmp;
+                if ($tmp) {
+                    $isInsertImage[$i] = $productModel->updateProductImage($imgID, $imageUrls[$i], $prodID);
+                }
+                else {
+                    $isInsertImage[$i] = $productModel->insertProductImage($imgID, $imageUrls[$i], $prodID);
+                }
+            }
+            $isUpdate = $productModel->updateProduct($arr_product);
+            print_r($imageUrls);
+
+            if ($isUpdate && !in_array(false, $isInsertImage, true)) {
+                //&& !in_array(false, $isInsertImage, true)
+                $_SESSION['successUpdateProduct'] = "Thêm mới sản phẩm thành công";
+            } else {
+                $_SESSION['errorUpdateProduct'] = "Thêm mới sản phẩm thất bại";
+            }
+
+            header("Location: products.php");
+            exit();
+        }
     }
 
 
@@ -341,7 +472,7 @@ class AdminController
             $employeePhone = $_POST['phoneEmployee'];
             $employeeUsername = $_POST['username'];
             $employeePass = $_POST['password'];
-            $employeeID='';
+            $employeeID = '';
 
             //Random 5 character
             //x5 chuỗi -> shuffle -> 5 kí tự đầu

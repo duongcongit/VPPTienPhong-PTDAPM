@@ -46,11 +46,11 @@
             return $employee;
         }
         
-
+        //---------------ADMIN-------------------
         //Hàm thêm nhân viên
         public function insertEmployee($arr = []) {
             $connection = $this->connectDb();
-            $sql_add_employee = "INSERT INTO employees (employeeID, fullname, gender,address, phone, email,username,password,status) VALUES ('{$arr['employeeID']}', '{$arr['employeeName']}', '{$arr['employeeGender']}', '{$arr['employeeAddress']}','{$arr['employeePhone']}', '{$arr['employeeEmail']}','{$arr['employeeUsername']}','{$arr['employeePass']}',1);";
+            $sql_add_employee = "INSERT INTO employees (employeeID, fullname, gender, phone, email,username,password,status,address) VALUES ('{$arr['employeeID']}', '{$arr['employeeName']}', '{$arr['employeeGender']}','{$arr['employeePhone']}', '{$arr['employeeEmail']}','{$arr['employeeUsername']}','{$arr['employeePass']}',1, '{$arr['employeeAddress']}');";
             echo $sql_add_employee;
             $insert_employee = mysqli_query($connection,$sql_add_employee);
             $this->closeDb($connection);
@@ -89,6 +89,7 @@
                         
             return $isDelete;
         }
+        //---------------------------
 
         public function connectDb() {
             $connection = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD, DB_NAME);

@@ -21,7 +21,7 @@
 
 <div class="alert alert-success alert-dismissible d-flex align-items-center 
 <?php
-if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) && !isset($_SESSION['upProdStockSucsess'])) {
+if (!isset($_SESSION['successAddProduct']) && !isset($_SESSION['errorAddProduct']) && !isset($_SESSION['successDeleteProduct'])&& !isset($_SESSION['errorDeleteProduct'])&& !isset($_SESSION['addSuccessCate'])&& !isset($_SESSION['addFailCate'])&& !isset($_SESSION['successAddProduct'])&& !isset($_SESSION['errorAddProduct'])&& !isset($_SESSION['successUpdateProduct'])&& !isset($_SESSION['errorUpdateProduct'])) {
     echo "d-none";
 }
 ?>
@@ -37,6 +37,38 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
             if (isset($_SESSION['errorAddProduct'])) {
                 echo $_SESSION['errorAddProduct'];
                 unset($_SESSION['errorAddProduct']);
+            }
+            if (isset($_SESSION['successDeleteProduct'])) {
+                echo $_SESSION['successDeleteProduct'];
+                unset($_SESSION['successDeleteProduct']);
+            }
+            if (isset($_SESSION['errorDeleteProduct'])) {
+                echo $_SESSION['errorDeleteProduct'];
+                unset($_SESSION['errorDeleteProduct']);
+            }
+            if (isset($_SESSION['addSuccessCate'])) {
+                echo $_SESSION['addSuccessCate'];
+                unset($_SESSION['addSuccessCate']);
+            }
+            if (isset($_SESSION['addFailCate'])) {
+                echo $_SESSION['addFailCate'];
+                unset($_SESSION['addFailCate']);
+            }
+            if (isset($_SESSION['successAddProduct'])) {
+                echo $_SESSION['successAddProduct'];
+                unset($_SESSION['successAddProduct']);
+            }
+            if (isset($_SESSION['errorAddProduct'])) {
+                echo $_SESSION['errorAddProduct'];
+                unset($_SESSION['errorAddProduct']);
+            }
+            if (isset($_SESSION['successUpdateProduct'])) {
+                echo $_SESSION['successUpdateProduct'];
+                unset($_SESSION['successUpdateProduct']);
+            }
+            if (isset($_SESSION['errorUpdateProduct'])) {
+                echo $_SESSION['errorUpdateProduct'];
+                unset($_SESSION['errorUpdateProduct']);
             }
             ?>
         </p>
@@ -99,7 +131,7 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
             ?>
             <h3 class="ms-2" id="label-count-prod"><?php echo $count_products ?> Sản phẩm </h3>
             <div class="box-button">
-                <a type="button" href="./addProductCate.php" class="btn ms-auto text-white bg-success"><i class="bi bi-plus-circle-fill"></i> Thêm loại hàng</a>
+                <a type="button" onclick="showConfirmation()" class="btn ms-auto text-white bg-success"><i class="bi bi-plus-circle-fill"></i> Thêm loại hàng</a>
                 <a type="button" href="./addProduct.php" class="btn btn-info ms-auto text-white"><i class="bi bi-plus-circle-fill me-1"></i> Thêm 1 sản phẩm mới</a>
             </div>
         </div>
@@ -140,7 +172,7 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
                             echo '</div>';
                         }
 
-                        if ($product['status'] == 3) {
+                        if ($product['status'] == 2) {
                             echo '<div class="col-md-12 produc-status-locked">';
                                 echo 'Bị khóa';
                             echo '</div>';
@@ -154,7 +186,7 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
 
                     echo '<th>'. $product['productID']. '</th>';
                     echo '<th>'. $product['name']. '</th>';
-                    echo '<th>'. $product['price']. '</th>';
+                    echo '<th>'. $product['price'].'đ'. '</th>';
                     echo '<th>'. $product['stock']. '</th>';
                     echo '<th>'. $product['sold']. '</th>';
                     //Sửa thông tin NCC
@@ -185,14 +217,19 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
 <!-- Định nghĩa hộp thoại xác nhận thêm loại hàng -->
 <div id="confirmation-dialog">
     <div id="confirmation-dialog-content">
-        <p>Bạn thay trạng thái cho người dùng này thế nào:</p>
+        <span class="mb-3">Các mặt hàng hiện có</span>
+        <?php
+        foreach($categories as $category){
+            echo '<span class="mb-3">'. $category['name'].'</span>';
+        }
+        $s = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
+        $temp = "LH";
+        $cateID = $temp . $s;
+        ?>
+        <p class="mt-3">Bạn muốn thêm loại hàng gì:</p>
         <div>
-            <input type="radio" id="choice1" name="choice" value="1">
-            <label for="choice1">Hoạt động bình thường</label>
-        </div>
-        <div>
-            <input type="radio" id="choice2" name="choice" value="2">
-            <label for="choice2">Khóa tài khoản</label>
+            <input type="text" id="addCateName" name="addCateName">
+            <input type="hidden" id="addCateID" name="addCateID" value="<?php echo $cateID?>">
         </div>
         <div id="confirmation-dialog-buttons">
             <button type="button" onclick="confirmAction()">Xác nhận</button>
@@ -202,8 +239,7 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
 </div>
 
 <script>
-    var elementId=0;
-    
+
     // Load the data first
     window.addEventListener('DOMContentLoaded', function() {
         // Code to load data goes here
@@ -214,10 +250,9 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
         }
     });
 
+ 
     function showConfirmation(customerID) {
-        elementId = customerID;
         document.getElementById("confirmation-dialog").style.display = "block";
-        console.log(elementId);
     }
 
     function hideConfirmation() {
@@ -225,14 +260,13 @@ if (!isset($_SESSION['editProdSucsess']) && !isset($_SESSION['addProdSucsess']) 
         elementId = 0;
     }
 
+
     function confirmAction() {
-        var choice = document.querySelector('input[name="choice"]:checked');
-        var id = elementId;
-        if (choice) {
-            window.location.href = "changeStatusCustomer.php?id="+ id + "&choice=" + choice.value;
+        var id = document.getElementById("addCateID").value;
+        var name = document.getElementById("addCateName").value;
+        if (id && name) {
+            window.location.href = "addCategory.php?id=" + id + "&name=" + name;
             hideConfirmation();
-        } else {
-            alert("Vui lòng chọn một lựa chọn.");
         }
     }
 </script>

@@ -29,10 +29,10 @@
     $image_urls = [];
     
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $valid_types = ['image/jpeg', 'image/png', 'image/gif'];
+        $valid_types = ['image/jpeg', 'image/png', 'image/gif','image/jpg'];
         $upload_errors = [];
     
-        for ($i = 1; $i <= $max_files; $i++) {
+        for ($i = 0; $i < $max_files; $i++) {
             if (isset($_FILES['image'.$i])) {
                 $file_tmp = $_FILES['image'.$i]['tmp_name'];
                 $file_name = basename($_FILES['image'.$i]['name']);
@@ -61,7 +61,6 @@
                 }
                     }
                 }
-                // var_dump($image_urls[0]);
                 // print_r($image_urls);
             }
 
@@ -95,7 +94,7 @@
             <!-- ảnh 1 -->
             <div class="input-group mb-3">
                 <?php if (!isset($image_urls[0])): ?>
-                    <input type="file" name="image1" accept="image/*" class="me-3">
+                    <input type="file" name="image0" accept="image/*" class="me-3">
                 <?php endif ?>
 
                 
@@ -106,7 +105,7 @@
             <!-- ảnh 2 -->
 
                 <?php if (!isset($image_urls[0])): ?>
-                   <input type="file" name="image2" accept="image/*" class="me-3">
+                   <input type="file" name="image1" accept="image/*" class="me-3">
                 <?php endif ?>
 
                 <?php if (isset($image_urls[1])): ?>
@@ -115,7 +114,7 @@
 
             <!-- ảnh 3 -->
                 <?php if (!isset($image_urls[0])): ?>
-                    <input type="file" name="image3" accept="image/*" class="me-3">
+                    <input type="file" name="image2" accept="image/*" class="me-3">
                 <?php endif ?>
 
                 <?php if (isset($image_urls[2])): ?>
@@ -206,9 +205,9 @@
                     <p class="ms-4 mb-4"><span class="text-danger" style="font-weight: 500;">(*)</span>  Tối thiểu 1, tối đa 3 hình ảnh</p>
                 </div> -->
                 
-                <input type="hidden" value="<?php echo count($image_urls)>=1 ? $image_urls[0] : '' ?>" name="imageInsert1">
-                <input type="hidden" value="<?php echo count($image_urls)>=2 ? $image_urls[1] : '' ?>" name="imageInsert2">
-                <input type="hidden" value="<?php echo count($image_urls)>=3 ? $image_urls[2] : '' ?>" name="imageInsert3">
+                <input type="hidden" value="<?php echo count($image_urls)>=1 ? $image_urls[0] : '' ?>" name="imageInsert0">
+                <input type="hidden" value="<?php echo count($image_urls)>=2 ? $image_urls[1] : '' ?>" name="imageInsert1">
+                <input type="hidden" value="<?php echo count($image_urls)>=3 ? $image_urls[2] : '' ?>" name="imageInsert2">
                 
                 <hr>
 

@@ -1,8 +1,8 @@
 <?php
     $controller = isset($_GET['controller']) ? $_GET['controller'] : 'admin';
     //lấy ra action
-    $action     = isset($_GET['action']) ? $_GET['action'] : 'updateEmployee';
-  
+    $action     = isset($_GET['action']) ? $_GET['action'] : 'deleteProduct';
+
     $controller = ucfirst($controller); //URL của chúng ta thiết kế luôn có dạng chữ thường > ucfirst = upper case first => Chuyển kí tự đầu tiên
     // sang chữ IN HOA
     $fileController = $controller . "Controller.php"; //Tên tệp tin muốn truy xuất
