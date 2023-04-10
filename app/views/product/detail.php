@@ -97,7 +97,7 @@
         <div class="row" style="max-width: 1200px;margin: auto;">
             <div class="col-sm-12 col-md-6 product-image row">
                 <div class="col-md-12">
-                    <img src="../../app/assets/images/products/bam_lo.jpg" alt="Product">
+                    <img src="<?php echo $productDetails['image1']; ?>" alt="Product" class="w-100">
                 </div>
                 <div class="col-sm-12 col-md-12">
 
@@ -182,29 +182,7 @@
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                         <strong class="product-name fs-5"><?php echo $productDetails['productName']; ?></strong>
                         <p>
-                            - Kw trio là thương hiệu văn phòng phẩm uy tín tại Đài Loan trong lĩnh vực sản xuất các loại
-                            máy bấm kim, bấm lổ, kim bấm văn phòng
-                            <br>
-                            - Thân máy inox, dạng đẩy, đục 2 lổ, thước canh chỉnh mép giấy, đế cao su chống trượt, bấm
-                            30 tờ, chất lượng ưu việt
-                            <br>
-                            - Chức năng: bấm 2 lổ tài liệu, chứng từ
-                            <br>
-                            - Đáp ứng tiêu chuẩn sức khỏe người dùng văn phòng
-                            <br>
-                            - Nsx: Đài Loan
-                            <br>
-                            - Quy cách: 1 cái / hộp
-                            <br>
-                            - Tiết kiệm hơn khi chọn mua theo nhóm
-                            <br>
-                            - Chương trình khuyến mãi chỉ áp dụng cho các đơn hàng trực tuyến
-                            <br>
-                            - Vận chuyển miễn phí dựa trên giá trị đơn hàng
-                            <br>
-                            - Mẫu mã và thông tin sản phẩm có thể thay đổi theo chính sách nhà sản xuất
-                            <br>
-                            - Đơn vị tính: Cái
+                        <?php echo $productDetails['detail']; ?>
                         </p>
                     </div>
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">

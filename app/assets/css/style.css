@@ -123,6 +123,13 @@ body {
 }
 
 
+
+.product-image {
+    aspect-ratio : 1 / 1;
+}
+
+
+
 .btn-add-to-cart {
     margin-left: 20px;
     width: 125px;

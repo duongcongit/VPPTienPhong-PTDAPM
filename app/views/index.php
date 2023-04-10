@@ -152,9 +152,13 @@
                         ?>
                             <!-- Items -->
                             <div class="pb-3 items-card col-sm-5 col-md-3" style="width: 17rem;">
-                                <a href="product/detail/<?php echo $product['productID']; ?>">
-                                    <img src="app/assets/images/products/bam_lo.jpg" class="card-img-top" alt="...">
-                                </a>
+
+
+                                <div class="col-md-12 product-image">
+                                    <a href="product/detail/<?php echo $product['productID']; ?>" class="">
+                                        <img src="<?php echo $product['image1']; ?>" class="card-img-top" alt="...">
+                                    </a>
+                                </div>
 
                                 <hr class="p-0 m-0 mb-4 m-auto d-none d-md-flex" style="width: 50%;">
                                 <div class="d-flex justify-content-center">
@@ -212,9 +216,11 @@
                         ?>
                             <!-- Items -->
                             <div class="pb-3 items-card col-sm-5 col-md-3" style="width: 17rem;">
-                                <a href="product/detail/<?php echo $product['productID']; ?>">
-                                    <img src="app/assets/images/products/bam_lo.jpg" class="card-img-top" alt="...">
-                                </a>
+                                <div class="col-md-12 product-image">
+                                    <a href="product/detail/<?php echo $product['productID']; ?>">
+                                        <img src="<?php echo $product['image1']; ?>" class="card-img-top" alt="...">
+                                    </a>
+                                </div>
 
                                 <hr class="p-0 m-0 mb-4 m-auto d-none d-md-flex" style="width: 50%;">
                                 <div class="d-flex justify-content-center">
