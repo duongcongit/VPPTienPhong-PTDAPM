@@ -1,3 +1,7 @@
+<?php
+$_SESSION['customerID'] = "1";
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -12,6 +16,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="app/assets/css/style.css">
+    <script src="app/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="app/assets/js/script.js"></script>
 </head>
 
 <body>
@@ -172,7 +178,7 @@
                                 <div class="d-flex justify-content-center pt-3">
                                     <!-- rgb(13,202,240)
                                 rgb(0,179,160) -->
-                                    <button class="btn btn-info text-light" style="background-color:  rgb(58, 160, 180);">Thêm vào giỏ</button>
+                                    <button class="btn btn-info text-light btn-add-to-cart" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $product['productID']; ?>">Thêm vào giỏ</button>
                                 </div>
                             </div>
 
@@ -232,9 +238,7 @@
                                     <strong><?php echo $product['price']; ?></strong>
                                 </div>
                                 <div class="d-flex justify-content-center pt-3">
-                                    <!-- rgb(13,202,240)
-                                rgb(0,179,160) -->
-                                    <button class="btn btn-info text-light" style="background-color:  rgb(58, 160, 180);">Thêm vào giỏ</button>
+                                <button class="btn btn-info text-light btn-add-to-cart" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $product['productID']; ?>">Thêm vào giỏ</button>
                                 </div>
                             </div>
 
@@ -366,8 +370,6 @@
             <!-- Copyright -->
         </footer>
     </div>
-
-
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

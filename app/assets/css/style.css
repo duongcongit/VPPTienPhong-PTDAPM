@@ -130,11 +130,12 @@ body {
 
 
 
-.btn-add-to-cart {
+.btn-add-to-cart, .btn-add-to-cart-detail {
     margin-left: 20px;
     width: 125px;
     height: 37.8px;
 }
+
 
 
 .product-description>div>div  {

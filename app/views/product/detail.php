@@ -1,3 +1,6 @@
+<?php
+$_SESSION['customerID'] = "1";
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -6,15 +9,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết</title>
-    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon_io/favicon-32x32.png">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../app/assets/css/style.css">
+    <script src="../../app/assets/js/jquery-3.6.4.min.js"></script>
+    <script src="../../app/assets/js/script.js"></script>
 </head>
 
 <body>
@@ -26,13 +27,11 @@
             <nav class="navbar navbar-expand-lg navbar-light row">
                 <div class="container-fluid col-md-12">
                     <div class="button-menu d-flex d-md-none">
-                        <i class="navbar-toggler bi bi-list" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="navbar-toggler bi bi-list" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         </i>
                     </div>
                     <div class="logo">
-                    <a class="navbar-brand" href="./index.php"><img src="../../app/assets/images/logo.png" alt="" style="width: 150px;"></a>
+                        <a class="navbar-brand" href="./index.php"><img src="../../app/assets/images/logo.png" alt="" style="width: 150px;"></a>
                     </div>
                     <div class="search-bar d-none d-md-flex m-auto">
                         <form class="d-flex align-items-center">
@@ -59,8 +58,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="search-bar d-flex d-md-none m-auto">
                             <form class="d-flex align-items-center">
-                                <input class="me-2 search-box search-box-sidemenu ps-3" placeholder="Tìm kiếm"
-                                    aria-label="Search">
+                                <input class="me-2 search-box search-box-sidemenu ps-3" placeholder="Tìm kiếm" aria-label="Search">
                                 <i class="bi bi-search text-info fs-5 search-button" type="submit"></i>
                             </form>
                         </div>
@@ -149,19 +147,18 @@
                 <div class="item-num d-flex mt-5 mb-2">
                     <ul class="pagination justify-content-end">
                         <li class="page-item page-item-btn-decrease">
-                            <a class="page-link bi bi-dash-lg" id="btn-decrease" type="button"></a>
+                            <a class="page-link bi bi-dash-lg" id="btn-decrease-quantity" type="button"></a>
                         </li>
                         <li class="page-item">
-                            <input type="text" id="input-quantity-detail" class="page-link px-2 text-dark"
-                                autocomplete="off" value="1" style="width: 50px;" data-prod_stock="">
+                            <input type="text" id="input-quantity-detail" class="page-link px-2 text-dark" autocomplete="off" value="1" style="width: 50px;" data-prod_stock="<?php echo $productDetails['stock']; ?>">
                         </li>
                         <li class="page-item">
-                            <a class="page-link bi-plus-lg" id="btn-increase" type="button"></a>
+                            <a class="page-link bi-plus-lg" id="btn-increase-quantity" type="button"></a>
                         </li>
                     </ul>
-                    <button class="btn btn-info text-light btn-add-to-cart"
-                        style="background-color:  rgb(58, 160, 180);">Thêm vào
-                        giỏ</button>
+                    <button class="btn btn-info text-light btn-add-to-cart-detail" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $productDetails['productID']; ?>">
+                        Thêm vào giỏ
+                    </button>
                 </div>
                 <!--  -->
 
@@ -170,11 +167,8 @@
             <div class="col-md-12 product-description mt-2 row">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-link active" id="nav-description-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                            aria-selected="true">MÔ TẢ</button>
-                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                            type="button" role="tab" aria-controls="nav-profile" aria-selected="false">ĐÁNH
+                        <button class="nav-link active" id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">MÔ TẢ</button>
+                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">ĐÁNH
                             GIÁ(0)</button>
                     </div>
                 </nav>
@@ -182,7 +176,7 @@
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                         <strong class="product-name fs-5"><?php echo $productDetails['productName']; ?></strong>
                         <p>
-                        <?php echo $productDetails['detail']; ?>
+                            <?php echo $productDetails['detail']; ?>
                         </p>
                     </div>
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
@@ -195,81 +189,39 @@
             <div class="content ps-3 mt-5">
                 <div class="col-md-12">
                     <div class="col-md-12 d-flex justify-content-between mb-3">
-                        <h3>Sản phẩm tương tự</h3>
+                        <h3>Có thể bạn cũng thích</h3>
                     </div>
                     <div class="col-md-12 row d-flex justify-content-evenly">
-                        <!-- Items -->
-                        <div class="pb-3 items-card col-sm-5 col-md-3" style="width: 17rem;">
-                            <img src="./images/products/print.png" class="card-img-top" alt="...">
-                            <hr class="p-0 m-0 mb-4 m-auto d-none d-md-flex" style="width: 50%;">
-                            <div class="d-flex justify-content-center">
-                                <h6 class="card-title">Máy in laser</h6>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <strong>90.000đ</strong>
-                            </div>
-                            <div class="d-flex justify-content-center pt-3">
-                                <!-- rgb(13,202,240)
-                                            rgb(0,179,160) -->
-                                <button class="btn btn-info text-light"
-                                    style="background-color:  rgb(58, 160, 180);">Thêm vào giỏ</button>
-                            </div>
-                        </div>
 
-                        <!-- Items -->
-                        <div class="pb-3 items-card col-sm-5 col-md-3" style="width: 17rem;">
-                            <img src="./images/products/print.png" class="card-img-top" alt="...">
-                            <hr class="p-0 m-0 mb-4 m-auto d-none d-md-flex" style="width: 50%;">
-                            <div class="d-flex justify-content-center">
-                                <h6 class="card-title">Máy in laser</h6>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <strong>90.000đ</strong>
-                            </div>
-                            <div class="d-flex justify-content-center pt-3">
-                                <!-- rgb(13,202,240)
-                                            rgb(0,179,160) -->
-                                <button class="btn btn-info text-light"
-                                    style="background-color:  rgb(58, 160, 180);">Thêm vào giỏ</button>
-                            </div>
-                        </div>
 
-                        <!-- Items -->
-                        <div class="pb-3 items-card col-sm-5 col-md-3" style="width: 17rem;">
-                            <img src="./images/products/print.png" class="card-img-top" alt="...">
-                            <hr class="p-0 m-0 mb-4 m-auto d-none d-md-flex" style="width: 50%;">
-                            <div class="d-flex justify-content-center">
-                                <h6 class="card-title">Máy in laser</h6>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <strong>90.000đ</strong>
-                            </div>
-                            <div class="d-flex justify-content-center pt-3">
-                                <!-- rgb(13,202,240)
-                                            rgb(0,179,160) -->
-                                <button class="btn btn-info text-light"
-                                    style="background-color:  rgb(58, 160, 180);">Thêm vào giỏ</button>
-                            </div>
-                        </div>
+                        <?php
+                        foreach ($alsoLikeProducts as $product) {
+                        ?>
+                            <!-- Items -->
+                            <div class="pb-3 items-card col-sm-5 col-md-3" style="width: 17rem;">
+                                <div class="col-md-12 product-image">
+                                    <a href="<?php echo SITEURL . 'product/detail/' . $product['productID']; ?>">
+                                        <img src="<?php echo $product['image1']; ?>" class="card-img-top" alt="...">
+                                    </a>
+                                </div>
 
-                        <!-- Items -->
-                        <div class="pb-3 items-card col-sm-5 col-md-3" style="width: 17rem;">
-                            <img src="./images/products/print.png" class="card-img-top" alt="...">
-                            <hr class="p-0 m-0 mb-4 m-auto d-none d-md-flex" style="width: 50%;">
-                            <div class="d-flex justify-content-center">
-                                <h6 class="card-title">Máy in laser</h6>
+                                <hr class="p-0 m-0 mb-4 m-auto d-none d-md-flex" style="width: 50%;">
+                                <div class="d-flex justify-content-center">
+                                    <a href="product/detail/<?php echo $product['productID']; ?>">
+                                        <h6 class="card-title"><?php echo $product['productName']; ?></h6>
+                                    </a>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <strong><?php echo $product['price']; ?></strong>
+                                </div>
+                                <div class="d-flex justify-content-center pt-3">
+                                    <button class="btn btn-info text-light btn-add-to-cart" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $product['productID']; ?>">Thêm vào giỏ</button>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-center">
-                                <strong>90.000đ</strong>
-                            </div>
-                            <div class="d-flex justify-content-center pt-3">
-                                <!-- rgb(13,202,240)
-                                            rgb(0,179,160) -->
-                                <button class="btn btn-info text-light"
-                                    style="background-color:  rgb(58, 160, 180);">Thêm vào giỏ</button>
-                            </div>
-                        </div>
 
+                        <?php
+                        }
+                        ?>
 
 
                     </div>
@@ -327,8 +279,7 @@
                         <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                             <!-- Content -->
                             <h6 class="text-uppercase fw-bold">Công ty TNHH VPP Tiền Phong</h6>
-                            <hr class="mb-4 mt-0 d-inline-block mx-auto"
-                                style="width: 60px; background-color: #7c4dff; height: 2px" />
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
                             <p>
                                 Chuyên bán lẻ các dụng cụ, thiết bị văn phòng. Nhận cung cấp cho các công ty, trường học
                                 với số lượng lớn, đảm bảo hàng uy tín, chất lượng
@@ -340,8 +291,7 @@
                         <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                             <!-- Links -->
                             <h6 class="text-uppercase fw-bold">Sản phẩm</h6>
-                            <hr class="mb-4 mt-0 d-inline-block mx-auto"
-                                style="width: 60px; background-color: #7c4dff; height: 2px" />
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
                             <p>
                                 <a href="#!" class="text-dark">Thiết bị</a>
                             </p>
@@ -355,8 +305,7 @@
                         <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
                             <!-- Links -->
                             <h6 class="text-uppercase fw-bold">Menu</h6>
-                            <hr class="mb-4 mt-0 d-inline-block mx-auto"
-                                style="width: 60px; background-color: #7c4dff; height: 2px" />
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
                             <p>
                                 <a href="#!" class="text-dark">Trang chủ</a>
                             </p>
@@ -376,8 +325,7 @@
                         <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
                             <!-- Links -->
                             <h6 class="text-uppercase fw-bold">Liên hệ</h6>
-                            <hr class="mb-4 mt-0 d-inline-block mx-auto"
-                                style="width: 60px; background-color: #7c4dff; height: 2px" />
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
                             <p><i class="fas fa-home mr-3"></i> Số 175 Tây Sơn, Đống Đa, Hà Nội</p>
                             <p><i class="fas fa-envelope mr-3"></i> vpptienphong@gmail.com</p>
                             <p><i class="fas fa-phone mr-3"></i> 0240 6354 8795</p>
@@ -399,12 +347,90 @@
         </footer>
     </div>
 
+    <script>
+        const SITEURL = "<?php echo SITEURL; ?>";
+        // Check when quantity is changed
+        $("#input-quantity-detail").on("input", function() {
+            let numPattern = /^[0-9]+$/;
+            var stock = $(this).data("prod_stock");
+            if (numPattern.test($(this).val()) == false) {
+                $(this).val("1");
+            }
+            if ($(this).val() > $(this).data("prod_stock")) {
+                $(this).val($(this).data("prod_stock"));
+            }
+        })
+
+        $("#input-quantity-detail").on("change", function() {
+            var stock = $(this).data("prod_stock");
+            if ($(this).val() > $(this).data("prod_stock")) {
+                $(this).val($(this).data("prod_stock"));
+            }
+        })
+
+        // When click button increase quantity
+        $("#btn-increase-quantity").on("click", function() {
+            var currQuantity = $("#input-quantity-detail").val();
+            var stock = $("#input-quantity-detail").data("prod_stock");
+            if (parseInt(currQuantity) < stock) {
+                $("#input-quantity-detail").val(parseInt(currQuantity) + 1);
+            }
+
+        });
+        // When click button decrease quantity
+        $("#btn-decrease-quantity").on("click", function() {
+            var currQuantity = $("#input-quantity-detail").val();
+            var stock = $(this).data("prod_stock");
+            if (parseInt(currQuantity) > 1) {
+                $("#input-quantity-detail").val(parseInt(currQuantity) - 1);
+            }
+        });
+
+        $(".btn-add-to-cart-detail").on("click", function() {
+            var customerID = $(this).data("customer_id");
+            var productID = $(this).data("product_id");
+            var quantity = $("#input-quantity-detail").val();
+
+            $.ajax({
+                url: SITEURL + "product/addProductToCart",
+                type: "POST",
+                data: {
+                    customerID: customerID,
+                    productID: productID,
+                    quantity: quantity
+                },
+                success: function(data) {
+                    console.log("Thêm vào giỏ hàng thành công");
+                }
+            })
 
 
+        });
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+        // ===============
+        $(".btn-add-to-cart").on("click", function() {
+            var customerID = $(this).data("customer_id");
+            var productID = $(this).data("product_id");
+            var quantity = 1;
+
+            $.ajax({
+                url: SITEURL + "product/addProductToCart",
+                type: "POST",
+                data: {
+                    customerID: customerID,
+                    productID: productID,
+                    quantity: quantity
+                },
+                success: function(data) {
+                    console.log("Thêm vào giỏ hàng thành công");
+                }
+            })
+            // 
+        });
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 
 </html>
