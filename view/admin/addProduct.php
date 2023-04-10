@@ -23,15 +23,106 @@
         <i class="bi bi-plus-circle-fill fs-2 text-danger"></i>
         <span>
             <strong class="fs-4 ms-2">Thêm 1 sản phẩm mới</strong>
-            <p class="ms-5 mb-0">Vui lòng điền đầy đủ thông tin sản phẩm.</p>
-            <p class="ms-5 text-danger" style="font-weight: 500;">! Chú ý: Các trường "*" là bắt buộc.</p>
+            <p class="ms-5 text-danger" style="font-weight: 500;">Vui lòng điền đầy đủ thông tin sản phẩm.</p>
         </span>
     </div>
+
+    <?php
+    require 'cloudinary/vendor/autoload.php';
+    use Cloudinary\Configuration\Configuration;
+    use Cloudinary\Api\Upload\UploadApi;
+    
+    Configuration::instance([
+        'cloud' => [
+            'cloud_name' => 'dhnr7g6h9', 
+            'api_key' => '495527574489912', 
+            'api_secret' => 'EbBF4Mwxe6RTiMbx6i0zGvFaADM'],
+        'url' => [
+            'secure' => true]]);
+    
+    $max_files = 3;
+    $image_urls = [];
+    
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $valid_types = ['image/jpeg', 'image/png', 'image/gif'];
+        $upload_errors = [];
+    
+        for ($i = 1; $i <= $max_files; $i++) {
+            if (isset($_FILES['image'.$i])) {
+                $file_tmp = $_FILES['image'.$i]['tmp_name'];
+                $file_name = basename($_FILES['image'.$i]['name']);
+                $file_type = $_FILES['image'.$i]['type'];
+                $file_size = $_FILES['image'.$i]['size'];
+    
+                // Validate file type and size
+                if (!in_array($file_type, $valid_types)) {
+                    $upload_errors[] = "Invalid file type for image $i.";
+                } else {
+                    // Sanitize file name
+                    $file_name = preg_replace('/[^a-zA-Z0-9_.-]/', '', $file_name);
+    
+                    // Upload image to Cloudinary
+                    $upload_result = (new UploadApi())->upload($file_tmp, [
+                        'folder' => 'uploads'
+                    ]);
+    
+                    if (!$upload_result || isset($upload_result['error'])) {
+                        // handle error here
+                        $upload_errors[] = "Failed to upload image $i.";
+                    } else {
+                        // Get the image URL from the upload result
+                        $image_urls[] = $upload_result['secure_url'];
+                    }
+                }
+            }
+        }
+        var_dump($image_urls[1]);
+    }
+
+?>
+
+
+        <form action="" method="POST" enctype="multipart/form-data" id ="myForm">
+            <!-- ảnh 1 -->
+            <div class="input-group mb-3">
+                <input type="file" name="image1" accept="image/*">
+                <input type="hidden" value="<?php echo isset($image_urls[1]) ? $image_urls[1] : '' ?>" name="imageInsert1">
+                <?php if (isset($image_urls[1])): ?>
+                    <img src="<?php echo $image_urls[1] ?>" width="200">
+                <?php endif ?>
+            </div>
+
+            <!-- ảnh 2 -->
+            <div class="input-group mb-3">
+                <input type="file" name="image2" accept="image/*">
+                <input type="hidden" value="<?php echo isset($image_urls[2]) ? $image_urls[2] : '' ?>" name="imageInsert2">
+                <?php if (isset($image_urls[2])): ?>
+                    <img src="<?php echo $image_urls[2] ?>" width="200">
+                <?php endif ?>
+            </div>
+
+            <!-- ảnh 3 -->
+            <div class="input-group mb-3">
+                <input type="file" name="image3" accept="image/*">
+                <input type="hidden" value="<?php echo isset($image_urls[3]) ? $image_urls[3] : '' ?>" name="imageInsert3">
+                <?php if (isset($image_urls[3])): ?>
+                    <img src="<?php echo $image_urls[3] ?>" width="200">
+                <?php endif ?>
+            </div>
+
+            <input type="submit" value="Upload">
+        </form>
+
+    <script>
+        var form = document.getElementById("myForm");
+        function handleForm(event) { event.preventDefault(); } 
+        form.addEventListener('submit', handleForm);
+    </script>
     <!--  -->
     <div class="col-md-12 d-flex justify-content-center">
         <div class="col-md-11">
             <hr>
-            <form method="POST" action="./process-add-product.php" enctype="multipart/form-data" autocomplete="off">
+            <form method="POST" action="addProductProcess.php" enctype="multipart/form-data" autocomplete="off">
                 <div class="basic-info col-md-12">
                     <h5><strong>Thông tin cơ bản</strong></h5>
                     <div class="input-group mb-3 mt-5">
@@ -106,87 +197,6 @@
                         <i class="bi bi-exclamation-circle-fill">Chưa có ảnh nào, yêu cầu sản phẩm có ít nhất 1 hình ảnh!</i>
                     </div>
                     <p class="ms-4 mb-4"><span class="text-danger" style="font-weight: 500;">(*)</span>  Tối thiểu 1, tối đa 3 hình ảnh</p>
-                    <!-- 
-                        <div class="row ms-5">
-                        <div class="card p-0 mb-3 me-3 d-flex justify-content-center" style="width: 200px;height: 200px;">
-                            <input type="file" name="prodImg1Add" id="photo-1-input" onchange="loadPhoto1(event)">
-                            <label for="photo-1-input" type="button">
-                                <img id="photo-1-preview" src="../assets/img/no-image.png" alt="" style="max-width: 100%;">
-                            </label>
-                            <div class="d-flex justify-content-between edit-pt-1 d-none" style="position: absolute;margin-left: 140px; top: 0; border: solid 1px rgb(72, 120, 224); border-radius: 5px; background-color: rgba(188, 199, 219, 0.8);">
-                                <label for="photo-1-input" type="button">
-                                    <i class="bi bi-pencil-fill text-primary fs-5 ms-2"></i>
-                                </label>
-                                <i class="bi bi-trash-fill text-danger fs-5 ms-2" id="del-photo-1" type="button"></i>
-                            </div>
-                            
-                        </div>
-                       
-                        <script>
-                            var loadPhoto1 = function(event) {
-                                $(".edit-pt-1").removeClass("d-none");
-                                document.getElementById("photo-1-preview").src = URL.createObjectURL(event.target.files[0]);
-                                output.onload = function() {
-                                    URL.revokeObjectURL(output.src);
-                                };
-                            };
-                        </script>
-                      
-
-                    
-                        <div class="card px-0 mb-3 me-3 d-flex justify-content-center align-items-center" style="width: 200px;height: 200px;background-size: contain;">
-                            <input type="file" name="prodImg2Add" id="photo-2-input" onchange="loadPhoto2(event)">
-                            <label for="photo-2-input" type="button">
-                                <img id="photo-2-preview" src="../assets/img/no-image.png" alt="" style="max-width: 100%;">
-                            </label>
-                            
-                            <div class="d-flex justify-content-between edit-pt-2 d-none" style="position: absolute;margin-left: 140px; top: 0; border: solid 1px rgb(72, 120, 224); border-radius: 5px; background-color: rgba(188, 199, 219, 0.8);">
-                                <label for="photo-2-input" type="button">
-                                    <i class="bi bi-pencil-fill text-primary fs-5 ms-2"></i>
-                                </label>
-                                <i class="bi bi-trash-fill text-danger fs-5 ms-2" id="del-photo-2" type="button"></i>
-                            </div>
-                          
-                        </div>
-                      
-                        <script>
-                            var loadPhoto2 = function(event) {
-                                $(".edit-pt-2").removeClass("d-none");
-                                document.getElementById("photo-2-preview").src = URL.createObjectURL(event.target.files[0]);
-                                output.onload = function() {
-                                    URL.revokeObjectURL(output.src);
-                                };
-                            };
-                        </script>
-                       
-
-                       
-                        <div class="card px-0 mb-3 me-3 d-flex justify-content-center align-items-center" style="width: 200px;height: 200px;background-size: contain;">
-                            <input type="file" name="prodImg3Add" id="photo-3-input" onchange="loadPhoto3(event)">
-                            <label for="photo-3-input" type="button">
-                                <img id="photo-3-preview" src="../assets/img/no-image.png" alt="" style="max-width: 100%;">
-                            </label>
-                        
-                            <div class="d-flex justify-content-between edit-pt-3 d-none" style="position: absolute;margin-left: 140px; top: 0; border: solid 1px rgb(72, 120, 224); border-radius: 5px; background-color: rgba(188, 199, 219, 0.8);">
-                                <label for="photo-3-input" type="button">
-                                    <i class="bi bi-pencil-fill text-primary fs-5 ms-2"></i>
-                                </label>
-                                <i class="bi bi-trash-fill text-danger fs-5 ms-2" id="del-photo-3" type="button"></i>
-                            </div>
-                      
-                        </div>
-           
-                        <script>
-                            var loadPhoto3 = function(event) {
-                                $(".edit-pt-3").removeClass("d-none");
-                                document.getElementById("photo-3-preview").src = URL.createObjectURL(event.target.files[0]);
-                                output.onload = function() {
-                                    URL.revokeObjectURL(output.src);
-                                };
-                            };
-                        </script>
-     
-                    </div> -->
                 </div>
 
                 <hr>
@@ -198,60 +208,6 @@
             </form>
             <!--  -->
 
-
-            <?php
-                require 'vendor/autoload.php';
-
-                // Lấy thông tin cấu hình từ file .env
-                $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-                $dotenv->load();
-
-                // Thiết lập cấu hình Cloudinary
-                \Cloudinary::config([
-                'cloud_name' => $_ENV['dhnr7g6h9'],
-                'api_key' => $_ENV['495527574489912'],
-                'api_secret' => $_ENV['EbBF4Mwxe6RTiMbx6i0zGvFaADM']
-                ]);
-
-                // Xử lý tệp ảnh được tải lên
-                if(isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                $file_name = $_FILES['image']['name'];
-                $file_tmp = $_FILES['image']['tmp_name'];
-                $file_size = $_FILES['image']['size'];
-                $file_ext = strtolower(end(explode('.',$_FILES['image']['name'])));
-
-                // Thiết lập tên tệp mới trên Cloudinary
-                $new_filename = uniqid() . '.' . $file_ext;
-
-                // Tải ảnh lên Cloudinary
-                $upload_result = \Cloudinary\Uploader::upload($file_tmp, [
-                    'public_id' => $new_filename,
-                    'folder' => 'uploads'
-                ]);
-
-                // In thông tin kết quả tải lên
-                echo "Upload successful. Public ID: " . $upload_result['public_id'] . ", URL: " . $upload_result['secure_url'];
-                }
-                ?>
-
-                <form action="" method="POST" enctype="multipart/form-data">
-                    <input type="file" name="image">
-                    <input type="submit" value="Upload">
-                </form>
-
-
-            <script>
-            // Bắt sự kiện khi người dùng chọn file
-            document.getElementById("image").addEventListener("change", function() {
-                // Đọc URL của file
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                // Gán URL cho thuộc tính src của img element để hiển thị ảnh
-                document.getElementById("preview").src = e.target.result;
-                }
-                reader.readAsDataURL(this.files[0]);
-            });
-            </script>
         </div>
     </div>
 </div>

@@ -10,48 +10,6 @@ $(document).ready(function () {
         $(".sidebar").toggleClass("sidebar-show");
         $(".main-right").toggleClass("show");
     });
-
-    //
-    $("#del-photo-1").on("click", function () {
-        document.getElementById("photo-1-preview").src =
-            "../assets/img/no-image.png";
-        $("#photo-1-input").val("");
-    });
-    //
-    $("#del-photo-2").on("click", function () {
-        document.getElementById("photo-2-preview").src =
-            "../assets/img/no-image.png";
-        $("#photo-2-input").val("");
-    });
-    //
-    $("#del-photo-3").on("click", function () {
-        document.getElementById("photo-3-preview").src =
-            "../assets/img/no-image.png";
-        $("#photo-3-input").val("");
-    });
-
-    //
-    $("#del-photo-1-edit").on("click", function () {
-        document.getElementById("photo-1-preview").src =
-            "../assets/img/no-image.png";
-        $("#photo-1-input").val("");
-        $("[name='isphoto1editempty']").val("TRUE");
-    });
-    //
-    $("#del-photo-2-edit").on("click", function () {
-        document.getElementById("photo-2-preview").src =
-            "../assets/img/no-image.png";
-        $("#photo-2-input").val("");
-        $("[name='isphoto2editempty']").val("TRUE");
-    });
-    //
-    $("#del-photo-3-edit").on("click", function () {
-        document.getElementById("photo-3-preview").src =
-            "../assets/img/no-image.png";
-        $("#photo-3-input").val("");
-        $("[name='isphoto3editempty']").val("TRUE");
-    });
-
     // Check image
     if (
         $("#photo-1-input").val() == "" &&

@@ -1,5 +1,11 @@
 <?php
 require_once '../model/AdminModel.php';
+require_once '../model/ProductModel.php';
+require_once '../model/CustomerModel.php';
+require_once '../model/EmployeeModel.php';
+require_once '../model/SupplierModel.php';
+
+
 
 class AdminController
 {
@@ -27,8 +33,8 @@ class AdminController
     //Các hàm lấy view
     public function index()
     {
-        $adminModel = new AdminModel();
-        $customers = $adminModel->getAllCustomers();
+        $customerModel = new CustomerModel();
+        $customers = $customerModel->getAllCustomers();
         // Sau khi truy vấn được dữ liệu,đổ ra 
         //View index
         require_once '../view/admin/index.php';
@@ -45,8 +51,8 @@ class AdminController
 
     public function supplier()
     {
-        $adminModel = new AdminModel();
-        $suppliers = $adminModel->getAllSuppliers();
+        $supplierModel = new SupplierModel();
+        $suppliers = $supplierModel->getAllSuppliers();
         // Sau khi truy vấn được dữ liệu,đổ ra 
         //View supplier
         require_once '../view/admin/suppliers.php';
@@ -54,8 +60,8 @@ class AdminController
 
     public function employee()
     {
-        $adminModel = new AdminModel();
-        $employees = $adminModel->getAllEmployees();
+        $employeeModel = new employeeModel();
+        $employees = $employeeModel->getAllEmployees();
         // Sau khi truy vấn được dữ liệu,đổ ra
         //View employee
         require_once '../view/admin/employees.php';
@@ -65,7 +71,7 @@ class AdminController
     //Hàm thay đổi trạng thái khách hàng
     public function changeStatusCustomer()
     {
-        $adminModel = new AdminModel();
+        $customerModel = new CustomerModel();
         // Lấy ra thông tin
         if (isset($_GET['id']) && isset($_GET['choice'])) {
             $id = $_GET['id'];
@@ -73,7 +79,7 @@ class AdminController
         }
 
         //gọi model 
-        $res = $adminModel->changeStatusCustomer($id, $status);
+        $res = $customerModel->changeStatusCustomer($id, $status);
 
         if ($res) {
             $_SESSION['editSuccessStatus'] = "Thay đổi trạng thái của khách hàng có mã #$id thành công";
@@ -107,119 +113,56 @@ class AdminController
             $prodName = $_POST['prodNameAdd'];
             $prodDetail = $_POST['prodDetailAdd'];
             $prodCategory = $_POST['prodCategoryAdd'];
-            $prodSKU = $_POST['prodSKUAdd'];
+            $prodSupplierID = $_POST['prodSupplierAdd'];
+
+            //Random 5 character
+            //x5 chuỗi -> shuffle -> 5 kí tự đầu
+
+            $s = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
+            $temp = "PROD";
+            $prodID = $temp . $s;
+
             $prodPrice = $_POST['prodPriceAdd'];
             $prodStock = $_POST['prodStockAdd'];
             $prodSold = 0; // Default
-            $userIDPr = $_SESSION['userID'];
-            $prodImg = "";
+
+            $prodImg1 = $_POST['imageInsert1'];;
+            $prodImg2 = $_POST['imageInsert2'];;
+            $prodImg3 = $_POST['imageInsert3'];;
+
             $prodStatus = 1;
-
-            if ($prodSKU == "") {
-                $prodSKU = "NULL";
-            }
-
-            $prodID = "SELECT productID FROM products WHERE productName='$prodName'";
-
-            // Gen random character to set name for prducts image
-            $temp_word = array_merge(range('a', 'z'));
-            shuffle($temp_word);
-            $randChr = substr(implode($temp_word), 0, 20) . rand(000, 999) . ".";
-
-
-            // Process upload product image
-            // Imamge 1
-            if (isset($_FILES['prodImg1Add']) && !empty($_FILES["prodImg1Add"]["name"])) {
-                $targetDir = "../assets/img/products/";
-                $fileName_tmp = basename($_FILES["prodImg1Add"]["name"]);
-                $fileType = pathinfo($fileName_tmp, PATHINFO_EXTENSION);
-                $prodImage1 = "1" . $randChr . $fileType;
-                $targetFilePath = $targetDir . $prodImage1;
-                $allowTypes = array('jpg', 'png', 'jpeg');
-                if (in_array($fileType, $allowTypes)) {
-                    if (move_uploaded_file($_FILES["prodImg1Add"]["tmp_name"], $targetFilePath)) {
-                        $sql_insert_img1 = "INSERT INTO product_image VALUES('$prodID', '$prodImage1');";
-                        $conn->query($sql_insert_img1);
-
-                    } else {
-                        $statusMsgUploadImg = "Đã xảy ra lỗi khi upload ảnh!.";
-                    }
-                } else {
-                    $statusMsgUploadImg = 'Chỉ chấp nhận file JPG, JPEG, PNG.';
-                }
-            }
-
-            // Image 2
-            if (isset($_FILES['prodImg2Add']) && !empty($_FILES["prodImg2Add"]["name"])) {
-                $targetDir = "../assets/img/products/";
-                $fileName_tmp = basename($_FILES["prodImg2Add"]["name"]);
-                $fileType = pathinfo($fileName_tmp, PATHINFO_EXTENSION);
-                $prodImage2 = "";
-                if (empty($_FILES["prodImg1Add"]["name"])) {
-                    $prodImage2 = "1" . $randChr . $fileType;
-                } else {
-                    $prodImage2 = "2" . $randChr . $fileType;
-                }
-                $targetFilePath = $targetDir . $prodImage2;
-                $allowTypes = array('jpg', 'png', 'jpeg');
-                if (in_array($fileType, $allowTypes)) {
-                    if (move_uploaded_file($_FILES["prodImg2Add"]["tmp_name"], $targetFilePath)) {
-                        $sql_insert_img2 = "INSERT INTO product_image VALUES('$prodID', '$prodImage2');";
-                        $conn->query($sql_insert_img2);
-
-                    } else {
-                        $statusMsgUploadImg = "Đã xảy ra lỗi khi upload ảnh!.";
-                    }
-                } else {
-                    $statusMsgUploadImg = 'Chỉ chấp nhận file JPG, JPEG, PNG.';
-                }
-            }
-
-            // Image 3
-            if (isset($_FILES['prodImg3Add']) && !empty($_FILES["prodImg3Add"]["name"])) {
-                $targetDir = "../assets/img/products/";
-                $fileName_tmp = basename($_FILES["prodImg3Add"]["name"]);
-                $fileType = pathinfo($fileName_tmp, PATHINFO_EXTENSION);
-                $prodImage3 = "";
-                if (empty($_FILES["prodImg1Add"]["name"]) && empty($_FILES["prodImg2Add"]["name"])) {
-                    $prodImage3 = "1" . $randChr . $fileType;
-                } else if (!empty($_FILES["prodImg1Add"]["name"]) && empty($_FILES["prodImg2Add"]["name"])) {
-                    $prodImage3 = "2" . $randChr . $fileType;
-                } else if (empty($_FILES["prodImg1Add"]["name"]) && !empty($_FILES["prodImg2Add"]["name"])) {
-                    $prodImage3 = "2" . $randChr . $fileType;
-                } else {
-                    $prodImage3 = "3" . $randChr . $fileType;
-                }
-                $targetFilePath = $targetDir . $prodImage3;
-                $allowTypes = array('jpg', 'png', 'jpeg');
-                if (in_array($fileType, $allowTypes)) {
-                    if (move_uploaded_file($_FILES["prodImg3Add"]["tmp_name"], $targetFilePath)) {
-                        $sql_insert_img3 = "INSERT INTO product_image VALUES('$prodID', '$prodImage3');";
-                        $conn->query($sql_insert_img3);
-
-                    } else {
-                        $statusMsgUploadImg = "Đã xảy ra lỗi khi upload ảnh!.";
-                    }
-                } else {
-                    $statusMsgUploadImg = 'Chỉ chấp nhận file JPG, JPEG, PNG.';
-                }
-            }
-
-            $arr_products = [
-                'hovaten' => $hoVaTen,
-                'chucvu' => $chucVu,
-                'phongban' => $phongBan,
-                'luong' => $luong,
-                'ngayvaolam' => $ngayVaoLam
+            $arr_product = [
+                'prodID'=>$prodID,
+                'prodName'=>$prodName,
+                'prodDetail'=>$prodDetail,
+                'prodCate'=>$prodCategory,
+                'prodSupplierID' =>$prodSupplierID,
+                'prodPrice' => $prodPrice,
+                'prodStock' => $prodStock,
+                'prodSold' => $prodSold,
+                'prodStatus'=>$prodStatus
             ];
-            $isInsert = $adminModel->insert($arr_products);
 
+            $isInsert = $adminModel->insertProduct($arr_product);
+            $imageUrls = array_filter(array($_POST['imageInsert1'], $_POST['imageInsert2'], $_POST['imageInsert3']));
+            $size = count($imageUrls);
+            $isInsertImage = array();
+            
+            $temp = 'image';   
+            for ($i = 0; $i < $size; $i++) {
+                $imgID = $prodID.($i+1);
+                $prodImgLabel = ($i+1).$temp.$prodID;
+                $isInsertImage[$i] = $adminModel->insertProductImage($imageUrls[$i], $prodID,$imgID,$prodImgLabel);
+            }
+            
             if ($isInsert) {
+                //&& !in_array(false, $isInsertImage, true)
                 $_SESSION['success'] = "Thêm mới sản phẩm thành công";
             } else {
                 $_SESSION['error'] = "Thêm mới sản phẩm thất bại";
             }
-            header("Location: index.php?controller=user&action=index");
+
+            // header("Location: product.php");
             exit();
         }
         //gọi view
@@ -238,8 +181,7 @@ class AdminController
     //Xu ly them supplier
     public function addSupplierProcess()
     {
-        $adminModel = new AdminModel();
-        $error = '';
+        $supplierModel = new SupplierModel();
         //xử lý 
         if (isset($_POST['btnAddSupplier'])) {
             $supplierName = $_POST['nameSupplier'];
@@ -256,7 +198,7 @@ class AdminController
                 'supplierPhone' => $supplierPhone,
                 'supplierEmail' => $supplierEmail
             ];
-            $isInsert = $adminModel->insertSupplier($supplier);
+            $isInsert = $supplierModel->insertSupplier($supplier);
             if ($isInsert) {
                 $_SESSION['successAddSupplier'] = "Thêm mới nhà cung cấp thành công";
             } else {
@@ -272,11 +214,11 @@ class AdminController
     //Xu ly xoa nha cung cap
     public function deleteSupplier()
     {
-        $adminModel = new AdminModel();
+        $supplierModel = new SupplierModel();
         //xử lý 
         if (isset($_GET['id'])) {
             $supplierId = $_GET['id'];
-            $isDelete = $adminModel->deleteSupplier($supplierId);
+            $isDelete = $supplierModel->deleteSupplier($supplierId);
             echo $isDelete;
             if ($isDelete) {
                 $_SESSION['successDeleteSupplier'] = 'Xóa nhà cung cấp có id: ' . $supplierId . ' thành công';
@@ -291,8 +233,8 @@ class AdminController
     //Xu ly xoa toan bo nha cung cap
     public function deleteAllSupplier()
     {
-        $adminModel = new AdminModel();
-        $isDelete = $adminModel->deleteAllSupplier();
+        $supplierModel = new SupplierModel();
+        $isDelete = $supplierModel->deleteAllSupplier();
         if ($isDelete) {
             $_SESSION['successDeleteAllSupplier'] = "Xóa toàn bộ NCC thành công";
         } else {
@@ -306,12 +248,12 @@ class AdminController
     //Lấy dữ liệu đổ vào view
     public function updateSupplier()
     {
-        $adminModel = new AdminModel();
+        $supplierModel = new SupplierModel();
         if (isset($_GET['id'])) {
             //lấy ra thông tin nhân viên dựa theo id đã gắn trên url
             $supplierId = $_GET['id'];
             //gọi model để lấy ra đối tượng nhân viên theo id
-            $supplier = $adminModel->getSupplierById($supplierId);
+            $supplier = $supplierModel->getSupplierById($supplierId);
         }
         //truyền ra view
         require_once '../view/admin/updateSupplier.php';
@@ -320,7 +262,7 @@ class AdminController
     //Thực hiện update
     public function updateSupplierProcess()
     {
-        $adminModel = new AdminModel();
+        $supplierModel = new supplierModel();
         //xử lý 
         if (isset($_POST['btnUpdateSupplier'])) {
             $supplierId = $_POST['idSupplier'];
@@ -337,7 +279,7 @@ class AdminController
                 'supplierEmail' => $supplierEmail
             ];
 
-            $isUpdate = $adminModel->updateSupplier($supplier);
+            $isUpdate = $supplierModel->updateSupplier($supplier);
             if ($isUpdate) {
                 $_SESSION['successUpdateSupplier'] = 'Update thông tin NCC có ID' . $supplierId . ' thành công';
             } else {
@@ -348,9 +290,6 @@ class AdminController
             exit();
         }
     }
-
-
-
 
 
 
@@ -365,7 +304,7 @@ class AdminController
     //Xử lý thêm nhân viên
     public function addEmployeeProcess()
     {
-        $adminModel = new AdminModel();
+        $employeeModel = new EmployeeModel();
         //xử lý 
         if (isset($_POST['btnAddEmployee'])) {
             $employeeName = $_POST['nameEmployee'];
@@ -398,7 +337,7 @@ class AdminController
                 'employeePass' => $employeePass,
             ];
 
-            $isInsert = $adminModel->insertEmployee($employee);
+            $isInsert = $employeeModel->insertEmployee($employee);
             if ($isInsert) {
                 $_SESSION['successAddEmployee'] = "Thêm mới nhân viên thành công";
             } else {
@@ -414,11 +353,11 @@ class AdminController
     //Xử lý xóa nhân viên
     public function deleteEmployee()
     {
-        $adminModel = new AdminModel();
+        $employeeModel = new EmployeeModel();
         //xử lý 
         if (isset($_GET['id'])) {
             $employeeId = $_GET['id'];
-            $isDelete = $adminModel->deleteEmployee($employeeId);
+            $isDelete = $employeeModel->deleteEmployee($employeeId);
             if ($isDelete) {
                 $_SESSION['successDeleteEmployee'] = 'Xóa nhà cung cấp có id: ' . $employeeId . ' thành công';
             } else {
@@ -432,8 +371,8 @@ class AdminController
     //Xử lý xóa toàn bộ nhân viên
     public function deleteAllEmployee()
     {
-        $adminModel = new AdminModel();
-        $isDelete = $adminModel->deleteAllEmployee();
+        $employeeModel = new EmployeeModel();
+        $isDelete = $employeeModel->deleteAllEmployee();
         if ($isDelete) {
             $_SESSION['successDeleteAllEmployee'] = "Xóa toàn bộ nhân viên thành công";
         } else {
@@ -447,12 +386,12 @@ class AdminController
     //Lấy dữ liệu đổ vào view
     public function updateEmployee()
     {
-        $adminModel = new AdminModel();
+        $employeeModel = new EmployeeModel();
         if (isset($_GET['id'])) {
             //lấy ra thông tin nhân viên dựa theo id đã gắn trên url
             $employeeId = $_GET['id'];
             //gọi model để lấy ra đối tượng nhân viên theo id
-            $employee = $adminModel->getEmployeeById($employeeId);
+            $employee = $employeeModel->getEmployeeById($employeeId);
         }
         //truyền ra view
         require_once '../view/admin/updateEmployee.php';
@@ -461,7 +400,7 @@ class AdminController
     //Thực hiện update
     public function updateEmployeeProcess()
     {
-        $adminModel = new AdminModel();
+        $employeeModel = new EmployeeModel();
         //xử lý 
         if (isset($_POST['btnUpdateEmployee'])) {
             $employeeId = $_POST['idEmployee'];
@@ -487,7 +426,7 @@ class AdminController
                 'employeePass' => $employeePass
             ];
 
-            $isUpdate = $adminModel->updateEmployee($employee);
+            $isUpdate = $employeeModel->updateEmployee($employee);
             if ($isUpdate) {
                 $_SESSION['successUpdateEmployee'] = 'Update thông tin nhân viên có ID' . $employeeId . ' thành công';
             } else {
