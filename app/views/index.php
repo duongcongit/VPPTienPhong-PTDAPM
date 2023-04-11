@@ -62,7 +62,7 @@ include _DIR_ROOT."/app/views/partials/header.php";
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
-                <div class="col-md-12 row d-flex justify-content-evenly">
+                <div class="col-md-12 row d-flex justify-content-start">
 
                     <?php
                     foreach ($productsBestSold as $product) {
@@ -126,7 +126,7 @@ include _DIR_ROOT."/app/views/partials/header.php";
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
-                <div class="col-md-12 row d-flex justify-content-evenly">
+                <div class="col-md-12 row d-flex justify-content-start">
 
                     <?php
                     foreach ($productsCatThietBi as $product) {
