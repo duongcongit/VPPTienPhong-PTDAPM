@@ -22,10 +22,10 @@
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <div class="container-fluid">
                         <i id="btn-menu" class="bi bi-list me-3 fs-2" type="button"></i>
-                        <a href="<?php echo SITEURL; ?>employee/index">
+                        <a href="<?php echo SITEURL; ?>receipt/index">
                             <img src="<?php echo SITEURL; ?>/app/views/employee/assets/img/logotp.jpg" alt="" class="logo ms-3" style="width:105px">
                         </a>
-                        <a class="navbar-brand me-auto ms-3 h5 pt-3" href="<?php echo SITEURL; ?>employee/index">Trang Nhân Viên</a>
+                        <a class="navbar-brand me-auto ms-3 h5 pt-3" href="<?php echo SITEURL; ?>receipt/index">Trang Nhân Viên</a>
                         <!-- <a class="navbar-brand ms-auto" href="#"><i class="bi bi-person-workspace me-2"></i><?php echo $_SESSION['employName'] ?></a> -->
                     </div>
                 </nav>
@@ -46,21 +46,21 @@
                 <div class="sidebar-menu">
                     <ul class="">
                         <li>
-                            <a href="<?php echo SITEURL; ?>employee/index" class="nav-link link-dark">
+                            <a href="<?php echo SITEURL; ?>receipt/index" class="nav-link link-dark">
                                 <i class="bi bi-receipt"></i>
                                 <span class="sidebar-item-text">Quản lý đơn hàng</span>
                             </a>
                         </li>
 
                         <li>
-                            <a href="<?php echo SITEURL ?>employee/customerCare" class="nav-link link-dark">
+                            <a href="<?php echo SITEURL ?>receipt/customerCare" class="nav-link link-dark">
                                 <i class="bi bi-person-circle"></i>
                                 <span class="sidebar-item-text">Chăm sóc khách hàng</span>
                             </a>
                         </li>
 
                         <li>
-                            <a href="<?php echo SITEURL ?>employee/report" class="nav-link link-dark">
+                            <a href="<?php echo SITEURL ?>receipt/report" class="nav-link link-dark">
                             <i class="bi bi-card-text"></i>
                                 <span class="sidebar-item-text">Báo cáo</span>
                             </a>
@@ -68,7 +68,7 @@
                         <hr style="width: 100%;">
 
                         <li>
-                            <a href="partials/logout.php" class="nav-link link-dark">
+                            <a href="<?php echo SITEURL ?>receipt/logout.php" class="nav-link link-dark">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span class="sidebar-item-text">Đăng xuất</span>
                             </a>
