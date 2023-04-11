@@ -15,7 +15,7 @@
 <div class="col main-right container-fluid row ">
 
 <div class="col-md-12 mt-2 mb-3 nav-page">
-    <h5 class="text-muted"><a href="../index.php">Trang quản trị</a> / </span><a href="">Quản lý sản phẩm</a></h5>
+    <h5 class="text-muted"><a href="./index.php">Trang quản trị</a> / </span><a href="">Quản lý sản phẩm</a></h5>
 </div>
 <!--  -->
 

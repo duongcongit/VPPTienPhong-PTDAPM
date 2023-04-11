@@ -19,7 +19,7 @@
     <nav class="navbar navbar-light">
     <div class="container ">
         <a class="navbar-brand" href="./index.php">
-        <img src="assets/img/logotp.jpg" alt="" class="img-fluid">
+        <img src="" alt="" class="img-fluid">
         </a>
     </div>
     </nav>
