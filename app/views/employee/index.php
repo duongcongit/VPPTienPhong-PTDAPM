@@ -51,7 +51,7 @@
                     echo "<th scope='row'>{$recp['receiptPID']}</th>";
                     echo '<th class="row">';
                     echo '<div style="max-width: fit-content;">';
-                        echo '<img src="'.SITEURL.'views/assets/img/'.$recp['imageID'].'" alt="" class="product-avatar-list">';
+                        echo '<img src="'.SITEURL.'app/views/assets/img/'.$recp['imageID'].'" alt="" class="product-avatar-list">';
                     echo '</div>';
                     echo ' <div class="col row d-flex align-items-center">';
                         echo '<div class="col-md-12">';
@@ -77,22 +77,22 @@
                     if(!$recp['statusR']){
                         echo '<th>';
                         echo '<a type="button"  class="btn ms-auto text-success" href="processAcept.php?id='.$recp['receiptPID'].'"> <i class="bi bi-check2"></i>Xác nhận</a>';
-                        echo '<a type="button"  class="btn ms-auto text-danger" href="processDeleteAcc.php?id='.$recp['receiptPID'].'"> <i class="bi bi-check2"></i>Hủy</a>';
+                        echo '<a type="button"  class="btn ms-auto text-danger" href="processDeleteAcc.php?id='.$recp['receiptPID'].'"> <i class="bi bi-x"></i>Hủy</a>';
                         echo '</th>';
                     }
                     else if($recp['statusR']==1){
                         echo '<th>';
-                        echo '<a type="button"  class="btn ms-auto text-danger" href="processDeleteAcc.php?id='.$recp['receiptPID'].'"> <i class="bi bi-check2"></i>Hủy</a>';
+                        echo '<a type="button"  class="btn ms-auto text-danger" href="processDeleteAcc.php?id='.$recp['receiptPID'].'"> <i class="bi bi-x"></i>Hủy</a>';
                         echo '</th>';
                     }
                     else if($recp['statusR']==2){
                         echo '<th>';
-                        echo '<a type="button"  class="btn ms-auto text-success" href="processAcept.php?id='.$recp['receiptPID'].'"> <i class="bi bi-check2"></i>Xem chi tiết</a>';
+                        echo '<a type="button"  class="btn ms-auto text-primary" href="processAcept.php?id='.$recp['receiptPID'].'"> <i class="bi bi-info"></i>Xem chi tiết</a>';
                         echo '</th>';
                     }
                     else if($recp['statusR']==3){
                         echo '<th>';
-                        echo '<a type="button"  class="btn ms-auto text-success" href="processAcept.php?id='.$recp['receiptPID'].'"> <i class="bi bi-check2"></i>Xem chi tiết</a>';
+                        echo '<a type="button"  class="btn ms-auto text-primary" href="processAcept.php?id='.$recp['receiptPID'].'"> <i class="bi bi-info"></i>Xem chi tiết</a>';
                         echo '</th>';
                     }
 

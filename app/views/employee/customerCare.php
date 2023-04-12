@@ -11,7 +11,7 @@
 ?>
 <div class="col main-right container-fluid">
 <div class="col-md-12 mt-4 mb-3 nav-page">
-    <h5 class="text-muted"><a href="<?php echo SITEURL; ?>receipt/index">Trang nhân viên</a> / </span><a href="<?php echo SITEURL ?>receipt/customerCare">Chăm sóc khách hàng</a></h5>
+    <h5 class="text-muted"><a href="<?php echo SITEURL; ?>employee/index">Trang nhân viên</a> / </span><a href="<?php echo SITEURL ?>employee/customerCare">Chăm sóc khách hàng</a></h5>
 </div>
 <div class="container-fluid mt-4">
 		<div class="row chatbox">
