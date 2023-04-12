@@ -7,7 +7,7 @@
         private $productID;
         private $username;
         private $productName;
-        private $imageID;
+        private $imageURL;
         private $quantityBuy;
         private $total;
         private $statusR;
@@ -41,7 +41,7 @@
             // B1. Khởi tạo kết nối
             $conn = $this->connectDb();
             // B2. Định nghĩa và thực hiện truy vấn
-            $sql = "SELECT receiptp.receiptPID,receiptp.customerID,detailreceiptp.productID,customers.username,products.productName,product_image.imageID,detailreceiptp.quantityBuy, detailreceiptp.total,receiptp.statusR
+            $sql = "SELECT receiptp.receiptPID,receiptp.customerID,detailreceiptp.productID,customers.username,products.productName,product_image.imageURL,detailreceiptp.quantityBuy, detailreceiptp.total,receiptp.statusR
             FROM receiptp,detailreceiptp,products,customers,product_image WHERE  receiptp.receiptPID = detailreceiptp.receiptPID and receiptp.customerID = customers.customerID and detailreceiptp.productID = products.productID 
             and products.productID = product_image.productID";
             $result = mysqli_query($conn,$sql);
@@ -76,7 +76,27 @@
             $this->closeDb($conn);
             return $result;
         }
+        
+        public function getReceiptDetail($id)
+        {
 
+            $conn = $this->connectDb();
+            $sql = "SELECT detailreceiptp.*,products.productName,product_image.imageURL 
+            FROM detailreceiptp,products,product_image 
+            WHERE receiptPID = '{$id}' and products.productID= detailreceiptp.productID and products.productID=product_image.productID ";
+            $result = mysqli_query($conn,$sql);
+            // Lấy chi tiết đơn hàng
+            
+            $receiptDetail = [];
+            // B3. Xử lý và (KO PHẢI SHOW KẾT QUẢ) TRẢ VỀ KẾT QUẢ
+            if(mysqli_num_rows($result) > 0){
+                // Lấy tất cả dùng mysqli_fetch_all
+                $receiptDetail = mysqli_fetch_all($result, MYSQLI_ASSOC); //Sử dụng MYSQLI_ASSOC để chỉ định lấy kết quả dạng MẢNG KẾT HỢP
+            }
+            
+            $this->closeDb($conn);
+            return $receiptDetail;
+        }
 
         public function connectDb() {
             $connection = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD, DB_NAME);

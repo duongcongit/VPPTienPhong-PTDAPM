@@ -23,12 +23,11 @@
         }
         //-------Receiptp--------------
         //Hàm thay đổi trạng thái đơng hàng
-        public function confirmReceiptp() {
+        public function confirmReceiptp($id) {
             $employeeModel = new EmployeeModel();
             // Lấy ra thông tin
-            if (isset($_GET['id']) && isset($_GET['choice'])) {
+            if (isset($_GET['id'])) {
                 $id = $_GET['id'];
-                $status = $_GET['choice'];
             }
 
             //gọi model 
@@ -40,16 +39,15 @@
             if ($res) {
                 $_SESSION['editFailStatus'] = "Xác nhận đơn hàng thất bại";
             }
-            header("Location:" .SITEURL."app/views/employee/index.php");
+            header("Location:" .SITEURL."employee/index");
             exit();
         }
         
-        public function refuseReceiptp() {
+        public function refuseReceiptp($id) {
             $employeeModel = new EmployeeModel();
             // Lấy ra thông tin
-            if (isset($_GET['id']) && isset($_GET['choice'])) {
+            if (isset($_GET['id']) ) {
                 $id = $_GET['id'];
-                $status = $_GET['choice'];
             }
 
             //gọi model 
@@ -61,8 +59,24 @@
             if ($res) {
                 $_SESSION['editFailStatus'] = "Xác nhận đơn hàng thất bại";
             }
-            header("Location:" .SITEURL."app/views/employee/index.php");
+            header("Location:" .SITEURL."employee/index");
             exit();
         } 
+
+        public function detail($id){
+            $employeeModel = new EmployeeModel();
+            // Lấy ra thông tin
+            if (isset($_GET['id']) ) {
+                $id = $_GET['id'];
+            }
+            $details = $employeeModel ->getReceiptDetail($id);
+            if(!$details){
+                echo "Không thể lấy được thông tin đơn hàng";
+            }
+            else{
+                require_once _DIR_ROOT.'/app/views/employee/detailReceiptp.php';
+            }
+        }
+
     }
 ?>
