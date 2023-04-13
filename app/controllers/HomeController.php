@@ -7,7 +7,7 @@ class Home extends Controller{
     public function index(){
         $productModel = new ProductModel();
         $productsBestSold = $productModel->getProductsBestSold();
-        $productsCatThietBi = $productModel->getProductsByCategory("THIETBI");
+        $productsCatThietBi = $productModel->getProductsByCategory("THIETBI", "sold desc");
         require_once _DIR_ROOT.'/app/views/index.php';
 
         // $this->render('index', $products);

@@ -1,5 +1,5 @@
 <?php
-include _DIR_ROOT."/app/views/partials/header.php";
+include _DIR_ROOT . "/app/views/partials/header.php";
 ?>
 
 <script>
@@ -12,9 +12,6 @@ include _DIR_ROOT."/app/views/partials/header.php";
         <div class="col-sm-12 col-md-6 product-image row">
             <div class="col-md-12">
                 <img src="<?php echo $productDetails['image1']; ?>" alt="Product" class="w-100">
-            </div>
-            <div class="col-sm-12 col-md-12">
-
             </div>
         </div>
 
@@ -72,12 +69,21 @@ include _DIR_ROOT."/app/views/partials/header.php";
                         <a class="page-link bi-plus-lg" id="btn-increase-quantity" type="button"></a>
                     </li>
                 </ul>
-                <button class="btn btn-info text-light btn-add-to-cart-detail" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $productDetails['productID']; ?>">
-                    Thêm vào giỏ
-                </button>
+                <?php
+                if ($productDetails['stock'] > 0) {
+                ?>
+                    <button class="btn btn-info text-light btn-add-to-cart-detail" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $productDetails['productID']; ?>">
+                        Thêm vào giỏ
+                    </button>
+                <?php } else {
+                ?>
+                    <button class="btn btn-info text-light btn-out-of-stock bg-secondary" style="border: grey;" disabled>Hết hàng</button>
+                <?php
+                }
+                ?>
             </div>
-            <!--  -->
 
+            <!--  -->
         </div>
 
         <div class="col-md-12 product-description mt-2 row">
@@ -131,8 +137,18 @@ include _DIR_ROOT."/app/views/partials/header.php";
                                 <strong><?php echo $product['price']; ?></strong>
                             </div>
                             <div class="d-flex justify-content-center pt-3">
-                                <button class="btn btn-info text-light btn-add-to-cart" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $product['productID']; ?>">Thêm vào giỏ</button>
+                                <?php
+                                if ($product['stock'] > 0) {
+                                ?>
+                                    <button class="btn btn-info text-light btn-add-to-cart" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $product['productID']; ?>">Thêm vào giỏ</button>
+                                <?php } else {
+                                ?>
+                                    <button class="btn btn-info text-light btn-out-of-stock bg-secondary" style="border: grey;" disabled>Hết hàng</button>
+                                <?php
+                                }
+                                ?>
                             </div>
+
                         </div>
 
                     <?php
@@ -231,5 +247,5 @@ include _DIR_ROOT."/app/views/partials/header.php";
 </script>
 
 <?php
-include _DIR_ROOT."/app/views/partials/footer.php";
+include _DIR_ROOT . "/app/views/partials/footer.php";
 ?>

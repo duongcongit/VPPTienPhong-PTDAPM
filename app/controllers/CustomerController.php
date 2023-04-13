@@ -6,6 +6,11 @@ require_once _DIR_ROOT . '/app/models/CartModel.php';
 class Customer extends Controller
 {
 
+    public function index()
+    {
+        require_once _DIR_ROOT . '/app/views/errors/404.php';
+    }
+
     // Xem giở hàng
     public function cart()
     {

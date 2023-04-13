@@ -131,7 +131,7 @@ body {
 }
 
 
-.btn-add-to-cart, .btn-add-to-cart-detail {
+.btn-add-to-cart, .btn-out-of-stock, .btn-add-to-cart-detail {
     margin-left: 20px;
     width: 125px;
     height: 37.8px;
@@ -159,3 +159,32 @@ body {
     border-radius: 5px;
 }
 
+
+/* Category page */
+.category-menu {
+    margin-left: 3px;
+    border-top: 1px ridge rgb(194, 194, 194);
+    margin-top: 30px;
+    border-radius: 5px;
+    background-color: #fdfdfd;
+}
+.category-menu>ul {
+    padding: 20px 0px 30px 15px;
+}
+.category-menu>ul>li {
+    list-style: none;
+    padding: 20px 0px 20px 0px;
+    border-top: 1px ridge rgb(194, 194, 194);
+    
+}
+.category-menu>ul>li:first-child {
+    list-style: none;
+    border-top: none;
+    
+}
+
+.category-menu>ul>li>a {
+    text-decoration: none;
+    font-weight: 300;
+    color: rgb(92, 91, 91);
+}

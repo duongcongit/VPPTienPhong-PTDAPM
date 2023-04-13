@@ -39,30 +39,31 @@ class App
             require_once 'controllers/' . $this->__controller . 'Controller.php';
             $this->__controller = new $this->__controller();
             unset($urlArr[0]);
+            // Xử lý action
+            if (!empty($urlArr[1])) {
+                $this->__action = $urlArr[1];
+                unset($urlArr[1]);
+                if (method_exists($this->__controller, $this->__action)) {
+                    // Xử lý params
+                    $this->__params = array_values(($urlArr));
+                    call_user_func_array([$this->__controller, $this->__action], $this->__params);
+                } else {
+                    $this->loadError("404");
+                }
+            } else {
+                if (method_exists($this->__controller, $this->__action)) {
+                    // Xử lý params
+                    $this->__params = array_values(($urlArr));
+                    call_user_func_array([$this->__controller, $this->__action], $this->__params);
+                }
+            }
         } else {
-            echo "Lỗi!";
+            $this->loadError("404");
         }
-
-        // Xử lý action
-        if (!empty($urlArr[1])) {
-            $this->__action = $urlArr[1];
-            unset($urlArr[1]);
-        }
-        else{
-            // $this->__controller->index();
-        }
-
-        // Xử lý params
-        $this->__params = array_values(($urlArr));
-
-
-        call_user_func_array([$this->__controller, $this->__action], $this->__params);
-
-
     }
 
     public function loadError($name = '404')
     {
-        require_once './errors' . $name . '.php';
+        require_once _DIR_ROOT.'/app/views/errors/'.$name.'.php';
     }
 }

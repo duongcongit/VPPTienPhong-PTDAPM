@@ -1,5 +1,6 @@
 <?php
 define('_DIR_ROOT', __DIR__);
+require_once _DIR_ROOT."/app/config/constants.php";
 require_once 'app/App.php';
 $App = new App();
 

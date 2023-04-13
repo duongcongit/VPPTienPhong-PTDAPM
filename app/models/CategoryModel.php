@@ -11,8 +11,7 @@ class CategoryModel
         $conn = $this->connectDb();
         $categories = [];
 
-        $splQuery = "SELECT products.*,categories.name
-        FROM categories";
+        $splQuery = "SELECT * FROM categories";
         $result = $conn->query($splQuery);
         $categories = $result->fetch_all(MYSQLI_ASSOC);
 

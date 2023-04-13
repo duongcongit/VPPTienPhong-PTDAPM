@@ -34,7 +34,7 @@ class ProductModel
     }
 
     // Lấy sản phẩm theo danh mục
-    public function getProductsByCategory($categoryID)
+    public function getProductsByCategory($categoryID, $orderBy)
     {
         $conn = $this->connectDb();
         $arr_products = [];
@@ -42,7 +42,8 @@ class ProductModel
         $splQuery = "SELECT products.*,categories.name
         FROM products,categories
         WHERE products.categoryID = categories.categoryID
-        AND categories.categoryID = '{$categoryID}'";
+        AND categories.categoryID = '{$categoryID}'
+        ORDER BY ".$orderBy."";
         $result = $conn->query($splQuery);
         $arr_products = $result->fetch_all(MYSQLI_ASSOC);
 
