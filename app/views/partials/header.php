@@ -1,5 +1,5 @@
 <?php
-require_once _DIR_ROOT."/app/config/constants.php";
+require_once _DIR_ROOT . "/app/config/constants.php";
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +18,36 @@ require_once _DIR_ROOT."/app/config/constants.php";
     <link rel="stylesheet" href="<?php echo SITEURL; ?>/app/assets/css/style.css">
     <script src="<?php echo SITEURL; ?>/app/assets/js/jquery-3.6.4.min.js"></script>
     <script src="<?php echo SITEURL; ?>/app/assets/js/script.js"></script>
+    <script>
+        const SITEURL = "<?php echo SITEURL; ?>";
+    </script>
 </head>
 
 <body>
+
+    <!-- Modal add to cart success -->
+    <div class="modal fade modal-success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div>
+                <div class="mt-5" style="height: fit-content;background-color: transparent;">
+                    <i class="bi bi-check-circle text-info" style="font-size: 50px;"></i>
+                </div>
+                <p class="mt-0 fs-5" id="modal-success-message">Thành công</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal add to cart fail -->
+    <div class="modal fade modal-fail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div>
+                <div class="mt-5" style="height: fit-content;background-color: transparent;">
+                    <i class="bi bi-x-circle text-danger" style="font-size: 50px;"></i>
+                </div>
+                <p class="mt-0 fs-5" id="modal-fail-message">Lỗi</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Start Header -->
     <div class="container-fluid header p-0 bg-light">
@@ -90,4 +117,3 @@ require_once _DIR_ROOT."/app/config/constants.php";
 
     </div>
     <!-- End Header -->
-        

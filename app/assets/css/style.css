@@ -188,3 +188,13 @@ body {
     font-weight: 300;
     color: rgb(92, 91, 91);
 }
+
+/* Style for modal alert add to cart success */
+.modal-success div div, .modal-fail div div {
+    color: white;
+    background-color: rgba(53, 53, 53, 0.7);
+    height: 200px;
+    width: 400px;
+    border-radius: 10px;
+    text-align: center;
+  }

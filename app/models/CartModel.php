@@ -42,7 +42,7 @@ class CartModel
     public function getProductInCart($customerID, $productID)
     {
         $conn = $this->connectDb();
-        $products = [];
+        $productDetails = [];
 
         $splQuery = "SELECT products.*,cart.*
         FROM products,cart,customers
@@ -51,11 +51,25 @@ class CartModel
         AND products.productID = cart.productID
         AND products.productID='{$productID}';";
 
-        $result = $conn->query($splQuery);
-        $products = $result->fetch_assoc();
+        $result = $conn->query($splQuery)->fetch_all(MYSQLI_ASSOC);
+
+        if ($result != NULL) {
+            $productDetails = $result[0];
+            // Lấy danh sách ảnh
+            $sqlGetImages = "SELECT imageID,imageURL FROM product_image WHERE productID='{$productID}' ORDER BY imageID ASC";
+            $images = $conn->query($sqlGetImages)->fetch_all(MYSQLI_ASSOC);
+
+            foreach ($images as $image) {
+                $imageLabel = "image" . substr($image['imageID'], 0, 1);;
+                $tempImage = array($imageLabel => $image['imageURL']);
+                $productDetails = $productDetails + $tempImage;
+            }
+
+            return $productDetails;
+        }
 
         $this->closeDb($conn);
-        return $products;
+        return $result;
     }
 
     // Thêm sản phẩm vào giỏ hàng
@@ -69,19 +83,9 @@ class CartModel
 
         $msg = "";
 
-        $existProduct = $this->getProductInCart($customerID, $productID);
-
-
-        if ($existProduct == NULL) {
-            $splInsert = "INSERT INTO cart (customerID, productID, quantity, timeAdd) 
+        $splInsert = "INSERT INTO cart (customerID, productID, quantity, timeAdd) 
             VALUES ('{$customerID}', '{$productID}', '{$quantity}', '{$currentTime}');";
-            $result = $conn->query($splInsert);
-        } else {
-            $quantity = $quantity + $existProduct['quantity'];
-            $sqlUpdate = "UPDATE cart SET quantity='{$quantity}', timeAdd='{$currentTime}' 
-            WHERE customerID='{$customerID}' AND productID = '{$productID}'";
-            $result = $conn->query($sqlUpdate);
-        }
+        $result = $conn->query($splInsert);
 
         $this->closeDb($conn);
         return $result;

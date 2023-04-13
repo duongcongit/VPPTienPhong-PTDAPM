@@ -30,7 +30,9 @@ class Customer extends Controller
     // Thêm sản phẩm vào giỏ hàng
     public function addProductToCart()
     {
+        $productModel = new ProductModel();
         $cartModel = new CartModel();
+        $msg = "";
 
         if (!isset($_SESSION['customerID'])) {
             header('Location: ' . SITEURL . 'login');
@@ -41,14 +43,37 @@ class Customer extends Controller
             return;
         }
 
+
+
         $customerID = $_SESSION['customerID'];
         $productID = $_POST['productID'];
         $quantity = $_POST['quantity'];
 
-        $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
+        $productInfo = $productModel->getProductDetail($productID);
+        $existProduct = $cartModel->getProductInCart($customerID, $productID);
 
-        $result = $cartModel->addProductToCart($data);
-        echo $result;
+        if ($existProduct == NULL) {
+        }
+
+
+        if ($existProduct == NULL) {
+            if ($quantity > $productInfo['stock']) {
+                $msg = "Exceed the available quantity";
+            } else {
+                $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
+                $result = $cartModel->addProductToCart($data);
+            }
+        } else {
+            $quantity = $quantity + $existProduct['quantity'];
+            if ($quantity > $productInfo['stock']) {
+                $msg = "Exceed the available quantity";
+            } else {
+                $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
+                $result = $cartModel->updateProductQuantity($data);
+            }
+        }
+
+        echo $msg;
     }
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng

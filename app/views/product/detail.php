@@ -60,13 +60,13 @@ include _DIR_ROOT . "/app/views/partials/header.php";
             <div class="item-num d-flex mt-5 mb-2">
                 <ul class="pagination justify-content-end">
                     <li class="page-item page-item-btn-decrease">
-                        <a class="page-link bi bi-dash-lg" id="btn-decrease-quantity" type="button"></a>
+                        <a class="page-link bi bi-dash-lg" id="btn-decrease-quantity-detail" type="button"></a>
                     </li>
                     <li class="page-item">
                         <input type="text" id="input-quantity-detail" class="page-link px-2 text-dark" autocomplete="off" value="1" style="width: 50px;" data-prod_stock="<?php echo $productDetails['stock']; ?>">
                     </li>
                     <li class="page-item">
-                        <a class="page-link bi-plus-lg" id="btn-increase-quantity" type="button"></a>
+                        <a class="page-link bi-plus-lg" id="btn-increase-quantity-detail" type="button"></a>
                     </li>
                 </ul>
                 <?php
@@ -163,88 +163,6 @@ include _DIR_ROOT . "/app/views/partials/header.php";
 
     </div>
 </div>
-
-<script>
-    const SITEURL = "<?php echo SITEURL; ?>";
-    // Check when quantity is changed
-    $("#input-quantity-detail").on("input", function() {
-        let numPattern = /^[0-9]+$/;
-        var stock = $(this).data("prod_stock");
-        if (numPattern.test($(this).val()) == false || $(this).val() == 0) {
-            $(this).val("1");
-        }
-        if ($(this).val() > $(this).data("prod_stock")) {
-            $(this).val($(this).data("prod_stock"));
-        }
-    })
-
-    // $("#input-quantity-detail").on("change", function() {
-    //     var stock = $(this).data("prod_stock");
-    //     if ($(this).val() > $(this).data("prod_stock")) {
-    //         $(this).val($(this).data("prod_stock"));
-    //     }
-    // })
-
-    // When click button increase quantity
-    $("#btn-increase-quantity").on("click", function() {
-        var currQuantity = $("#input-quantity-detail").val();
-        var stock = $("#input-quantity-detail").data("prod_stock");
-        if (parseInt(currQuantity) < stock) {
-            $("#input-quantity-detail").val(parseInt(currQuantity) + 1);
-        }
-
-    });
-    // When click button decrease quantity
-    $("#btn-decrease-quantity").on("click", function() {
-        var currQuantity = $("#input-quantity-detail").val();
-        var stock = $(this).data("prod_stock");
-        if (parseInt(currQuantity) > 1) {
-            $("#input-quantity-detail").val(parseInt(currQuantity) - 1);
-        }
-    });
-
-    $(".btn-add-to-cart-detail").on("click", function() {
-        var customerID = $(this).data("customer_id");
-        var productID = $(this).data("product_id");
-        var quantity = $("#input-quantity-detail").val();
-
-        $.ajax({
-            url: SITEURL + "customer/addProductToCart",
-            type: "POST",
-            data: {
-                customerID: customerID,
-                productID: productID,
-                quantity: quantity
-            },
-            success: function(data) {
-                console.log("Thêm vào giỏ hàng thành công");
-            }
-        })
-
-
-    });
-
-    // ===============
-    $(".btn-add-to-cart").on("click", function() {
-        var customerID = $(this).data("customer_id");
-        var productID = $(this).data("product_id");
-        var quantity = 1;
-
-        $.ajax({
-            url: SITEURL + "customer/addProductToCart",
-            type: "POST",
-            data: {
-                customerID: customerID,
-                productID: productID,
-                quantity: quantity
-            },
-            success: function(data) {
-                console.log("Thêm vào giỏ hàng thành công");
-            }
-        })
-        // 
-    });
-</script>
 
 <?php
 include _DIR_ROOT . "/app/views/partials/footer.php";
