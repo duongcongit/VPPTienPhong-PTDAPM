@@ -98,4 +98,38 @@ class Customer extends Controller
 
         $result = $cartModel->updateProductQuantity($data);
     }
+
+    // Xóa một sản phẩm trong giỏ hàng
+    public function removeProductFromCart()
+    {
+        $cartModel = new CartModel();
+
+        if (!isset($_SESSION['customerID'])) {
+            header('Location: ' . SITEURL . 'login');
+            return;
+        }
+        if (!isset($_POST['productID'])) {
+            header('Location: ' . SITEURL . '404');
+            return;
+        }
+
+        $customerID = $_SESSION['customerID'];
+        $productID = $_POST['productID'];
+        $data = array("customerID" => $customerID, "productID" => $productID);
+        $result = $cartModel->deleteProductInCart($data);
+    }
+
+    // Xóa tất cả sản phẩm trong giỏ hàng
+    public function clearCart()
+    {
+        $cartModel = new CartModel();
+
+        if (!isset($_SESSION['customerID'])) {
+            header('Location: ' . SITEURL . 'login');
+            return;
+        }
+        $customerID = $_SESSION['customerID'];
+        $data = array("customerID" => $customerID);
+        $result = $cartModel->deleteAllProductsInCart($data);
+    }
 }
