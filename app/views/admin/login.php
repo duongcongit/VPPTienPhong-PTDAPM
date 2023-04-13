@@ -25,7 +25,7 @@
     <nav class="navbar navbar-light">
     <div class="container ">
         <a class="navbar-brand" href="./index.php">
-        <img src="assets/img/logotp.jpg" alt="" class="img-fluid">
+        <img src="<?php echo SITEURL; ?>/app/views/admin/assets/img/logo_login.png" alt="" class="img-fluid">
         </a>
     </div>
     </nav>

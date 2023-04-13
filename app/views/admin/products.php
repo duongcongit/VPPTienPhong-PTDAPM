@@ -157,7 +157,12 @@ if (!isset($_SESSION['successAddProduct']) && !isset($_SESSION['errorAddProduct'
                 echo '<tr>';
                     echo '<th class="row">';
                     echo '<div style="max-width: fit-content;">';
-                        echo '<img src="'.$product['image1'].'" alt="" class="product-avatar-list">';
+                        if(isset($product['image1'])){
+                            echo '<img src="'.$product['image1'].'" alt="" class="product-avatar-list">';
+                        }
+                        else{
+                            echo '<img src="'.SITEURL.'/app/views/admin/assets/img/no-image-removebg.png" alt ="" class="product-avatar-list">';
+                        }
                     echo '</div>';
                     echo ' <div class="col row d-flex align-items-center">';
                         if ($product['status'] == 1 && $product['stock'] > 0) {
