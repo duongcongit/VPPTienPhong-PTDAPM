@@ -83,6 +83,24 @@ class ReceiptModel
         return $result;
     }
 
+    // Tạo chi tiết hóa đơn
+    public function addDetailReceipt($data)
+    {
+        $conn = $this->connectDb();
+
+        $customerID = $data['customerID'];
+        $employeeID = $data['employeeID'];
+        $status = 0;
+
+        $splQuery = "INSERT INTO receiptP (customerID, employeeID, statusR) 
+        VALUES (''{$customerID}'', ''{$employeeID}'', ''{$status}'');";
+
+        $result = $conn->query($splQuery);
+
+        $this->closeDb($conn);
+        return $result;
+    }
+
     public function connectDb()
     {
         $connection = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD, DB_NAME);

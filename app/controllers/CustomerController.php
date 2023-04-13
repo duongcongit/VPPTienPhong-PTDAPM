@@ -2,6 +2,7 @@
 require_once _DIR_ROOT . '/app/core/Controller.php';
 require_once _DIR_ROOT . '/app/models/ProductModel.php';
 require_once _DIR_ROOT . '/app/models/CartModel.php';
+require_once _DIR_ROOT . '/app/models/ReceiptModel.php';
 
 class Customer extends Controller
 {
@@ -42,8 +43,6 @@ class Customer extends Controller
             header('Location: ' . SITEURL . '404');
             return;
         }
-
-
 
         $customerID = $_SESSION['customerID'];
         $productID = $_POST['productID'];
@@ -131,5 +130,21 @@ class Customer extends Controller
         $customerID = $_SESSION['customerID'];
         $data = array("customerID" => $customerID);
         $result = $cartModel->deleteAllProductsInCart($data);
+    }
+
+    // Đặt hàng
+    public function order($products = []){
+        $receiptModel = new ReceiptModel();
+        $cartModel = new CartModel();
+
+        if (!isset($_SESSION['customerID'])) {
+            header('Location: ' . SITEURL . 'login');
+            return;
+        }
+
+        $customerID = $_SESSION['customerID'];
+
+        require_once _DIR_ROOT . '/app/views/customer/order.php';
+
     }
 }

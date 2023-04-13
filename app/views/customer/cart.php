@@ -8,10 +8,6 @@ include _DIR_ROOT . "/app/views/partials/header.php";
     }
 </style>
 
-<script>
-    document.title = "Giỏ hàng"
-</script>
-
 <!-- Modal confirm -->
 <div class="modal fade modal-confirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="width: 380px;">
@@ -45,7 +41,7 @@ include _DIR_ROOT . "/app/views/partials/header.php";
         <!-- SHOW PRODUCTS -->
 
         <div class="col-md-12 col-lg-9 mb-5">
-            <div class="product-cart-attr mb-4 col-md-12 bg-light d-flex align-items-center px-3 py-2">
+            <div class="product-cart-attr mb-4 col-md-12 bg-light d-flex align-items-center px-3 py-2 cart-shadow">
                 <div style="width: 40%;"><input id="btn-check-all-cart" class="me-1 form-check-input" type="checkbox" style="cursor: pointer;">Tất cả (0 sản phẩm)</div>
                 <div style="width: 20%;">Giá</div>
                 <div style="width: 20%;">Số lượng</div>
@@ -57,7 +53,7 @@ include _DIR_ROOT . "/app/views/partials/header.php";
             foreach ($products as $product) {
             ?>
                 <!-- Product -->
-                <div class="cart-product-info bg-light mb-0 mt-3 col-md-12 d-flex d-flex align-items-center px-3 pb-2 pt-4">
+                <div class="cart-shadow cart-product-info bg-light mb-0 mt-3 col-md-12 d-flex d-flex align-items-center px-3 pb-2 pt-4">
                     <div style="width: 40%;" class="mb-4 d-flex align-items-center">
                         <input class="btn-check-product me-1 form-check-input" type="checkbox" style="cursor: pointer;" data-prodid="<?php echo $product['productID']; ?>" value=" <?php echo $product['price'] * $product['quantity']; ?>">
                         <img src="<?php echo $product['image1']; ?>" alt="" class="product-avatar-list" style="width: 70px;">
@@ -94,10 +90,13 @@ include _DIR_ROOT . "/app/views/partials/header.php";
 
         </div>
 
+        <!-- Form -->
+        
+
 
         <!-- ACTIONS -->
         <div class="col-md-12 col-lg-3 cart-actions">
-            <div class="col-md-12 bg-light px-3">
+            <div class="col-md-12 bg-light px-3 cart-shadow">
                 <div class="col-md-12 d-flex justify-content-between pt-2">
                     <p class="text-muted">Giao tới</p>
                     <a href="#" class="text-decoration-none">Thay đổi</a>
@@ -108,7 +107,7 @@ include _DIR_ROOT . "/app/views/partials/header.php";
                 </div>
             </div>
 
-            <div class="col-md-12 bg-light px-3 mb-3">
+            <div class="col-md-12 bg-light px-3 mb-3 cart-shadow">
                 <div class="col-md-12 d-flex justify-content-between pt-2">
                     <p class="">Khuyến mãi</p>
                     <p class="text-muted">Có thể chọn(0) <i type="button" class="bi bi-info-circle"></i></p>
@@ -118,7 +117,7 @@ include _DIR_ROOT . "/app/views/partials/header.php";
                 </div>
             </div>
 
-            <div class="col-md-12 bg-light px-3 mb-3">
+            <div class="col-md-12 bg-light px-3 mb-3 cart-shadow">
                 <div class="col-md-12 d-flex justify-content-between pt-2">
                     <p>Đã chọn: </p>
                     <p class="number-product-checked">0 (Sản phẩm)</p>
@@ -134,15 +133,18 @@ include _DIR_ROOT . "/app/views/partials/header.php";
             </div>
 
             <p id="order-help" class="col-md-12 text-danger d-flex justify-content-center d-none" style="font-weight: 500;">(!) Chưa chọn sản phẩm nào.</p>
-            <a href="#" id="btn-order" class="btn btn-danger col-md-12 py-2 mb-3">
-                <h4 class="mt-1">Đặt hàng</h4>
-            </a>
+            
+            <form action="<?php echo SITEURL; ?>customer/order" method="post">
+                <button id="btn-order" type="submit" class="btn btn-danger col-md-12 py-2 mb-3">
+                    <h4 class="mt-1">Mua hàng</h4>
+                </button>
+            </form>
+
+            
         </div>
 
     </div>
 </div>
-
-
 
 
 <?php
