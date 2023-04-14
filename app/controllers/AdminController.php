@@ -454,6 +454,23 @@ class Admin
 
     }
 
+    //Kiểm tra tài khoản nhân viên
+    public function checkEmployeeUserName()
+    {
+        $employeeModel = new EmployeeModel();
+        if (isset($_POST['username'])) {
+            $username = $_POST['username'];
+            $isCheck = $employeeModel->checkEmployeeUserName($username);
+            if ($isCheck) {
+                // trả về mã lỗi 1 nếu tài khoản đã tồn tại
+                echo json_encode(['error' => 1]);
+            } else {
+                // trả về mã lỗi 0 nếu tài khoản chưa tồn tại
+                echo json_encode(['error' => 0]);
+            }
+        }
+    }
+
     //Xử lý thêm nhân viên
     public function addEmployeeProcess()
     {
@@ -564,7 +581,7 @@ class Admin
             $employeeGender = $_POST['genderEmployee'];
             $employeeEmail = $_POST['emailEmployee'];
             $employeePhone = $_POST['phoneEmployee'];
-            $employeeUsername = $_POST['username'];
+            // $employeeUsername = $_POST['username'];
             $employeePass = $_POST['password'];
 
 
@@ -576,7 +593,7 @@ class Admin
                 'employeeAddress' => $employeeAddress,
                 'employeePhone' => $employeePhone,
                 'employeeEmail' => $employeeEmail,
-                'employeeUsername' => $employeeUsername,
+                // 'employeeUsername' => $employeeUsername,
                 'employeePass' => $employeePass
             ];
 

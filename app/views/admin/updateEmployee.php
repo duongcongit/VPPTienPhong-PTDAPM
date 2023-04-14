@@ -112,7 +112,7 @@
                         <div class="col-md-12 pe-4">
                             <div class="input-group mb-3">
                                 <span class="pe-3" dir="rtl" style="min-width: 161px;font-weight: 500;"> Tài khoản</span>
-                                <input name="username" required type="text" class="form-control" placeholder="" value='<?php echo $employee['username'] ?>'>
+                                <input name="username" readonly type="text" class="form-control" placeholder="" value='<?php echo $employee['username'] ?>'>
                                 <span class="pe-3" dir="rtl" style="min-width: 70px;font-weight: 500;">Pass</span>
                                 <input name="password" required type="tel" class="form-control" placeholder="" value='<?php echo $employee['password'] ?>'>
                             </div>

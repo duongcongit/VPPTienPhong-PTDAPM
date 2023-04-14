@@ -67,10 +67,11 @@
                         <div class="col-md-12 pe-4">
                             <div class="input-group mb-3">
                                 <span class="pe-3" dir="rtl" style="min-width: 161px;font-weight: 500;"> Tài khoản</span>
-                                <input name="username" required type="text" class="form-control" placeholder="Nhập vào">
+                                <input name="username" id="username" required type="text" class="form-control" placeholder="Nhập vào">
                                 <span class="pe-3" dir="rtl" style="min-width: 70px;font-weight: 500;">Pass</span>
                                 <input name="password" required type="tel" class="form-control" placeholder="Nhập vào">
                             </div>
+                            <span class="username-error" style="color:red;display:none"></span>
                         </div>
                     </div>
                 </div>
@@ -88,6 +89,29 @@
 <!--  -->
 
 <!-- Content end-->
+
+<script>
+$(document).ready(function() {
+    $('#username').on('blur', function() {
+        var username = $(this).val();
+        $.ajax({
+            url: 'checkEmployeeUserName',
+            type: 'POST',
+            data: { username: username },
+            dataType: 'json',
+            success: function(response) {
+                if (response.error == 1) {
+                    $('.username-error').text('Tài khoản đã tồn tại. Vui lòng chọn tài khoản khác.').show();
+                    $('#btn-add-Employee').prop('disabled', true);
+                } else {
+                    $('.username-error').hide();
+                    $('#btn-add-Employee').prop('disabled', false);
+                }
+            }
+        });
+    });
+});
+</script>
 
 <?php
 include "partials/footerAdmin.php";

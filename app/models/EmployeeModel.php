@@ -47,6 +47,19 @@
         }
         
         //---------------ADMIN-------------------
+        // kiểm tra xem đã tồn tại tài khoản
+        public function checkEmployeeUserName($username)
+        {
+            $connection = $this->connectDb();
+            $querySelect = "SELECT * FROM employees WHERE username='$username'";
+            $results = mysqli_query($connection, $querySelect);
+            if (mysqli_num_rows($results) > 0) {
+                return 1;
+            }
+            $this->closeDb($connection);
+            return 0;
+        }
+
         //Hàm thêm nhân viên
         public function insertEmployee($arr = []) {
             $connection = $this->connectDb();
@@ -62,7 +75,7 @@
          public function updateEmployee($arr = []) {
             $connection = $this->connectDb();
             $queryUpdate = "UPDATE employees
-            SET `fullname` = '{$arr['employeeName']}',`gender` = '{$arr['employeeGender']}',`address` = '{$arr['employeeAddress']}',`phone` = '{$arr['employeePhone']}',`email` = '{$arr['employeeEmail']}',`username` = '{$arr['employeeUsername']}',`password` = '{$arr['employeePass']}',`status` = '{$arr['employeeStatus']}'
+            SET `fullname` = '{$arr['employeeName']}',`gender` = '{$arr['employeeGender']}',`address` = '{$arr['employeeAddress']}',`phone` = '{$arr['employeePhone']}',`email` = '{$arr['employeeEmail']}',`password` = '{$arr['employeePass']}',`status` = '{$arr['employeeStatus']}'
             WHERE `employeeID` = {$arr['employeeId']}";        
             $isUpdate = mysqli_query($connection, $queryUpdate);
             $this->closeDb($connection);
