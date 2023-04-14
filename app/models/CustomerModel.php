@@ -36,8 +36,6 @@ class CustomerModel
                 $_SESSION['error'] = 'Vui lòng kích hoạt tài khoản';
             }
         }
-
-        
     }
 
 
@@ -107,6 +105,16 @@ class CustomerModel
         // B2. Định nghĩa và thực hiện truy vấn
         $sql = "UPDATE customers SET `status` = '$status' WHERE customerID = '$id'";
         $result = mysqli_query($conn, $sql);
+        $this->closeDb($conn);
+        return $result;
+    }
+
+    // Lấy thông tin của một khách hàng
+    public function getCustomerInfo($customerID = '')
+    {
+        $conn = $this->connectDb();
+        $sql = "SELECT * FROM customers WHERE customerID = '{$customerID}'";
+        $result = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
         $this->closeDb($conn);
         return $result;
     }

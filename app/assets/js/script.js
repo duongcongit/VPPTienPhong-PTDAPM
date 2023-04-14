@@ -118,7 +118,7 @@ $(document).ready(function () {
                 quantity: quantity
             },
             success: function (data) {
-                console.log("Cập nhật giỏ hàng thành công");
+                // console.log("Cập nhật giỏ hàng thành công");
             }
         })
     }
@@ -130,11 +130,50 @@ $(document).ready(function () {
             format_price(amount) + '<u class="ms-1">đ</u>'
         );
         //
-        $(".btn-check-product[data-prodid='" + productID + "']").val(
-            parseInt(amount)
-        );
+        $(".btn-check-product[data-prodid='" + productID + "']").attr({
+            value: parseInt(amount),
+            'data-quantity': quantity
+        });
 
     }
+
+    // Cập nhật danh sách các sản phẩm muốn mua
+    function updateProductOrder() {
+        let orderDataCart = $("#order-data-cart")[0];
+        $("#order-data-cart").html("");
+        var num_inp = $(".btn-check-product").length;
+        var num_prod = 0;
+
+        let j = 0;
+        for (let i = 0; i < num_inp; i++) {
+            // let inp = $(".btn-check-product:eq(" + i + ")");
+            if ($(".btn-check-product:eq(" + i + ")").is(":checked")) {
+                // let inp = $(".btn-check-product:eq(" + i + ")");
+                let inp = document.getElementsByClassName("btn-check-product")[i];
+                let prID = inp.getAttribute("data-prodid");
+                let prName = inp.getAttribute("data-product_name");
+                let prImage = inp.getAttribute("data-product_image");
+                let prPrice = inp.getAttribute("data-price");
+                let quant = inp.getAttribute("data-quantity");
+
+                let value = [prID, prName, prImage, prPrice, quant];
+
+                // console.log(prID + " - " + quant);
+
+                $('<input>').attr({
+                    type: 'hidden',
+                    class: "product-order-from-cart",
+                    name: "product"+j,
+                    value: value
+                }).appendTo(orderDataCart);
+                j++;
+
+            }
+        }
+
+    }
+
+    // updateProductOrder();
 
     // Cập nhật tổng tiền của các sản phẩm đã chọn
     function update_total_price() {
@@ -152,9 +191,14 @@ $(document).ready(function () {
         if (num_prod > 0) {
             $("#order-help").addClass("d-none");
         }
+        else {
+
+        }
         //
         $(".number-product-checked").text(num_prod + " (Sản phẩm)");
         $(".total-price").html(format_price(amount) + '<u class="ms-1">đ</u>');
+
+        updateProductOrder();
     }
 
     // Xử lý sự kiện nhấn nút chọn tất cả sản phẩm

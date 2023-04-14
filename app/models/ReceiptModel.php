@@ -71,11 +71,35 @@ class ReceiptModel
         $conn = $this->connectDb();
 
         $customerID = $data['customerID'];
-        $employeeID = $data['employeeID'];
-        $status = 0;
+        $timeBuy = $data['timeBuy'];
+        $consigneeName = $data['consigneeName'];
+        $phoneNumber = $data['phoneNumber'];
+        $deliveryAddress = $data['deliveryAddress'];
+        $paymentMethod = $data['paymentMethod'];
+        $status = $data['status'];
 
-        $splQuery = "INSERT INTO receiptP (customerID, employeeID, statusR) 
-        VALUES (''{$customerID}'', ''{$employeeID}'', ''{$status}'');";
+        $splQuery = "INSERT INTO receiptP (customerID, timeBuy, consigneeName, phoneNumber, deliveryAddress, paymentMethod, statusR) 
+        VALUES ('{$customerID}', '{$timeBuy}', '{$consigneeName}', '{$phoneNumber}', '{$deliveryAddress}', '{$paymentMethod}', '{$status}');";
+
+        $result = $conn->query($splQuery);
+
+        $this->closeDb($conn);
+
+        return $result;
+    }
+
+    // Tạo chi tiết hóa đơn
+    public function addDetailReceipt($receiptID, $product)
+    {
+        $conn = $this->connectDb();
+
+        $productID = $product['productID'];
+        $price = $product['price'];
+        $quantityBuy = $product['quantity'];
+        $total = $product['amount'];
+
+        $splQuery = "INSERT INTO detailReceiptP (receiptPID, productID, price, quantityBuy, total) 
+        VALUES ('{$receiptID}', '{$productID}', '{$price}', '{$quantityBuy}', '{$total}');";
 
         $result = $conn->query($splQuery);
 
@@ -83,19 +107,14 @@ class ReceiptModel
         return $result;
     }
 
-    // Tạo chi tiết hóa đơn
-    public function addDetailReceipt($data)
+    // 
+    public function getReceiptInfo($customerID, $timeBuy)
     {
         $conn = $this->connectDb();
 
-        $customerID = $data['customerID'];
-        $employeeID = $data['employeeID'];
-        $status = 0;
+        $sql = "SELECT * FROM receiptP WHERE customerID = '{$customerID}' AND timeBuy = '{$timeBuy}'";
 
-        $splQuery = "INSERT INTO receiptP (customerID, employeeID, statusR) 
-        VALUES (''{$customerID}'', ''{$employeeID}'', ''{$status}'');";
-
-        $result = $conn->query($splQuery);
+        $result = $conn->query($sql)->fetch_all(MYSQLI_ASSOC)[0];
 
         $this->closeDb($conn);
         return $result;
