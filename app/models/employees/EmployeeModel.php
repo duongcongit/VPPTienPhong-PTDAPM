@@ -42,9 +42,11 @@
             // B1. Khởi tạo kết nối
             $conn = $this->connectDb();
             // B2. Định nghĩa và thực hiện truy vấn
-            $sql = "SELECT receiptp.receiptPID,receiptp.customerID,detailreceiptp.productID,customers.username,products.productName,product_image.imageURL,detailreceiptp.quantityBuy, detailreceiptp.total,receiptp.statusR
-            FROM receiptp,detailreceiptp,products,customers,product_image WHERE  receiptp.receiptPID = detailreceiptp.receiptPID and receiptp.customerID = customers.customerID and detailreceiptp.productID = products.productID 
-            and products.productID = product_image.productID";
+            $sql = "SELECT c.username, r.receiptPID, r.paymentMethod, SUM(d.quantityBuy) AS tongSanPham, SUM(d.total) AS tongTien, r.statusR
+            FROM receiptP AS r
+            INNER JOIN detailReceiptP AS d ON r.receiptPID = d.receiptPID
+            INNER JOIN customers AS c ON r.customerID = c.customerID
+            GROUP BY c.username, r.receiptPID, r.statusR";
             $result = mysqli_query($conn,$sql);
 
             //khai báo biến lưu kết quả trả về (dạng mảng)
@@ -58,33 +60,39 @@
             return $arr_receipt;
         }
 
-        public function confirmReceiptp($id){
+        public function confirmReceiptp($id,$empID){
             // B1. Khởi tạo kết nối
             $conn = $this->connectDb();
             // B2. Định nghĩa và thực hiện truy vấn
-            $sql = "UPDATE receiptp SET `statusR` = '1' WHERE receiptPID = '$id'";
+            $sql = "UPDATE receiptp SET statusR = '1', employeeID = '{$_SESSION['empID']}'  WHERE receiptPID = '{$id}'";
             $result = mysqli_query($conn, $sql);
             $this->closeDb($conn);
             return $result;
         }
 
-        public function refuseReceiptp($id){
+
+        public function refuseReceiptp($id,$empID){
             // B1. Khởi tạo kết nối
             $conn = $this->connectDb();
             // B2. Định nghĩa và thực hiện truy vấn
-            $sql = "UPDATE receiptp SET `statusR` = '2' WHERE receiptPID = '$id'";
+            $sql = "UPDATE receiptp SET statusR = '2', employeeID = '{$_SESSION['empID']}'   WHERE receiptPID = '{$id}'";
             $result = mysqli_query($conn, $sql);
             $this->closeDb($conn);
             return $result;
         }
-        
+
+
+
         public function getReceiptDetail($id)
         {
-
             $conn = $this->connectDb();
-            $sql = "SELECT detailreceiptp.*,products.productName,product_image.imageURL 
-            FROM detailreceiptp,products,product_image 
-            WHERE receiptPID = '{$id}' and products.productID= detailreceiptp.productID and products.productID=product_image.productID ";
+            $sql = "SELECT d.*,r.*,p.productName,pi.imageURL 
+            FROM receiptP AS r
+            INNER JOIN detailReceiptP AS d ON r.receiptPID = d.receiptPID
+            INNER JOIN customers AS c ON r.customerID = c.customerID
+            INNER JOIN products AS p ON d.productID= p.productID
+            INNER JOIN product_image AS pi ON p.productID=pi.productID
+            WHERE r.receiptPID = '{$id}' ";
             $result = mysqli_query($conn,$sql);
             // Lấy chi tiết đơn hàng
             

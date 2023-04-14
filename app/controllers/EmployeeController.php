@@ -64,18 +64,21 @@
             if (isset($_GET['id'])) {
                 $id = $_GET['id'];
             }
+            if(isset($_SESSION['empID'])){
+                
+                $empID = $_SESSION['empID'];
+                //gọi model 
+                $res = $employeeModel ->confirmReceiptp($id,$empID);
 
-            //gọi model 
-            $res = $employeeModel ->confirmReceiptp($id);
-
-            if ($res) {
-                $_SESSION['editSuccessStatus'] = "Xác nhận đơn thành công";
+                if ($res) {
+                    $_SESSION['editSuccessStatus'] = "Xác nhận đơn thành công";
+                }
+                if ($res) {
+                    $_SESSION['editFailStatus'] = "Xác nhận đơn hàng thất bại";
+                }
+                header("Location:" .SITEURL."employee/index");
+                exit();
             }
-            if ($res) {
-                $_SESSION['editFailStatus'] = "Xác nhận đơn hàng thất bại";
-            }
-            header("Location:" .SITEURL."employee/index");
-            exit();
         }
         
         public function refuseReceiptp($id) {
@@ -84,18 +87,21 @@
             if (isset($_GET['id']) ) {
                 $id = $_GET['id'];
             }
+            if(isset($_SESSION['empID'])){
+                
+                $empID = $_SESSION['empID'];
+                //gọi model 
+                $res = $employeeModel ->refuseReceiptp($id,$empID);
 
-            //gọi model 
-            $res = $employeeModel ->refuseReceiptp($id);
-
-            if ($res) {
-                $_SESSION['editSuccessStatus'] = "Xác nhận đơn thành công";
+                if ($res) {
+                    $_SESSION['editSuccessStatus'] = "Hủy đơn thành công";
+                }
+                if ($res) {
+                    $_SESSION['editFailStatus'] = "Hủy đơn hàng thất bại";
+                }
+                header("Location:" .SITEURL."employee/index");
+                exit();
             }
-            if ($res) {
-                $_SESSION['editFailStatus'] = "Xác nhận đơn hàng thất bại";
-            }
-            header("Location:" .SITEURL."employee/index");
-            exit();
         } 
 
         public function detail($id){

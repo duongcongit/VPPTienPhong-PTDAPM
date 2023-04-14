@@ -54,7 +54,7 @@
 							<div class="message-bubble">
 								<p>Chào bạn, tôi có thể giúp gì cho bạn ạ?</p>
 							</div>
-							<img src="<?php echo SITEURL; ?>/app/views/assets/img/logotp.png" alt="Avatar" class="chat-avatar">
+							<img src="<?php echo SITEURL; ?>/app/views/employee/assets/img/logotp.png" alt="Avatar" class="chat-avatar">
 						</div>
 						<div class="chat-message received">
 							<img src="<?php echo SITEURL; ?>/app/views/assets/img/kh1.jpg" alt="Avatar" class="chat-avatar">
@@ -66,7 +66,7 @@
 							<div class="message-bubble">
 								<p>Dạ, sản phẩm này có gì bạn cần tư vấn thêm không ạ?</p>
 							</div>
-							<img src="<?php echo SITEURL; ?>/app/views/assets/img/logotp.png" alt="Avatar" class="chat-avatar">
+							<img src="<?php echo SITEURL; ?>/app/views/employee/assets/img/logotp.png" alt="Avatar" class="chat-avatar">
 						</div>
 						<div class="chat-message received">
 							<img src="<?php echo SITEURL; ?>/app/views/assets/img/kh1.jpg" alt="Avatar" class="chat-avatar">
@@ -78,7 +78,7 @@
 							<div class="message-bubble">
 								<p>Giá sản phẩm hiện tại là 1.000.000 VNĐ ạ!</p>
 							</div>
-							<img src="<?php echo SITEURL; ?>/app/views/assets/img/logotp.png" alt="Avatar" class="chat-avatar">
+							<img src="<?php echo SITEURL; ?>/app/views/employee/assets/img/logotp.png" alt="Avatar" class="chat-avatar">
 						</div>
 					</div>
 					<div class="card-footer">

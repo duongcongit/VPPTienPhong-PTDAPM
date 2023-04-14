@@ -29,7 +29,7 @@
             <div class="h3 text-center text-white">Đăng Nhập</div>
             <div class="d-flex align-items-center input-field mt-3 mb-2 "> 
                 <span class="fa fa-user p-2"></span> 
-                <input type="text" placeholder="Tên đăng nhập" required class="form-control" id="emp" name="emp"> 
+                <input type="text" placeholder="Tên đăng nhập" required class="form-control" id="user" name="user"> 
             </div>
             <small id="userNotification"></small>
             <div class="d-flex align-items-center input-field mt-3 mb-4">

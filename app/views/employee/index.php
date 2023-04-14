@@ -34,8 +34,9 @@
                 <tr>
                     <th>Người dùng</th>
                     <th>Mã đơn hàng</th>
-                    <th>Sản phẩm</th>
-                    <th>Tổng đơn hàng</th>
+                    <th>Tổng sản phẩm</th>
+                    <th>Tổng tiền</th>
+                    <th>Phương thức thanh toán</th>
                     <th>Trạng thái</th>
                     <th>Thao tác</th>
                 </tr>
@@ -48,17 +49,25 @@
                 echo '<tr class="bg-white">';
                     echo "<th scope='row'>{$recp['username']}</th>";
                     echo "<th scope='row'>{$recp['receiptPID']}</th>";
-                    echo '<th class="row">';
-                    echo '<div style="max-width: fit-content;">';
-                        echo '<img src="'.$recp['imageURL'].'" alt="" class="product-avatar-list">';
-                    echo '</div>';
-                    echo ' <div class="col row d-flex align-items-center">';
-                        echo '<div class="col-md-12">';
-                            echo '<b>' .$recp['productName']. '</b>';
-                        echo '</div>';
-                    echo '</div>';
+                    echo "<th scope='row'>{$recp['tongSanPham']}</th>";
+                    echo "<th>{$recp['tongTien']}</th>";
+                    echo '<th>';
+                        if(!$recp['paymentMethod']){
+                            echo '<p class= "text-primary mb-auto">COD</p>';
+                        }
+                        else if($recp['paymentMethod']==1){
+                            echo '<p class= "text-primary mb-auto">Nội địa</p>';
+                        }
+                        else if($recp['paymentMethod']==2){
+                            echo '<p class= "text-primary mb-auto">Visa</p>';
+                        }
+                        else if($recp['paymentMethod']==3){
+                            echo '<p class= "text-primary mb-auto">MasterCard</p>';
+                        }
+                        else if($recp['paymentMethod']==4){
+                            echo '<p class= "text-primary mb-auto">ZaloPay</p>';
+                        }
                     echo '</th>';
-                    echo "<th>{$recp['total']}</th>";
                     echo '<th>';
                         if(!$recp['statusR']){
                             echo '<p class= "text-secondary mb-auto">Đang chờ xác nhận</p>';
