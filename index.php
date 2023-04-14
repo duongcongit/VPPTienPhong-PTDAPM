@@ -7,3 +7,6 @@ $App = new App();
 $_SESSION['customerID'] = "1"; // Test
 // unset($_SESSION['customerID']);
 ?>
+$_SESSION['customerID'] = "1"; // Test
+// unset($_SESSION['customerID']);
+?>

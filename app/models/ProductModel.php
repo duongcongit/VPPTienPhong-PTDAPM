@@ -5,6 +5,102 @@ require_once _DIR_ROOT . '/app/config/constants.php';
 class ProductModel
 {
 
+    //----------------ADMIN-----------------
+    //Thêm loại sản phẩm
+    public function insertProductCate($cate)
+    {
+        $connection = $this->connectDb();
+        $sql_add_category = "INSERT INTO categories VALUES('$cate')";
+        $insert_category = mysqli_query($connection, $sql_add_category);
+        $this->closeDb($connection);
+        return $insert_category;
+    }
+
+    //Thêm sản phẩm
+    public function insertProduct($arr = [])
+    {
+        $connection = $this->connectDb();
+        $sql_add_product = "INSERT INTO products (productID, productName, detail,stock, sold, price,status, categoryID,supplierID) VALUES ('{$arr['prodID']}','{$arr['prodName']}', '{$arr['prodDetail']}', '{$arr['prodStock']}', '{$arr['prodSold']}','{$arr['prodPrice']}', '{$arr['prodStatus']}','{$arr['prodCate']}','{$arr['prodSupplierID']}');";
+        $insert_product = mysqli_query($connection, $sql_add_product);
+        $this->closeDb($connection);
+        return $insert_product;
+    }
+
+    //Thêm ảnh sản phẩm
+    public function insertProductImage($imgID, $url, $prodID)
+    {
+        $connection = $this->connectDb();
+        $sql_add_product_image = "INSERT INTO product_image (imageID, imageURL,productID) 
+            VALUES ('{$imgID}','{$url}','{$prodID}');";
+        $insert_employee = mysqli_query($connection, $sql_add_product_image);
+        $this->closeDb($connection);
+        return $insert_employee;
+    }
+
+    //Update sản phẩm trong bảng products
+    public function updateProduct($arr = [])
+    {
+        $connection = $this->connectDb();
+        $sql_update_product = "UPDATE products set `productName` = '{$arr['prodName']}', `detail` ='{$arr['prodDetail']}',`stock`='{$arr['prodStock']}', `sold`='{$arr['prodSold']}', `price`='{$arr['prodPrice']}',
+            `status` ='1'
+            WHERE productID = '{$arr['prodID']}';";
+        $update_product = mysqli_query($connection, $sql_update_product);
+        $this->closeDb($connection);
+        return $update_product;
+    }
+
+    //update ảnh trong bảng product
+    public function updateProductImage($imgID, $url)
+    {
+        $connection = $this->connectDb();
+        $sql_add_product_image = "UPDATE product_image set `imageURL` = '$url' WHERE imageID ='$imgID';";
+        $insert_employee = mysqli_query($connection, $sql_add_product_image);
+        $this->closeDb($connection);
+        return $insert_employee;
+    }
+
+    //Kiểm tra update xem trong bảng product_image đã có ảnh chưa
+    //Nếu có thì thực hiên updateProductImage
+    //Không thì thực hiện insertProductImage
+    public function checkImageURLByID($imgID)
+    {
+        $connection = $this->connectDb();
+        $sql_add_product_image = "SELECT * from product_image WHERE imageID = '$imgID'";
+        $result = mysqli_query($connection, $sql_add_product_image);
+        if (mysqli_num_rows($result) > 0) {
+            // Lấy tất cả dùng mysqli_fetch_all
+            $this->closeDb($connection);
+            return 1;
+        }
+
+        return 0;
+    }
+
+    // Ham xóa sản phẩm trong bảng products
+    public function deleteProduct($id)
+    {
+        $connection = $this->connectDb();
+        $queryDelete = "DELETE FROM products WHERE productID = '$id'";
+        $isDelete = mysqli_query($connection, $queryDelete);
+        $this->closeDb($connection);
+
+        return $isDelete;
+    }
+
+    // Ham xóa sản phẩm trong bảng products
+    public function deleteProductImage($id)
+    {
+        $connection = $this->connectDb();
+        $queryDelete = "DELETE FROM product_image WHERE productID = '$id'";
+        $isDelete = mysqli_query($connection, $queryDelete);
+        $this->closeDb($connection);
+
+        return $isDelete;
+    }
+    //--------------Hết ADMIN-----------------------
+
+    
+
     // Lấy tất cả sản phẩm
     public function getAllProducts()
     {
@@ -23,7 +119,7 @@ class ProductModel
             $images = $conn->query($sqlGetImages)->fetch_all(MYSQLI_ASSOC);
 
             foreach ($images as $image) {
-                $imageLabel = "image" . substr($image['imageID'], 0, 1);;
+                $imageLabel = "image" . substr($image['imageID'], 0, 1);
                 $tempImage = array($imageLabel => $image['imageURL']);
                 $arr_products[$i] += $tempImage;
             }
@@ -53,7 +149,7 @@ class ProductModel
             $images = $conn->query($sqlGetImages)->fetch_all(MYSQLI_ASSOC);
 
             foreach ($images as $image) {
-                $imageLabel = "image" . substr($image['imageID'], 0, 1);;
+                $imageLabel = "image" . substr($image['imageID'], 0, 1);
                 $tempImage = array($imageLabel => $image['imageURL']);
                 $arr_products[$i] += $tempImage;
             }
@@ -83,7 +179,7 @@ class ProductModel
         $images = $conn->query($sqlGetImages)->fetch_all(MYSQLI_ASSOC);
 
         foreach ($images as $image) {
-            $imageLabel = "image" . substr($image['imageID'], 0, 1);;
+            $imageLabel = "image" . substr($image['imageID'], 0, 1);
             $tempImage = array($imageLabel => $image['imageURL']);
             $productDetails = $productDetails + $tempImage;
         }
@@ -111,7 +207,7 @@ class ProductModel
             $images = $conn->query($sqlGetImages)->fetch_all(MYSQLI_ASSOC);
 
             foreach ($images as $image) {
-                $imageLabel = "image" . substr($image['imageID'], 0, 1);;
+                $imageLabel = "image" . substr($image['imageID'], 0, 1);
                 $tempImage = array($imageLabel => $image['imageURL']);
                 $arr_products[$i] += $tempImage;
             }

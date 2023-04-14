@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif
+}
+.col-md-12{
+    padding: 0;
+    margin: 0;
+}
+.header-navbar{ 
+    padding: 0px;
+    height: 52px;
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 7%) 0px 2px 4px;
+}
+.navbar > .container{
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.navbar{
+    /* background: linear-gradient(to right, rgba(50,197,246,1) 0%, rgba(0,68,255,1) 100%); */
+    background: #B2BEC9;
+}
+.navbar > .container img{
+    max-width: 150px;
+}
+main{
+    margin-top: 50px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    height: auto;
+    min-height: 100vh;
+    
+}
+
+body {
+    /* background-color: rgb(148, 218, 241); */
+    min-height: 93vh
+}
+
+.wrapper {
+    max-width: 500px;
+    margin: 50px auto
+}
+
+.wrapper .card {
+    max-width: 400px;
+    min-height: 300px;
+    margin: 30px;
+    /* background: linear-gradient(to right, rgba(50,197,246,1) 0%, rgba(0,68,255,1) 100%); */
+    background: #656D74;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(27, 25, 25, 0.5);
+    border-radius: 15px;
+    padding: 0.8rem;
+}
+
+.wrapper .card a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.wrapper .card a:hover {
+    color: #ff0000;
+}
+
+.wrapper .card .input-field {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #212529;
+    padding: 0.3rem;
+}
+
+.wrapper .card .input-field input {
+    background-color: inherit;
+}
+
+.wrapper .card .input-field input.form-control,
+.wrapper .card .input-field input.form-control:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    color: #212529;
+}
+
+.wrapper .card .input-field button.btn {
+    color: #212529;
+    padding: 0rem;
+    padding-right: 0.5rem;
+}
+
+.wrapper .card .input-field button.btn:hover {
+    color: #fff;
+}
+
+.wrapper .card .input-field button.btn:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.wrapper .card .input-field input::placeholder {
+    color: #fff;
+}
+
+
+
+.wrapper .card .btn.btn-primary {
+    border-radius: 20px;
+    width: 110px;
+    background-color: #333;
+    color: #fff;
+    border: none
+}
+
+.wrapper .card .btn.btn-primary:hover {
+    color: #333;
+    background: rgba(252,188,48,1);
+}
+
+.wrapper .card .btn.btn-primary:focus {
+    border: none;
+    box-shadow: none
+}
+
+.wrapper .card .text-light-white {
+    color: #212529
+}
+
+.wrapper .card .line span.connect {
+    position: absolute;
+    top: -12px;
+    left: 33%;
+    color: #000;
+    padding: 0 0.3rem;
+    z-index: 100;
+    border-radius: 2px;
+    background-color: #fff
+}
+
+.wrapper .card .connections a img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover
+}
+
+@media(max-width: 370px) {
+    .wrapper .card .line:after {
+        left: 27%
+    }
+}
+
+@media(max-width: 350px) {
+    .wrapper {
+        margin: 10px auto
+    }
+
+    .wrapper .card {
+        margin: 10px
+    }
+}
