@@ -30,6 +30,11 @@
                 isset($_SESSION['empName']);
                 header("Location:" .SITEURL."employee/index");
             }
+            else{
+                $_SESSION['error'] = 'Bạn nhập sai tên đăng nhập hoặc mật khẩu rồi!!!';
+                header("Location:" .SITEURL."employee/login");
+                exit();
+            }
     
         }
 

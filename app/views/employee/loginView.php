@@ -25,7 +25,7 @@
 <main class="container-fluid">
 <div class="wrapper">
     <div class="card">
-        <form action="<?php echo SITEURL; ?>employee/loginProcess" class="d-flex flex-column" method ="post">
+        <form action="<?php echo SITEURL;?>employee/loginProcess" class="d-flex flex-column" method ="post">
             <div class="h3 text-center text-white">Đăng Nhập</div>
             <div class="d-flex align-items-center input-field mt-3 mb-2 "> 
                 <span class="fa fa-user p-2"></span> 
