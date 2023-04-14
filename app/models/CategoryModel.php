@@ -1,7 +1,6 @@
 <?php
 require_once _DIR_ROOT . '/app/config/constants.php';
 
-
 class CategoryModel
 {
 
@@ -79,4 +78,6 @@ class CategoryModel
     {
         mysqli_close($connection);
     }
+
+    
 }
