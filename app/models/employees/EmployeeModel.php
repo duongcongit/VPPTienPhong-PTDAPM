@@ -26,8 +26,8 @@
             if(mysqli_num_rows($result) == 1){
                 $row = mysqli_fetch_array($result);
                 if($pass == $row['password']){
-                    $_SESSION['employeeID']=$row['employeeID'];
-                    $_SESSION['employeeName '] = $row['fullname'];
+                    $_SESSION['empID']=$row['employeeID'];
+                    $_SESSION['empName'] = $row['fullname'];
                     return 1;
                 }
                 else{
@@ -36,6 +36,7 @@
                     
             }
         }
+
 
         public function getAllReceiptp(){
             // B1. Khởi tạo kết nối

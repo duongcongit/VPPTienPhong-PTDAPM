@@ -2,6 +2,36 @@
     require_once _DIR_ROOT.'/app/models/employees/EmployeeModel.php';
     
     class Employee {
+        public function login(){
+            require_once _DIR_ROOT.'/app/views/employee/loginView.php';
+        }
+
+        public function logout(){
+            // include "../../config/constants.php";
+            unset($_SESSION['empID']);
+            unset($_SESSION['empName']);
+            header("Location:" .SITEURL."employee/login");
+        }
+
+        public function loginProcess()
+        {
+            $employeeModel = new EmployeeModel();
+            if (empty($_POST['emp']) || empty($_POST['pass'])) {
+                $_SESSION['error'] = 'Bạn cần điền đầy đủ thông tin!';
+                header("Location:" .SITEURL."employee/login");
+                exit();
+            }
+            $user = htmlspecialchars($_POST['emp']);
+            $password = htmlspecialchars($_POST['pass'], ENT_QUOTES);
+    
+            $res = $employeeModel->loginProcess($user, $password);
+            if ($res == 1) {
+                isset($_SESSION['empID']);
+                isset($_SESSION['empName']);
+                header("Location:" .SITEURL."employee/index");
+            }
+    
+        }
 
         public function index() {
             $employeeModel = new EmployeeModel();

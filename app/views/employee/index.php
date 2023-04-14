@@ -1,13 +1,12 @@
 <?php
-    // if (!isset($_SESSION)) 
-    // { 
-    //     session_start(); 
-    // } 
-    // if (!isset($_SESSION['empID'])) {
-    //     header("location: ../login/loginView.php");
-    // }
+    if (!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
+    if (!isset($_SESSION['empID'])) {
+        header("Location:" .SITEURL."employee/login");
+    }
     include _DIR_ROOT.'/app/views/employee/partials/header.php';  
-    // include 'partials/loginCheck.php';
 ?> 
     <div class="col main-right container-fluid row ">
         <div class="col-md-12 mt-4 mb-3 nav-page">
