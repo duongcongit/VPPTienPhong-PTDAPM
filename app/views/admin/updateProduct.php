@@ -159,9 +159,31 @@
 
                 <hr>
 
-                <div class="basic-info col-md-12 mt-3">
+                <div class="basic-info col-md-12 mt-3" styple="font-size:20px">
                     <h5><strong>Cập nhật thông tin cơ bản</strong></h5>
                     <div class="input-group mb-3 mt-5">
+                        <div class="input-group mb-3">
+                            <span class="pe-3" dir="rtl" style="margin-left:75px;font-weight: 500;">Status</span>
+                            <?php
+                            if($product['status']=='1'){
+                                echo '<label>';
+                                    echo '<input type="radio" name="prodStatusUpdate" style="margin-left:25px" value="1" checked required> Bình thường';
+                                echo '</label>';
+                                echo '<label>';
+                                    echo '<input type="radio" name="prodStatusUpdate" class="ms-3" value="2" required> Xóa';
+                                echo '</label>';
+                            }
+                            else{
+                                echo '<label>';
+                                    echo '<input type="radio" name="prodStatusUpdate" style="margin-left:25px" value="1" required> Bình thường';
+                                echo '</label>';
+                                echo '<label>';
+                                    echo '<input type="radio" name="prodStatusUpdate" checked class="ms-3" value="2" required> Xóa';
+                                echo '</label>';
+                            }
+                            ?>
+
+                        </div>
                         <div class="col-md-12 pe-4">
                             <div class="input-group mb-3">
                                 <span class="pe-3" dir="rtl" style="min-width: 161px;"> Tên sản phẩm</span>

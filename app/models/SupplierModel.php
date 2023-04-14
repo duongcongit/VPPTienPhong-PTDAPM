@@ -70,7 +70,7 @@
         //Hàm thêm nhà cung cấp 
         public function insertSupplier($arr = []) {
             $connection = $this->connectDb();
-            $sql_add_supplier = "INSERT INTO suppliers (supplierID, supplierName, address, phone, email) VALUES (NULL, '{$arr['supplierName']}', '{$arr['supplierAddress']}', '{$arr['supplierPhone']}', '{$arr['supplierEmail']}');";
+            $sql_add_supplier = "INSERT INTO suppliers (supplierID, supplierName, address, phone, email,status) VALUES (NULL, '{$arr['supplierName']}', '{$arr['supplierAddress']}', '{$arr['supplierPhone']}', '{$arr['supplierEmail']}','1');";
             $insert_supplier = mysqli_query($connection,$sql_add_supplier);
             $this->closeDb($connection);
             return $insert_supplier;
@@ -80,7 +80,7 @@
         public function updateSupplier($arr = []) {
             $connection = $this->connectDb();
             $queryUpdate = "UPDATE suppliers
-        SET `supplierName` = '{$arr['supplierName']}',`address` = '{$arr['supplierAddress']}',`phone` = '{$arr['supplierPhone']}',`email` = '{$arr['supplierEmail']}'
+        SET `supplierName` = '{$arr['supplierName']}',`address` = '{$arr['supplierAddress']}',`phone` = '{$arr['supplierPhone']}',`email` = '{$arr['supplierEmail']}',`status` = '{$arr['supplierStatus']}'
         WHERE `supplierId` = {$arr['supplierId']}";
             $isUpdate = mysqli_query($connection, $queryUpdate);
             $this->closeDb($connection);
@@ -101,7 +101,8 @@
         // Ham xóa NCC
         public function deleteSupplier($id=null) {
             $connection = $this->connectDb();
-            $queryDelete = "DELETE FROM suppliers WHERE supplierID = '$id'";
+            $queryDelete = "UPDATE suppliers SET status = '2' WHERE supplierID = '$id'";
+            // $queryDelete = "DELETE FROM suppliers WHERE supplierID = '$id'";
             $isDelete = mysqli_query($connection, $queryDelete);
             $this->closeDb($connection);
                         

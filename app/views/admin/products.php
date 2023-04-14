@@ -179,7 +179,7 @@ if (!isset($_SESSION['successAddProduct']) && !isset($_SESSION['errorAddProduct'
 
                         if ($product['status'] == 2) {
                             echo '<div class="col-md-12 produc-status-locked">';
-                                echo 'Bị khóa';
+                                echo 'Sản phẩm đã bị xóa';
                             echo '</div>';
                         }
 

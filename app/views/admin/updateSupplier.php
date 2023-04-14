@@ -37,6 +37,29 @@
                                 <input name="idSupplier" readonly type="text" class="form-control" placeholder="" value='<?php echo $supplier['supplierID'] ?>'>
                             </div>
                         </div>
+
+                        <div class="col-md-12 pe-4 mb-3">
+                            <span class="pe-3" dir="rtl" style="margin-left:75px;font-weight: 500;">Status</span>
+                            <?php
+                            if($supplier['status']=='1'){
+                                echo '<label>';
+                                    echo '<input type="radio" name="statusSupplier" style="margin-left:25px" value="1" checked required> Bình thường';
+                                echo '</label>';
+                                echo '<label>';
+                                    echo '<input type="radio" name="statusSupplier" class="ms-3" value="2" required> Xóa';
+                                echo '</label>';
+                            }
+                            else{
+                                echo '<label>';
+                                    echo '<input type="radio" name="statusSupplier" style="margin-left:25px" value="1" required> Bình thường';
+                                echo '</label>';
+                                echo '<label>';
+                                    echo '<input type="radio" name="statusSupplier" checked class="ms-3" value="2" required> Xóa';
+                                echo '</label>';
+                            }
+                            ?>
+                        </div>
+
                         <div class="col-md-12 pe-4">
                             <div class="input-group mb-3">
                                 <span class="pe-3" dir="rtl" style="min-width: 161px;font-weight: 500;"> Tên nhà cung cấp</span>

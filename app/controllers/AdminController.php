@@ -263,6 +263,8 @@ class Admin
             $prodID = $_POST['prodID'];
             $prodName = $_POST['prodNameUpdate'];
             $prodDetail = $_POST['prodDetailUpdate'];
+            $prodStatus = $_POST['prodStatusUpdate'];
+
             // $prodCategory = $_POST['prodCategoryUpdate'];
             // $prodSupplierID = $_POST['prodSupplierUpdate'];
 
@@ -270,7 +272,6 @@ class Admin
             $prodStock = $_POST['prodStockUpdate'];
             $prodSold = $_POST['prodSoldUpdate'];
 
-            $prodStatus = 1;
             $arr_product = [
                 'prodID' => $prodID,
                 'prodName' => $prodName,
@@ -364,12 +365,12 @@ class Admin
         //xử lý 
         if (isset($_GET['id'])) {
             $supplierId = $_GET['id'];
-            $checkProduct = $supplierModel->checkSuppliers($supplierId);
-            if($checkProduct){
-                $_SESSION['errorDeleteSupplierProduct'] = "Thêm mới nhà cung cấp thất bại";
-                header("Location: suppliers");
-                exit();
-            }
+            // $checkProduct = $supplierModel->checkSuppliers($supplierId);
+            // if($checkProduct){
+            //     $_SESSION['errorDeleteSupplierProduct'] = "Thêm mới nhà cung cấp thất bại";
+            //     header("Location: suppliers");
+            //     exit();
+            // }
             $isDelete = $supplierModel->deleteSupplier($supplierId);
             echo $isDelete;
             if ($isDelete) {
@@ -422,13 +423,16 @@ class Admin
             $supplierAddress = $_POST['addSupplier'];
             $supplierEmail = $_POST['emailSupplier'];
             $supplierPhone = $_POST['phoneSupplier'];
+            $supplierStatus = $_POST['statusSupplier'];
+
 
             $supplier = [
                 'supplierId' => $supplierId,
                 'supplierName' => $supplierName,
                 'supplierAddress' => $supplierAddress,
                 'supplierPhone' => $supplierPhone,
-                'supplierEmail' => $supplierEmail
+                'supplierEmail' => $supplierEmail,
+                'supplierStatus' => $supplierStatus
             ];
 
             $isUpdate = $supplierModel->updateSupplier($supplier);
