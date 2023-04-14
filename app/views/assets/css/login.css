@@ -20,7 +20,8 @@
     flex-wrap: wrap;
 }
 .navbar{
-    background: linear-gradient(to right, rgba(50,197,246,1) 0%, rgba(0,68,255,1) 100%);
+    background-image: none;
+    background: #B2BEC9;
 }
 .navbar > .container img{
     max-width: 140px;
@@ -37,7 +38,7 @@ main{
 }
 
 body {
-    background-color: rgb(148, 218, 241);
+    background-color: white;
     min-height: 93vh
 }
 
@@ -50,7 +51,7 @@ body {
     max-width: 400px;
     min-height: 300px;
     margin: 30px;
-    background: linear-gradient(to right, rgba(50,197,246,1) 0%, rgba(0,68,255,1) 100%);
+    background: #656D74;
     overflow: hidden;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(27, 25, 25, 0.5);
@@ -111,7 +112,7 @@ body {
 .wrapper .card .btn.btn-primary {
     border-radius: 20px;
     width: 110px;
-    background-color: #333;
+    background-color: #B2BEC9;
     color: #fff;
     border: none
 }

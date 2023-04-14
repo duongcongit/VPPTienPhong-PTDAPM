@@ -20,6 +20,7 @@
     flex-wrap: wrap;
 }
 .navbar{
+    background-image: none;
     background: #B2BEC9;
 }
 .navbar > .container img{
@@ -111,14 +112,14 @@ body {
 .wrapper .card .btn.btn-primary {
     border-radius: 20px;
     width: 110px;
-    background-color: #333;
+    background-color: #B2BEC9;
     color: #fff;
     border: none
 }
 
 .wrapper .card .btn.btn-primary:hover {
     color: #333;
-    background: #B2BEC9;
+    background: rgba(252,188,48,1);
 }
 
 .wrapper .card .btn.btn-primary:focus {
