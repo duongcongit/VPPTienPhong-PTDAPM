@@ -16,7 +16,7 @@
 <header class="header-navbar container-fluid fixed-top">
     <nav class="navbar navbar-light">
     <div class="container ">
-        <a class="navbar-brand" href="../index.php">
+        <a class="navbar-brand" href="<?php echo SITEURL;?>">
         <img src="<?php echo SITEURL; ?>/app/views/assets/img/logo.png" alt="" class="img-fluid">
         </a>
     </div>
