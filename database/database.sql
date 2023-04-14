@@ -87,7 +87,7 @@ CREATE TABLE cart (
 CREATE TABLE receiptP (
     receiptPID int AUTO_INCREMENT PRIMARY KEY NOT NULL,
     customerID int NOT NULL,
-    employeeID int NOT NULL,
+    employeeID int,
     timeBuy DATETIME NOT NULL,
     paymentMethod int NOT NULL,
     consigneeName varchar(255) NOT NULL,
