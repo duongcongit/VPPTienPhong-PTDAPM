@@ -30,25 +30,18 @@
                     }
                     else{
                         $_SESSION['error'] = 'Sai mật khẩu!';
-                        return 0;
                     }
+                }
                 else{
-                    $_SESSION['error'] = 'Vui lòng kích hoạt tài khoản';
-                    return 0;
+                    $_SESSION['error'] = 'Vui lòng kích hoạt tài khoản';  
                 }   
-            else{
-                $_SESSION['error'] = 'Vui lòng kiểm tra tài khoản hoặc mật khẩu của bạn';
-                return 0;
             }
         }
-    }
-}
+
     
 
         public function signupProcess($name,$address,$phone,$email,$user,$pass,$token){
             $conn = $this->connectDb();
-            $token = md5($email).rand(10,9999);
-            $pass_hash=password_hash($pass,PASSWORD_DEFAULT);
             // B2. Định nghĩa và thực hiện truy vấn
             $sql = "INSERT INTO users (fullname,address, phone,email,username,password,token) VALUES('$name', '$address', '$phone', '$email' ,'$user', '$pass_hash' , '$token')";
             $result = mysqli_query($conn,$sql);

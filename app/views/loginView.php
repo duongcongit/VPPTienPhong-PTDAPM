@@ -8,9 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-    <link rel="stylesheet" href="<?php echo SITEURL; ?>/app/views/employee/assets/css/login.css">
+    <link rel="stylesheet" href="<?php echo SITEURL; ?>/app/views/assets/css/login.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="<?php echo SITEURL; ?>/app/views/employee/assets/js/scriptsLogin.js"></script>
+    <script src="<?php echo SITEURL; ?>/app/views/assets/js/scriptsLogin.js"></script>
 </head>
 <body>
 <header class="header-navbar container-fluid fixed-top">
@@ -25,7 +25,7 @@
 <main class="container-fluid">
 <div class="wrapper">
     <div class="card">
-        <form action="<?php echo SITEURL;?>employee/loginProcess" class="d-flex flex-column" method ="post">
+        <form action="<?php echo SITEURL;?>loginProcess" class="d-flex flex-column" method ="post">
             <div class="h3 text-center text-white">Đăng Nhập</div>
             <div class="d-flex align-items-center input-field mt-3 mb-2 "> 
                 <span class="fa fa-user p-2"></span> 
