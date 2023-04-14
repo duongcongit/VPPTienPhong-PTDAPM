@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th4 10, 2023 lúc 08:25 PM
+-- Thời gian đã tạo: Th4 14, 2023 lúc 11:55 AM
 -- Phiên bản máy phục vụ: 10.4.27-MariaDB
 -- Phiên bản PHP: 8.2.0
 
@@ -35,6 +35,13 @@ CREATE TABLE `admins` (
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `admins`
+--
+
+INSERT INTO `admins` (`adminID`, `adminName`, `email`, `username`, `password`) VALUES
+(1, 'Administrator', 'administrator@gmail.com', 'administrator', 'administrator');
+
 -- --------------------------------------------------------
 
 --
@@ -48,6 +55,17 @@ CREATE TABLE `cart` (
   `timeAdd` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `cart`
+--
+
+INSERT INTO `cart` (`customerID`, `productID`, `quantity`, `timeAdd`) VALUES
+(1, 'SPBK50LA', 2, '2023-04-13 21:05:29'),
+(1, 'SPCOMPAKT', 1, '2023-04-13 21:04:15'),
+(1, 'SPGA4DA70', 2, '2023-04-13 21:04:57'),
+(1, 'SPGA5EX80', 4, '2023-04-13 21:05:24'),
+(1, 'SPMGENIUS', 3, '2023-04-13 21:04:18');
+
 -- --------------------------------------------------------
 
 --
@@ -58,6 +76,17 @@ CREATE TABLE `categories` (
   `categoryID` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `categories`
+--
+
+INSERT INTO `categories` (`categoryID`, `name`) VALUES
+('BUT', 'Bút viết'),
+('DUNGCU', 'Dụng cụ văn phòng'),
+('GIAYINAN', 'Giấy In Ấn - Photo'),
+('LUUTRU', 'Lưu trữ'),
+('THIETBI', 'Thiết bị văn phòng');
 
 -- --------------------------------------------------------
 
@@ -76,6 +105,13 @@ CREATE TABLE `customers` (
   `status` int(11) NOT NULL,
   `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `customers`
+--
+
+INSERT INTO `customers` (`customerID`, `fullname`, `address`, `phone`, `email`, `username`, `password`, `status`, `token`) VALUES
+(1, 'Dương Công', 'Tây Sơn, Hà Nội', '0987654321', 'duongcong@gmail.com', 'duongcong', 'duongcong', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -109,6 +145,13 @@ CREATE TABLE `employees` (
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `employees`
+--
+
+INSERT INTO `employees` (`employeeID`, `fullname`, `gender`, `address`, `phone`, `email`, `username`, `password`, `status`) VALUES
+(1, 'Nhân Viên', 'Nam', 'Tây Sơn, Hà Nội', '0987654321', 'nhanvien@gmail.com', 'nhanvien', 'nhanvien', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -127,6 +170,17 @@ CREATE TABLE `products` (
   `supplierID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `products`
+--
+
+INSERT INTO `products` (`productID`, `productName`, `detail`, `stock`, `sold`, `price`, `status`, `categoryID`, `supplierID`) VALUES
+('SPBK50LA', 'Bấm kim 50LA', '', 2, 100, 320000, 1, 'DUNGCU', 1),
+('SPCOMPAKT', 'Compa kỹ thuật', '', 100, 12, 50000, 1, 'DUNGCU', 1),
+('SPGA4DA70', 'Giấy A4 Double A 70 Gsm', 'Giấy in A4 là đồ dùng văn phòng phẩm không thể thiếu đối với bất kỳ cơ quan, doanh nghiệp nào. Nó chính là phương tiện chứa đựng mọi thông tin về công việc, làm tư liệu hay mang nhiều công dụng hữu ích khác. Hôm nay, Văn phòng phẩm FAST mang đến cho bạn những thông tin cần thiết về dòng giấy A4 của Thái Lan - Double A, cùng tìm hiểu ngay nào.\r\n<br>\r\nĐặc điểm:\r\n<br>\r\n- Chất giấy láng mịn, bám mực tốt\r\n<br>\r\n- Độ cản quang tốt, thích hợp dùng để in hai mặt\r\n<br>\r\n- Phù hợp với tất cả các dòng máy in và photo', 1000, 250, 66500, 1, 'GIAYINAN', 1),
+('SPGA5EX80', 'Giấy A5 Excel 80 Gsm', '', 1000, 260, 28000, 1, 'GIAYINAN', 1),
+('SPMGENIUS', 'Chuột máy tính có dây Genius', '', 1000, 40, 152600, 1, 'THIETBI', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -139,6 +193,17 @@ CREATE TABLE `product_image` (
   `productID` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `product_image`
+--
+
+INSERT INTO `product_image` (`imageID`, `imageURL`, `productID`) VALUES
+('1imageSPBK50LA', 'http://mauweb.monamedia.net/vanphongphamfast/wp-content/uploads/2018/06/bk-50la-600x600.jpg', 'SPBK50LA'),
+('1imageSPCOMPAKT', 'http://mauweb.monamedia.net/vanphongphamfast/wp-content/uploads/2018/06/compa.png', 'SPCOMPAKT'),
+('1imageSPGA4DA70', 'https://cdn.fast.vn/tmp/20200716114159-3.jpg', 'SPGA4DA70'),
+('1imageSPGA5EX80', 'https://cdn.fast.vn/tmp/20221026132948-z3830392318118_9c4f34eeadac9a88775d64847af8a9be.jpg', 'SPGA5EX80'),
+('1imageSPMGENIUS', 'https://cdn.fast.vn/image/cache/data/7/77690chuot-600x450.jpg', 'SPMGENIUS');
+
 -- --------------------------------------------------------
 
 --
@@ -148,9 +213,13 @@ CREATE TABLE `product_image` (
 CREATE TABLE `receiptP` (
   `receiptPID` int(11) NOT NULL,
   `customerID` int(11) NOT NULL,
-  `employeeID` int(11) NOT NULL,
+  `employeeID` int(11) DEFAULT NULL,
   `timeBuy` datetime NOT NULL,
-  `statusR` int(11) NOT NULL
+  `statusR` int(11) NOT NULL,
+  `consigneeName` varchar(255) NOT NULL,
+  `phoneNumber` varchar(20) NOT NULL,
+  `deliveryAddress` varchar(255) NOT NULL,
+  `paymentMethod` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -168,6 +237,13 @@ CREATE TABLE `suppliers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Đang đổ dữ liệu cho bảng `suppliers`
+--
+
+INSERT INTO `suppliers` (`supplierID`, `supplierName`, `address`, `phone`, `email`) VALUES
+(1, 'Văn phòng phẩm Tiền Phong', '175 Tây Sơn, Đống Đa, Hà Nội', '024036548795', 'vpptienphong@gmail.com');
+
+--
 -- Chỉ mục cho các bảng đã đổ
 --
 
@@ -175,7 +251,8 @@ CREATE TABLE `suppliers` (
 -- Chỉ mục cho bảng `admins`
 --
 ALTER TABLE `admins`
-  ADD PRIMARY KEY (`adminID`);
+  ADD PRIMARY KEY (`adminID`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Chỉ mục cho bảng `cart`
@@ -194,7 +271,8 @@ ALTER TABLE `categories`
 -- Chỉ mục cho bảng `customers`
 --
 ALTER TABLE `customers`
-  ADD PRIMARY KEY (`customerID`);
+  ADD PRIMARY KEY (`customerID`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Chỉ mục cho bảng `detailReceiptP`
@@ -207,7 +285,8 @@ ALTER TABLE `detailReceiptP`
 -- Chỉ mục cho bảng `employees`
 --
 ALTER TABLE `employees`
-  ADD PRIMARY KEY (`employeeID`);
+  ADD PRIMARY KEY (`employeeID`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Chỉ mục cho bảng `products`
@@ -229,8 +308,7 @@ ALTER TABLE `product_image`
 --
 ALTER TABLE `receiptP`
   ADD PRIMARY KEY (`receiptPID`),
-  ADD KEY `customerID` (`customerID`),
-  ADD KEY `employeeID` (`employeeID`);
+  ADD KEY `customerID` (`customerID`);
 
 --
 -- Chỉ mục cho bảng `suppliers`
@@ -246,19 +324,19 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT cho bảng `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `adminID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `adminID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customerID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `customerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employeeID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `employeeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `receiptP`
@@ -270,7 +348,7 @@ ALTER TABLE `receiptP`
 -- AUTO_INCREMENT cho bảng `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `supplierID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `supplierID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

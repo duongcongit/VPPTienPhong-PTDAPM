@@ -6,7 +6,7 @@ CREATE TABLE customers (
     address varchar(255) NOT NULL,
     phone varchar(20) NOT NULL,
     email varchar(255) NOT NULL,
-    username varchar(255) NOT NULL,
+    username varchar(255) NOT NULL UNIQUE,
     password varchar(255) NOT NULL,
     status int NOT NULL,
     token varchar(255)
@@ -20,7 +20,7 @@ CREATE TABLE employees (
     address varchar(255) NOT NULL,
     phone varchar(20) NOT NULL,
     email varchar(255) NOT NULL,
-    username varchar(255) NOT NULL,
+    username varchar(255) NOT NULL UNIQUE,
     password varchar(255) NOT NULL,
     status int NOT NULL
 );
@@ -30,7 +30,7 @@ CREATE TABLE admins (
     adminID int AUTO_INCREMENT PRIMARY KEY NOT NULL,
     adminName varchar(255) NOT NULL,
     email varchar(255) NOT NULL,
-    username varchar(255) NOT NULL,
+    username varchar(255) NOT NULL UNIQUE,
     password varchar(255) NOT NULL
 );
 
@@ -89,9 +89,12 @@ CREATE TABLE receiptP (
     customerID int NOT NULL,
     employeeID int NOT NULL,
     timeBuy DATETIME NOT NULL,
+    paymentMethod int NOT NULL,
+    consigneeName varchar(255) NOT NULL,
+    phoneNumber varchar(20) NOT NULL,
+    deliveryAddress varchar(255) NOT NULL,
     statusR int NOT NULL,
-    FOREIGN KEY (customerID) REFERENCES customers(customerID),
-    FOREIGN KEY (employeeID) REFERENCES employees(employeeID)
+    FOREIGN KEY (customerID) REFERENCES customers(customerID)
 );
 
 -- Detail Receipt
