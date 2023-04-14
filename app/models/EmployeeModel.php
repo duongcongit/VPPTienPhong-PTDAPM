@@ -86,7 +86,8 @@
         // Ham xóa tất cả nhân viên
         public function deleteAllEmployee() {
             $connection = $this->connectDb();
-            $queryDelete = "DELETE FROM employees";
+            $queryDelete = "UPDATE employees SET status = 2";
+            // $queryDelete = "DELETE FROM employees";
             $isDelete = mysqli_query($connection, $queryDelete);
             $this->closeDb($connection);      
             return $isDelete;
@@ -96,7 +97,7 @@
         // Ham xóa nhân viên với Id cụ thể
         public function deleteEmployee($id=null) {
             $connection = $this->connectDb();
-            $queryDelete = "DELETE FROM employees WHERE employeeID = '$id'";
+            $queryDelete = "UPDATE employees SET status = 2 WHERE employeeID = '$id'";
             $isDelete = mysqli_query($connection, $queryDelete);
             $this->closeDb($connection);
                         

@@ -142,6 +142,7 @@ if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'
                     <th>SDT</th>
                     <th>Địa chỉ</th>
                     <th>Email</th>
+                    <th>Trạng thái</th>
                     <th>Sửa tài khoản</th>
                     <th>Xóa tài khoản</th>
                 </tr>
@@ -157,6 +158,13 @@ if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'
                                 echo "<th>{$supplier['phone']}</th>";
                                 echo "<th>{$supplier['address']}</th>";
                                 echo "<th>{$supplier['email']}</th>";
+                                if($supplier['status']==1){
+                                    echo '<th><i class="bi bi-check-circle-fill text-success ms-3" style="font-size:24px"></i></th>';
+                                }
+                                else if($supplier['status']==2){
+                                    echo '<th><i class="bi bi-x-circle-fill text-danger ms-3" style="font-size:24px"></i></th>';
+                                }
+                                
                                 //Sửa thông tin NCC
                                 echo "<th>";
                                 echo '<a onclick="return confirm(\'Bạn muốn sửa thông tin nhà cung cấp ' . $supplier['supplierName'] . ' ?\')" type="button" class="btn text-warning " href="updateSupplier?id=' . $supplier['supplierID'] . '">';
@@ -183,31 +191,31 @@ if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'
 <!-- Content end-->
 
 <?php
-if (isset($_SESSION['errorDeleteSupplierProduct'])) {
-    echo '<div id="confirmation-dialog-1" class="show">';
-    unset($_SESSION['errorDeleteSupplierProduct']);
-} else {
-    echo '<div id="confirmation-dialog-1">';
-}
+// if (isset($_SESSION['errorDeleteSupplierProduct'])) {
+//     echo '<div id="confirmation-dialog-1" class="show">';
+//     unset($_SESSION['errorDeleteSupplierProduct']);
+// } else {
+//     echo '<div id="confirmation-dialog-1">';
+// }
 ?>
     <!-- Định nghĩa hộp thoại thông báo -->
-    <div id="confirmation-dialog-content">
+    <!-- <div id="confirmation-dialog-content">
         <i class="bi bi-exclamation-triangle text-warning ms-3" style="font-size:30px"></i>
         <b>Nhà cung cấp này hiện đang cung cấp sản phẩm. Vui lòng xóa các sản phẩm có mã nhà cung cấp này trước rồi thực hiện hành động này</b>
     </div>
     <div id="confirmation-dialog-buttons">
         <button type="button" onclick="hideConfirmation()">Hủy</button>
     </div>
-</div>
+</div> -->
 
 <!-- Check -->
-<script>
+<!-- <script>
     function hideConfirmation() {
         var confirmationDialog = document.getElementById("confirmation-dialog-1");
         confirmationDialog.style.display = "none";
         confirmationDialog.classList.remove("show");
     }
-</script>
+</script> -->
 
 <?php
 include "partials/footerAdmin.php";

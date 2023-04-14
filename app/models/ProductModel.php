@@ -42,7 +42,7 @@ class ProductModel
     {
         $connection = $this->connectDb();
         $sql_update_product = "UPDATE products set `productName` = '{$arr['prodName']}', `detail` ='{$arr['prodDetail']}',`stock`='{$arr['prodStock']}', `sold`='{$arr['prodSold']}', `price`='{$arr['prodPrice']}',
-            `status` ='1'
+            `status` ='{$arr['prodStatus']}'
             WHERE productID = '{$arr['prodID']}';";
         $update_product = mysqli_query($connection, $sql_update_product);
         $this->closeDb($connection);
@@ -80,7 +80,8 @@ class ProductModel
     public function deleteProduct($id)
     {
         $connection = $this->connectDb();
-        $queryDelete = "DELETE FROM products WHERE productID = '$id'";
+        $queryDelete = "UPDATE products SET status ='2' WHERE productID = '$id'";
+        // $queryDelete = "DELETE FROM products WHERE productID = '$id'";
         $isDelete = mysqli_query($connection, $queryDelete);
         $this->closeDb($connection);
 
@@ -209,7 +210,6 @@ class ProductModel
 
             foreach ($images as $image) {
                 $imageLabel = "image" . substr($image['imageID'], 0, 1);
-                ;
                 $tempImage = array($imageLabel => $image['imageURL']);
                 $arr_products[$i] += $tempImage;
             }
