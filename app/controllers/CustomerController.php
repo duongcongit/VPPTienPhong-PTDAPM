@@ -19,7 +19,7 @@ class Customer extends Controller
         $cartModel = new CartModel();
 
         if (!isset($_SESSION['customerID'])) {
-            header('Location: ' . SITEURL . 'login');
+            header('Location: ' . SITEURL . 'customer/login');
             return;
         }
 
@@ -160,17 +160,17 @@ class Customer extends Controller
     }
 
         public function logout(){
-            unset($_SESSION['cusID']);
-            unset($_SESSION['cusName']);
+            unset($_SESSION['customerID']);
+            unset($_SESSION['customerName']);
             header("Location:" .SITEURL."login");
         }
 
         public function loginProcess()
         {
-            $customerModel = new EmployeeModel();
+            $customerModel = new CustomerModel();
             if (empty($_POST['user']) || empty($_POST['pass'])) {
                 $_SESSION['error'] = 'Bạn cần điền đầy đủ thông tin!';
-                header("Location:" .SITEURL."login");
+                header("Location:" .SITEURL."customer/login");
                 exit();
             }
             $user = htmlspecialchars($_POST['user']);
@@ -178,12 +178,19 @@ class Customer extends Controller
     
             $res = $customerModel->loginProcess($user, $password);
             if ($res == 1) {
-                isset($_SESSION['cusID']);
-                isset($_SESSION['cusName']);
-                header("Location:" .SITEURL."index");
+                isset($_SESSION['customerID']);
+                isset($_SESSION['customerName']);
+                header("Location:" .SITEURL);
+            }
+            else{
+                $_SESSION['error'] = 'Thông tin không chính xác, vui lòng kiểm tra lại!';
+                header("Location:" .SITEURL."customer/login");
+                exit();
             }
     
         }
+
+
         public function signupProcess()
         {
             $customerModel = new CustomerModel();

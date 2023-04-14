@@ -70,7 +70,10 @@ require_once _DIR_ROOT . "/app/config/constants.php";
                         </form>
                     </div>
                     <div class="account d-none d-md-flex ms-auto">
-                        <i class="bi bi-person text-info fs-3"></i>
+                        <a href="<?php echo SITEURL; ?>customer/login">
+                            <i class="bi bi-person text-info fs-3"></i>
+                        </a>
+
                     </div>
                     <div class="cart ms-4">
                         <a href="<?php echo SITEURL; ?>customer/cart"><i class="bi bi-cart2 text-info fs-3"></i></a>
