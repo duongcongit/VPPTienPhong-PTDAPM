@@ -335,7 +335,7 @@ class Customer extends Controller
     {
         unset($_SESSION['customerID']);
         unset($_SESSION['customerName']);
-        header("Location:" . SITEURL . "login");
+        header("Location:" . SITEURL);
     }
 
     public function loginProcess()

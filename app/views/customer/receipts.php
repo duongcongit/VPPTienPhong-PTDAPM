@@ -14,8 +14,12 @@ include _DIR_ROOT . "/app/views/partials/header.php";
 
 <div class="main container-fluid cart-main">
     <div class="row" id="cart-view">
-        <div class="col-md-12 mt-4 fs-2">
+        <div class="col-md-12 mt-4 fs-2 d-flex justify-content-between">
             <p class="bi bi-receipt-cutoff text-muted"> Các đơn hàng</p>
+            <a href="<?php echo SITEURL ?>/customer/logout" class="btn fs-4">
+                Đăng xuất
+                <i class="bi bi-box-arrow-right text-danger"></i>
+            </a>
         </div>
 
         <div class="col-md-12 product-description mt-2 row">
