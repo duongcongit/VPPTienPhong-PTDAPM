@@ -2,6 +2,10 @@
 include _DIR_ROOT . "/app/views/partials/header.php";
 ?>
 
+<script>
+    document.title = "Giỏ hàng";
+</script>
+
 <style>
     body {
         background-color: rgb(240, 240, 240);

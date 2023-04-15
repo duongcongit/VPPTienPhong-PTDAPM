@@ -1,5 +1,5 @@
 // === Function ===
-const addToCart = (customerID, productID, quantity, SITEURL) => {
+const addToCart = (productID, quantity, SITEURL) => {
 
     $.ajax({
         url: SITEURL + "customer/addProductToCart",
@@ -9,7 +9,13 @@ const addToCart = (customerID, productID, quantity, SITEURL) => {
             quantity: quantity
         },
         success: function (data) {
-            if (data.toString() == "Exceed the available quantity") {
+            if(data.toString() == "No logged"){
+                window.location.href = SITEURL + "customer/login";
+            }
+            else if(data.toString() == "404"){
+                window.location.href = SITEURL
+            }
+            else if (data.toString() == "Exceed the available quantity") {
                 console.log("Quá số lượng");
                 let modalFail = bootstrap.Modal.getOrCreateInstance(
                     document.querySelector(".modal-fail")
@@ -62,10 +68,9 @@ $(document).ready(function () {
     // ======= Home Page =======
     // const SITEURL = "<?php echo SITEURL; ?>";
     $(".btn-add-to-cart").on("click", function () {
-        var customerID = $(this).data("customer_id");
         var productID = $(this).data("product_id");
         var quantity = 1;
-        addToCart(customerID, productID, quantity, SITEURL);
+        addToCart(productID, quantity, SITEURL);
     });
 
     // ======= Detail page =======
@@ -100,10 +105,9 @@ $(document).ready(function () {
     });
 
     $(".btn-add-to-cart-detail").on("click", function () {
-        var customerID = $(this).data("customer_id");
         var productID = $(this).data("product_id");
         var quantity = $("#input-quantity-detail").val();
-        addToCart(customerID, productID, quantity, SITEURL);
+        addToCart(productID, quantity, SITEURL);
     });
 
     // ======= Cart page =======

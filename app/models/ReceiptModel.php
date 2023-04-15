@@ -120,6 +120,51 @@ class ReceiptModel
         return $result;
     }
 
+    // Lấy các đơn hàng của khách hàng
+    public function getReceipts($customerID)
+    {
+
+        $conn = $this->connectDb();
+        $sql = "SELECT c.username, c.fullname, r.*, r.statusR
+            FROM receiptP AS r
+            INNER JOIN customers AS c ON r.customerID = c.customerID
+            WHERE c.customerID = '{$customerID}';";
+        $result = mysqli_query($conn, $sql);
+
+        $arr_receipt = [];
+        if (mysqli_num_rows($result) > 0) {
+
+            $arr_receipt = mysqli_fetch_all($result, MYSQLI_ASSOC); //Sử dụng MYSQLI_ASSOC để chỉ định lấy kết quả dạng MẢNG KẾT HỢP
+        }
+
+        return $arr_receipt;
+    }
+
+    // Lấy thông tin một đơn hàng
+    public function getReceiptDetail($id)
+    {
+        $conn = $this->connectDb();
+        $sql = "SELECT d.*,p.productName,pi.imageURL 
+                FROM receiptP AS r
+                INNER JOIN detailReceiptP AS d ON r.receiptPID = d.receiptPID
+                INNER JOIN customers AS c ON r.customerID = c.customerID
+                INNER JOIN products AS p ON d.productID= p.productID
+                INNER JOIN product_image AS pi ON p.productID=pi.productID
+                WHERE r.receiptPID = '{$id}' ";
+        $result = mysqli_query($conn, $sql);
+        // Lấy chi tiết đơn hàng
+
+        $receiptDetail = [];
+        // B3. Xử lý và (KO PHẢI SHOW KẾT QUẢ) TRẢ VỀ KẾT QUẢ
+        if (mysqli_num_rows($result) > 0) {
+            // Lấy tất cả dùng mysqli_fetch_all
+            $receiptDetail = mysqli_fetch_all($result, MYSQLI_ASSOC); //Sử dụng MYSQLI_ASSOC để chỉ định lấy kết quả dạng MẢNG KẾT HỢP
+        }
+
+        $this->closeDb($conn);
+        return $receiptDetail;
+    }
+
     public function connectDb()
     {
         $connection = mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD, DB_NAME);

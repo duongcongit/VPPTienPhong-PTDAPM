@@ -4,29 +4,71 @@ require_once _DIR_ROOT . '/app/models/CustomerModel.php';
 require_once _DIR_ROOT . '/app/models/ProductModel.php';
 require_once _DIR_ROOT . '/app/models/CartModel.php';
 require_once _DIR_ROOT . '/app/models/ReceiptModel.php';
-require_once _DIR_ROOT . '/app/models/AdminModel.php';
 
 class Customer extends Controller
 {
 
     public function index()
     {
-        require_once _DIR_ROOT . '/app/views/errors/404.php';
+        $receiptModel = new ReceiptModel();
+        $productModel = new ProductModel();
+
+        $this->checkLogin();
+
+        $customerID = $_SESSION['customerID'];
+        $receipts = [];
+        $products = array("products" => []);
+        $productsRaw = [];
+
+        $receiptsRaw = $receiptModel->getReceipts($customerID);
+
+        $total = 0;
+
+        
+
+        for($i = 0; $i<count($receiptsRaw); $i++){
+
+            $receiptID = $receiptsRaw[$i]['receiptPID'];
+            $productsRaw = $receiptModel->getReceiptDetail($receiptID);
+            $products['products'] = $products['products'] + $productsRaw;
+
+            $tempRe = $receiptsRaw[$i];
+            
+
+            foreach($products['products'] as $product){
+                $total = $total + $product['total'];
+            }
+
+            $tempRe = $tempRe + array("total" => $total);
+
+            $tempRe = $tempRe + $products;
+            array_push($receipts, $tempRe);
+            
+
+        }
+
+        // echo '<pre>';
+        // print_r($receipts);
+        // echo '</pre>';
+
+        require_once _DIR_ROOT . '/app/views/customer/receipts.php';
+    }
+
+    private function checkLogin()
+    {
+        if (!isset($_SESSION['customerID'])) {
+            header('Location: ' . SITEURL . 'customer/login');
+            return;
+        }
     }
 
     // Xem giở hàng
     public function cart()
     {
         $cartModel = new CartModel();
-
-        if (!isset($_SESSION['customerID'])) {
-            header('Location: ' . SITEURL . 'customer/login');
-            return;
-        }
-
+        $this->checkLogin();
         $customerID = $_SESSION['customerID'];
         $products = $cartModel->getAllProductsInCart($customerID);
-
         require_once _DIR_ROOT . '/app/views/customer/cart.php';
     }
 
@@ -38,41 +80,42 @@ class Customer extends Controller
         $msg = "";
 
         if (!isset($_SESSION['customerID'])) {
-            header('Location: ' . SITEURL . 'login');
+            // header('Location: ' . SITEURL . 'customer/login');
+            $msg = "No logged";
+            echo $msg;
             return;
-        }
-        if (!isset($_POST['productID']) || !isset($_POST['quantity'])) {
-            header('Location: ' . SITEURL . '404');
+        } else if (!isset($_POST['productID']) || !isset($_POST['quantity'])) {
+            // header('Location: ' . SITEURL . '404');
+            $msg = "404";
+            echo $msg;
             return;
-        }
-
-        $customerID = $_SESSION['customerID'];
-        $productID = $_POST['productID'];
-        $quantity = $_POST['quantity'];
-
-        $productInfo = $productModel->getProductDetail($productID);
-        $existProduct = $cartModel->getProductInCart($customerID, $productID);
-
-        if ($existProduct == NULL) {
-        }
-
-
-        if ($existProduct == NULL) {
-            if ($quantity > $productInfo['stock']) {
-                $msg = "Exceed the available quantity";
-            } else {
-                $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
-                $result = $cartModel->addProductToCart($data);
-            }
         } else {
-            $quantity = $quantity + $existProduct['quantity'];
-            if ($quantity > $productInfo['stock']) {
-                $msg = "Exceed the available quantity";
+            $customerID = $_SESSION['customerID'];
+            $productID = $_POST['productID'];
+            $quantity = $_POST['quantity'];
+
+            $productInfo = $productModel->getProductDetail($productID);
+            $existProduct = $cartModel->getProductInCart($customerID, $productID);
+
+            if ($existProduct == NULL) {
+                if ($quantity > $productInfo['stock']) {
+                    $msg = "Exceed the available quantity";
+                } else {
+                    $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
+                    $result = $cartModel->addProductToCart($data);
+                }
             } else {
-                $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
-                $result = $cartModel->updateProductQuantity($data);
+                $quantity = $quantity + $existProduct['quantity'];
+                if ($quantity > $productInfo['stock']) {
+                    $msg = "Exceed the available quantity";
+                } else {
+                    $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
+                    $result = $cartModel->updateProductQuantity($data);
+                }
             }
         }
+
+
 
         echo $msg;
     }
@@ -83,7 +126,7 @@ class Customer extends Controller
         $cartModel = new CartModel();
 
         if (!isset($_SESSION['customerID'])) {
-            header('Location: ' . SITEURL . 'login');
+            header('Location: ' . SITEURL . '/customer/login');
             return;
         }
         if (!isset($_POST['productID']) || !isset($_POST['quantity'])) {
