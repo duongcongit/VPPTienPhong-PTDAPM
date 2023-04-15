@@ -72,7 +72,7 @@ include _DIR_ROOT . "/app/views/partials/header.php";
                 <?php
                 if ($productDetails['stock'] > 0) {
                 ?>
-                    <button class="btn btn-info text-light btn-add-to-cart-detail" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $productDetails['productID']; ?>">
+                    <button class="btn btn-info text-light btn-add-to-cart-detail" style="background-color:  rgb(58, 160, 180);" data-product_id="<?php echo $productDetails['productID']; ?>">
                         Thêm vào giỏ
                     </button>
                 <?php } else {
@@ -140,7 +140,7 @@ include _DIR_ROOT . "/app/views/partials/header.php";
                                 <?php
                                 if ($product['stock'] > 0) {
                                 ?>
-                                    <button class="btn btn-info text-light btn-add-to-cart" style="background-color:  rgb(58, 160, 180);" data-customer_id="<?php echo $_SESSION['customerID'] ?>" data-product_id="<?php echo $product['productID']; ?>">Thêm vào giỏ</button>
+                                    <button class="btn btn-info text-light btn-add-to-cart" style="background-color:  rgb(58, 160, 180);" data-product_id="<?php echo $product['productID']; ?>">Thêm vào giỏ</button>
                                 <?php } else {
                                 ?>
                                     <button class="btn btn-info text-light btn-out-of-stock bg-secondary" style="border: grey;" disabled>Hết hàng</button>

@@ -25,7 +25,7 @@
                         <a href="<?php echo SITEURL; ?>">
                             <img src="<?php echo SITEURL; ?>/app/views/employee/assets/img/logotp.jpg" alt="" class="logo ms-3" style="width:105px">
                         </a>
-                        <a class="navbar-brand me-auto ms-3 h5 pt-3" href="<?php echo SITEURL; ?>employee/index">Trang Nhân Viên</a>
+                        <a class="navbar-brand me-auto ms-3 h5 pt-3" href="<?php echo SITEURL; ?>employee/">Trang Nhân Viên</a>
                         <a class="navbar-brand ms-auto" href="#"><i class="bi bi-person-workspace me-2"></i><?php echo $_SESSION['empName'] ?></a>
                     </div>
                 </nav>
@@ -46,7 +46,7 @@
                 <div class="sidebar-menu">
                     <ul class="">
                         <li>
-                            <a href="<?php echo SITEURL; ?>employee/index" class="nav-link link-dark">
+                            <a href="<?php echo SITEURL; ?>employee/" class="nav-link link-dark">
                                 <i class="bi bi-receipt"></i>
                                 <span class="sidebar-item-text">Quản lý đơn hàng</span>
                             </a>

@@ -10,7 +10,7 @@
 ?> 
 <div class="col main-right container-fluid">
 <div class="col-md-12 mt-4 mb-3 nav-page">
-    <h5 class="text-muted"><a href="<?php echo SITEURL; ?>employee/index">Trang nhân viên</a> / </span><a href="<?php echo SITEURL; ?>employee/report">Báo cáo</a></h5>
+    <h5 class="text-muted"><a href="<?php echo SITEURL; ?>employee/">Trang nhân viên</a> / </span><a href="<?php echo SITEURL; ?>employee/report">Báo cáo</a></h5>
 </div>
 
 

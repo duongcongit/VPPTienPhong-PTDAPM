@@ -10,22 +10,65 @@ class Customer extends Controller
 
     public function index()
     {
-        require_once _DIR_ROOT . '/app/views/errors/404.php';
+        $receiptModel = new ReceiptModel();
+        $productModel = new ProductModel();
+
+        $this->checkLogin();
+
+        $customerID = $_SESSION['customerID'];
+        $receipts = [];
+        $products = array("products" => []);
+        $productsRaw = [];
+
+        $receiptsRaw = $receiptModel->getReceipts($customerID);
+
+        $total = 0;
+
+        
+
+        for($i = 0; $i<count($receiptsRaw); $i++){
+
+            $receiptID = $receiptsRaw[$i]['receiptPID'];
+            $productsRaw = $receiptModel->getReceiptDetail($receiptID);
+            $products['products'] = $products['products'] + $productsRaw;
+
+            $tempRe = $receiptsRaw[$i];
+            
+
+            foreach($products['products'] as $product){
+                $total = $total + $product['total'];
+            }
+
+            $tempRe = $tempRe + array("total" => $total);
+
+            $tempRe = $tempRe + $products;
+            array_push($receipts, $tempRe);
+            
+
+        }
+
+        // echo '<pre>';
+        // print_r($receipts);
+        // echo '</pre>';
+
+        require_once _DIR_ROOT . '/app/views/customer/receipts.php';
+    }
+
+    private function checkLogin()
+    {
+        if (!isset($_SESSION['customerID'])) {
+            header('Location: ' . SITEURL . 'customer/login');
+            return;
+        }
     }
 
     // Xem giở hàng
     public function cart()
     {
         $cartModel = new CartModel();
-
-        if (!isset($_SESSION['customerID'])) {
-            header('Location: ' . SITEURL . 'customer/login');
-            return;
-        }
-
+        $this->checkLogin();
         $customerID = $_SESSION['customerID'];
         $products = $cartModel->getAllProductsInCart($customerID);
-
         require_once _DIR_ROOT . '/app/views/customer/cart.php';
     }
 
@@ -37,41 +80,42 @@ class Customer extends Controller
         $msg = "";
 
         if (!isset($_SESSION['customerID'])) {
-            header('Location: ' . SITEURL . 'login');
+            // header('Location: ' . SITEURL . 'customer/login');
+            $msg = "No logged";
+            echo $msg;
             return;
-        }
-        if (!isset($_POST['productID']) || !isset($_POST['quantity'])) {
-            header('Location: ' . SITEURL . '404');
+        } else if (!isset($_POST['productID']) || !isset($_POST['quantity'])) {
+            // header('Location: ' . SITEURL . '404');
+            $msg = "404";
+            echo $msg;
             return;
-        }
-
-        $customerID = $_SESSION['customerID'];
-        $productID = $_POST['productID'];
-        $quantity = $_POST['quantity'];
-
-        $productInfo = $productModel->getProductDetail($productID);
-        $existProduct = $cartModel->getProductInCart($customerID, $productID);
-
-        if ($existProduct == NULL) {
-        }
-
-
-        if ($existProduct == NULL) {
-            if ($quantity > $productInfo['stock']) {
-                $msg = "Exceed the available quantity";
-            } else {
-                $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
-                $result = $cartModel->addProductToCart($data);
-            }
         } else {
-            $quantity = $quantity + $existProduct['quantity'];
-            if ($quantity > $productInfo['stock']) {
-                $msg = "Exceed the available quantity";
+            $customerID = $_SESSION['customerID'];
+            $productID = $_POST['productID'];
+            $quantity = $_POST['quantity'];
+
+            $productInfo = $productModel->getProductDetail($productID);
+            $existProduct = $cartModel->getProductInCart($customerID, $productID);
+
+            if ($existProduct == NULL) {
+                if ($quantity > $productInfo['stock']) {
+                    $msg = "Exceed the available quantity";
+                } else {
+                    $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
+                    $result = $cartModel->addProductToCart($data);
+                }
             } else {
-                $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
-                $result = $cartModel->updateProductQuantity($data);
+                $quantity = $quantity + $existProduct['quantity'];
+                if ($quantity > $productInfo['stock']) {
+                    $msg = "Exceed the available quantity";
+                } else {
+                    $data = array("customerID" => $customerID, "productID" => $productID, "quantity" => $quantity);
+                    $result = $cartModel->updateProductQuantity($data);
+                }
             }
         }
+
+
 
         echo $msg;
     }
@@ -82,7 +126,7 @@ class Customer extends Controller
         $cartModel = new CartModel();
 
         if (!isset($_SESSION['customerID'])) {
-            header('Location: ' . SITEURL . 'login');
+            header('Location: ' . SITEURL . '/customer/login');
             return;
         }
         if (!isset($_POST['productID']) || !isset($_POST['quantity'])) {
@@ -134,61 +178,188 @@ class Customer extends Controller
     }
 
     // Đặt hàng
-    public function order($products = []){
+    public function order($products = [])
+    {
+
+        unset($_SESSION["order"]);
+        $orderDetail = [];
+
+        $receiptModel = new ReceiptModel();
+        $cartModel = new CartModel();
+        $customerModel = new CustomerModel();
+
+        if (!isset($_SESSION['customerID'])) {
+            header('Location: ' . SITEURL . 'customer/login');
+            return;
+        }
+
+        // if (!isset($_POST['product1'])) {
+        //     header('Location: ' . SITEURL . 'customer/cart');
+        //     return;
+        // }
+
+        $customerID = $_SESSION['customerID'];
+
+        $customerInfo = $customerModel->getCustomerInfo($customerID)[0];
+        $deliveryInfo = array("deliveryInfo" => array(
+            "consigneeName" => $customerInfo['fullname'],
+            "phoneNumber" => $customerInfo['phone'],
+            "deliveryAddress" => $customerInfo['address'],
+        ));
+
+        $products = [];
+        $paymentMethod = array("paymentMethod" => "1");
+        $total = 0;
+
+        for ($i = 0; $i < count($_POST); $i++) {
+            $product = [];
+            $temp = array_filter(explode(',', $_POST['product' . $i]));
+            $product += array(
+                "productID" => $temp[0],
+                "productName" => $temp[1],
+                "image" => $temp[2],
+                "price" => $temp[3],
+                "quantity" => $temp[4],
+                "amount" => $temp[3] * $temp[4]
+            );
+
+            array_push($products, $product);
+            $total = $total + $product["amount"];
+        }
+
+        if (!isset($_POST['product1'])) {
+            header('Location: ' . SITEURL . 'customer/cart');
+            return;
+        }
+
+        $products = array("products" => $products);
+        $total = array("total" => $total);
+
+        $orderDetail += $deliveryInfo + $products + $paymentMethod + $total;
+
+        $product = null;
+
+        $_SESSION["order"] = $orderDetail;
+
+
+        // echo '<pre>';
+        // print_r($_SESSION["order"]);
+        // echo '</pre>';
+
+        require_once _DIR_ROOT . '/app/views/customer/order.php';
+    }
+
+    // Xử lý đặt hàng
+    public function orderProcess($data = [])
+    {
         $receiptModel = new ReceiptModel();
         $cartModel = new CartModel();
 
-        if (!isset($_SESSION['customerID'])) {
-            header('Location: ' . SITEURL . 'login');
+        if (!isset($_SESSION["order"]) || !isset($_POST['order'])) {
+            header('Location: ' . SITEURL . 'customer/cart');
             return;
         }
 
         $customerID = $_SESSION['customerID'];
+        $orderDetail = $_SESSION["order"];
+        $timeBuy = date("Y-m-d H:i:s");
+        $status = 0;
 
-        require_once _DIR_ROOT . '/app/views/customer/order.php';
+        $data = array(
+            "customerID" => $customerID,
+            "timeBuy" => $timeBuy,
+            "consigneeName" => $orderDetail['deliveryInfo']['consigneeName'],
+            "phoneNumber" => $orderDetail['deliveryInfo']['phoneNumber'],
+            "deliveryAddress" => $orderDetail['deliveryInfo']['deliveryAddress'],
+            "paymentMethod" => $orderDetail['paymentMethod'],
+            "status" => $status
+        );
 
+        $receiptModel->createReceipt($data);
+
+        $receiptID = $receiptModel->getReceiptInfo($customerID, $timeBuy)['receiptPID'];
+
+        foreach ($orderDetail['products'] as $product) {
+            $proData = array(
+                "productID" => $product['productID'],
+                "price" => $product['price'],
+                "quantity" => $product['quantity'],
+                "amount" => $product['amount']
+            );
+
+            $resultAddDetailReceipt = $receiptModel->addDetailReceipt($receiptID, $proData);
+        }
+
+        // Unset
+        // unset(
+        //     $receiptModel,
+        //     $cartModel,
+        //     $customerID,
+        //     $orderDetail,
+        //     $timeBuy,
+        //     $status,
+        //     $data,
+        //     $proData
+        // );
+
+        header('Location: ' . SITEURL . 'customer/orderSuccess/' . $receiptID);
+        return;
+    }
+
+    public function orderSuccess($receiptID)
+    {
+        if (!isset($_SESSION['customerID'])) {
+            header('Location: ' . SITEURL . 'customer/login');
+            return;
+        }
+
+        // if($receiptID == NULL || $receiptID = ""){
+        //     require_once _DIR_ROOT . '/app/views/errors/404.php';
+        // }
+        require_once _DIR_ROOT . '/app/views/customer/orderSuccess.php';
     }
 
     // ==================
 
-    public function login(){
-        require_once _DIR_ROOT.'/app/views/loginView.php';
+    public function login()
+    {
+        require_once _DIR_ROOT . '/app/views/loginView.php';
     }
 
-    public function signup(){
-        require_once _DIR_ROOT.'/app/views/signupView.php';
+    public function signup()
+    {
+        require_once _DIR_ROOT . '/app/views/signupView.php';
     }
 
-        public function logout(){
-            unset($_SESSION['customerID']);
-            unset($_SESSION['customerName']);
-            header("Location:" .SITEURL."login");
-        }
+    public function logout()
+    {
+        unset($_SESSION['customerID']);
+        unset($_SESSION['customerName']);
+        header("Location:" . SITEURL);
+    }
 
-        public function loginProcess()
-        {
-            $customerModel = new CustomerModel();
-            if (empty($_POST['user']) || empty($_POST['pass'])) {
-                $_SESSION['error'] = 'Bạn cần điền đầy đủ thông tin!';
-                header("Location:" .SITEURL."customer/login");
-                exit();
-            }
-            $user = htmlspecialchars($_POST['user']);
-            $password = htmlspecialchars($_POST['pass'], ENT_QUOTES);
-    
-            $res = $customerModel->loginProcess($user, $password);
-            if ($res == 1) {
-                isset($_SESSION['customerID']);
-                isset($_SESSION['customerName']);
-                header("Location:" .SITEURL);
-            }
-            else{
-                $_SESSION['error'] = 'Thông tin không chính xác, vui lòng kiểm tra lại!';
-                header("Location:" .SITEURL."customer/login");
-                exit();
-            }
-    
+    public function loginProcess()
+    {
+        $customerModel = new CustomerModel();
+        if (empty($_POST['user']) || empty($_POST['pass'])) {
+            $_SESSION['error'] = 'Bạn cần điền đầy đủ thông tin!';
+            header("Location:" . SITEURL . "customer/login");
+            exit();
         }
+        $user = htmlspecialchars($_POST['user']);
+        $password = htmlspecialchars($_POST['pass'], ENT_QUOTES);
+
+        $res = $customerModel->loginProcess($user, $password);
+        if ($res == 1) {
+            isset($_SESSION['customerID']);
+            isset($_SESSION['customerName']);
+            header("Location:" . SITEURL);
+        } else {
+            $_SESSION['error'] = 'Thông tin không chính xác, vui lòng kiểm tra lại!';
+            header("Location:" . SITEURL . "customer/login");
+            exit();
+        }
+    }
 
 
         public function signupProcess()
@@ -222,14 +393,12 @@ class Customer extends Controller
                 }
             }
         }
-        public function verifyMail($email,$token){
-            $customerModel = new CustomerModel();
-            $verify = $customerModel->verifyMail($email,$token);
-            
-            require_once _DIR_ROOT.'/app/views/verifyMail.php';
-        }
-
-        
-
     }
-?>
+    public function verifyMail($email, $token)
+    {
+        $customerModel = new CustomerModel();
+        $verify = $customerModel->verifyMail($email, $token);
+
+        require_once _DIR_ROOT . '/app/views/verifyMail.php';
+    }
+}
