@@ -131,7 +131,7 @@
             // B1. Khởi tạo kết nối
             $conn = $this->connectDb();
             // B2. Định nghĩa và thực hiện truy vấn
-            $sql = "SELECT c.username, r.receiptPID, r.paymentMethod, SUM(d.quantityBuy) AS tongSanPham, SUM(d.total) AS tongTien, r.statusR
+            $sql = "SELECT c.username, c.fullname, r.receiptPID, r.paymentMethod, SUM(d.quantityBuy) AS tongSanPham, SUM(d.total) AS tongTien, r.statusR
             FROM receiptP AS r
             INNER JOIN detailReceiptP AS d ON r.receiptPID = d.receiptPID
             INNER JOIN customers AS c ON r.customerID = c.customerID
@@ -153,7 +153,7 @@
             // B1. Khởi tạo kết nối
             $conn = $this->connectDb();
             // B2. Định nghĩa và thực hiện truy vấn
-            $sql = "UPDATE receiptp SET statusR = '1', employeeID = '{$_SESSION['empID']}'  WHERE receiptPID = '{$id}'";
+            $sql = "UPDATE receiptP SET statusR = '1', employeeID = '{$_SESSION['empID']}'  WHERE receiptPID = '{$id}'";
             $result = mysqli_query($conn, $sql);
             $this->closeDb($conn);
             return $result;
@@ -164,7 +164,7 @@
             // B1. Khởi tạo kết nối
             $conn = $this->connectDb();
             // B2. Định nghĩa và thực hiện truy vấn
-            $sql = "UPDATE receiptp SET statusR = '2', employeeID = '{$_SESSION['empID']}'   WHERE receiptPID = '{$id}'";
+            $sql = "UPDATE receiptP SET statusR = '2', employeeID = '{$_SESSION['empID']}'   WHERE receiptPID = '{$id}'";
             $result = mysqli_query($conn, $sql);
             $this->closeDb($conn);
             return $result;
