@@ -193,10 +193,10 @@ class Customer extends Controller
             return;
         }
 
-        if (!isset($_POST['product1'])) {
-            header('Location: ' . SITEURL . 'customer/cart');
-            return;
-        }
+        // if (!isset($_POST['product1'])) {
+        //     header('Location: ' . SITEURL . 'customer/cart');
+        //     return;
+        // }
 
         $customerID = $_SESSION['customerID'];
 
