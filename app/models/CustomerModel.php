@@ -46,7 +46,7 @@ class CustomerModel
     {
         $conn = $this->connectDb();
         // B2. Định nghĩa và thực hiện truy vấn
-        $sql = "INSERT INTO users (fullname,address, phone,email,username,password,token) VALUES('$name', '$address', '$phone', '$email' ,'$user', '$pass_hash' , '$token')";
+        $sql = "INSERT INTO customers (fullname,address, phone,email,username,password,token) VALUES('$name', '$address', '$phone', '$email' ,'$user', '$pass_hash' , '$token')";
         $result = mysqli_query($conn, $sql);
         $link = "<a href='" . SITEURL . "/verifyMail/" . $email . "/" . $token . "'>Kích hoạt tài khoản</a>";
         // B3. Xử lý và (KO PHẢI SHOW KẾT QUẢ) TRẢ VỀ KẾT QUẢ

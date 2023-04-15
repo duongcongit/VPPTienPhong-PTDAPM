@@ -1,5 +1,5 @@
 <?php
-    require_once _DIR_ROOT.'/app/models/employees/EmployeeModel.php';
+    require_once _DIR_ROOT.'/app/models/EmployeeModel.php';
     
     class Employee {
         public function login(){

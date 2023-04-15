@@ -25,7 +25,7 @@
 <main class="container-fluid">
 <div class="wrapper">
     <div class="card">
-        <form action="<?php echo SITEURL;?>signupProcess" method="post" class="d-flex flex-column">
+        <form action="<?php echo SITEURL;?>customer/signupProcess" method="post" class="d-flex flex-column">
             <div class="h3 text-center text-black">Đăng Ký</div>
             <div class="d-flex align-items-center input-field my-3"> 
               <span class="fa fa-user-pen p-2"></span>  
@@ -67,7 +67,7 @@
             </small>
             <div class="my-3"> <input type="submit" value="Đăng ký" class="btn btn-primary" name="btnSignUp" id='Signup' disable> </div>
             <div class="mb-3"> <span class="text-light-white">Bạn đã có tài khoản?</span> 
-                <a href="<?php echo SITEURL;?>employee/login">Đăng nhập ngay</a> 
+                <a href="<?php echo SITEURL;?>customer/login">Đăng nhập ngay</a> 
             </div>
         </form>
     </div>

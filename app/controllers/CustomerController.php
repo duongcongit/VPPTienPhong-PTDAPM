@@ -4,7 +4,7 @@ require_once _DIR_ROOT . '/app/models/CustomerModel.php';
 require_once _DIR_ROOT . '/app/models/ProductModel.php';
 require_once _DIR_ROOT . '/app/models/CartModel.php';
 require_once _DIR_ROOT . '/app/models/ReceiptModel.php';
-
+require_once  _DIR_ROOT.'/app/sendMail.php';
 class Customer extends Controller
 {
 
@@ -195,12 +195,12 @@ class Customer extends Controller
         {
             $customerModel = new CustomerModel();
             if( !isset($_POST['btnSignUp']) ){
-                header("location: ../signup.php");
+                header("Location:" .SITEURL."customer/signup");
             }
             else{
-                if (empty($_POST['emp']) || empty($_POST['pass'])) {
+                if (empty($_POST['name']) || empty($_POST['pass'])) {
                     $_SESSION['error'] = 'Bạn cần điền đầy đủ thông tin!';
-                    header("Location:" .SITEURL."signup");
+                    header("Location:" .SITEURL."customer/signup");
                     exit();
                 }
                 $user = htmlspecialchars($_POST['name']);
@@ -213,7 +213,6 @@ class Customer extends Controller
                 $pass_hash=password_hash($password,PASSWORD_DEFAULT);
                 $res = $customerModel->signupProcess($name,$address,$phone,$email,$user,$pass_hash,$token);
                 if ($res == 1) {
-                    require_once  _DIR_ROOT.'/app/sendMail.php';
                     if(sendEmailForAccountActive($email,$res)){
                         echo "Vui lòng kiểm tra hộp thư của bạn để kích hoạt tài khoản";
                     }
@@ -222,8 +221,6 @@ class Customer extends Controller
                     }
                 }
             }
-            
-    
         }
         public function verifyMail($email,$token){
             $customerModel = new CustomerModel();

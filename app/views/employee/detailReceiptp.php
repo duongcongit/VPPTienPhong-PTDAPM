@@ -20,7 +20,7 @@
             <p>Người nhận: <?php echo $details[0]['consigneeName'] ?></p>
             <p>Số điện thoại: <?php echo $details[0]['phoneNumber'] ?></p>
             <p>Địa chỉ nhận: <?php echo $details[0]['deliveryAddress'] ?></p>
-        </div>oke
+        </div>
         <!--  -->
         <table class="styled-table ">
             <thead>

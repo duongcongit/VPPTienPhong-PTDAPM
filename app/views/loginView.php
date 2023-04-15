@@ -44,7 +44,15 @@
                 require_once _DIR_ROOT.'/app/config/session.php';
             ?>
             </small>  
+            <div class="mb-3"> <span class="text-light-white">Bạn chưa có tài khoản?</span> 
+                <a href="<?php echo SITEURL;?>customer/signup">Đăng ký ngay</a> 
+            </div>
         </form>
+        <div class="position-relative border-bottom my-3 line"> <span class="connect">Có thể kết nối</span> </div>
+        <div class="text-center py-3 connections"> 
+            <a href="https://wwww.facebook.com" target="_blank" class="px-2"> <img src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt=""> </a> 
+            <a href="https://www.google.com" target="_blank" class="px-2"> <img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" alt=""> </a> 
+        </div>
     </div>
 </div>
 </main>
