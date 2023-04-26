@@ -47,11 +47,11 @@ class CustomerModel
         $sql = "INSERT INTO customers (fullname,address, phone,email,username,password,status,token) VALUES('$name', '$address', '$phone', '$email' ,'$user', '$pass_hash' ,'1', '$token')";
         $result = mysqli_query($conn, $sql);
         // B3. Xử lý và (KO PHẢI SHOW KẾT QUẢ) TRẢ VỀ KẾT QUẢ
-        if(mysqli_num_rows($result) == 1){
-            $_SESSION['success'] = 'Đăng kí thành công!';
+        if($result){
+            return 1;
         }
         else{
-            $_SESSION['error'] = 'Đăng kí thất bại! Vui lòng kiểm tra lại thông tin';
+            return 0;
         }
     }
 

@@ -4,7 +4,7 @@ require_once _DIR_ROOT . '/app/models/CustomerModel.php';
 require_once _DIR_ROOT . '/app/models/ProductModel.php';
 require_once _DIR_ROOT . '/app/models/CartModel.php';
 require_once _DIR_ROOT . '/app/models/ReceiptModel.php';
-require_once  _DIR_ROOT.'/app/sendMail.php';
+
 class Customer extends Controller
 {
 
@@ -384,6 +384,7 @@ class Customer extends Controller
                 $pass_hash=password_hash($password,PASSWORD_DEFAULT);
                 $res = $customerModel->signupProcess($name,$address,$phone,$email,$user,$pass_hash,$token);
                 if ($res == 1) {
+                    $_SESSION['success'] = 'Chúc mừng bạn đăng kí thành công!';
                     header("Location:" .SITEURL. "customer/login");
                 }
                 else{
@@ -394,7 +395,5 @@ class Customer extends Controller
         }
 
         
-
-    }
 
 }
