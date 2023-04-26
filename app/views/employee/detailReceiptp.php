@@ -8,69 +8,7 @@
     }
     include _DIR_ROOT.'/app/views/employee/partials/header.php';  
 ?> 
-    <div class="col main-right container-fluid row ">
-        <div class="col-md-12 mt-4 mb-3 nav-page">
-            <h5 class="text-muted">
-                <a href="<?php echo SITEURL; ?>employee/index">Trang nhân viên</a> / </span>
-                <a href="<?php echo SITEURL; ?>employee/index">Quản lý đơn hàng</a> / </span>
-                <a href="<?php echo SITEURL; ?>employee/detail/<?php echo $detail['receiptPID'] ?>">Chi tiết đơn hàng</a>
-            </h5>
-        </div>
-        <div class="col-md-12 mt-4 mb-3 bg-white card">
-            <p class= "mt-2">Người nhận: <?php echo $details[0]['consigneeName'] ?></p>
-            <p>Số điện thoại: <?php echo $details[0]['phoneNumber'] ?></p>
-            <p class= "mb-3">Địa chỉ nhận: <?php echo $details[0]['deliveryAddress'] ?></p>
-        </div>
-        <div class="col-md-12 py-2 d-flex justify-content-end">
-            <a type="button" href="<?php echo SITEURL; ?>employee/index" class="btn btn-secondary px-4">Quay lại</a>
-        </div>
-        <!--  -->
-        <table class="styled-table ">
-            <thead>
-                <tr>
-                    <th>Sản phẩm</th>
-                    <th>Giá tiền</th>
-                    <th>Số lượng</th>
-                    <th>Tổng tiền</th>
-                </tr>
-            </thead>
-            <tbody id="table-products">
-                <!--  -->
-                <?php
-                foreach($details as $detail)
-                {
-                echo '<tr class="bg-white">';
-                    echo '<th class="row">';
-                    echo '<div style="max-width: fit-content;">';
-                        echo '<img src="'.$detail['imageURL'].'" alt="" class="product-avatar-list">';
-                    echo '</div>';
-                    echo ' <div class="col row d-flex align-items-center">';
-                        echo '<div class="col-md-12">';
-                            echo '<b>' .$detail['productName']. '</b>';
-                        echo '</div>';
-                    echo '</div>';
-                    echo '</th>';
-                    echo "<th>{$detail['price']}</th>";
-                    echo "<th>{$detail['quantityBuy']}</th>";
-                    echo "<th>{$detail['total']}</th>";
-                echo '</tr>';
-                }
-            
-                ?>
-                <!--  -->
-            </tbody>
-        </table>
-        <!--  -->
-        </div>
-        
-if (!isset($_SESSION)) {
-    session_start();
-}
-if (!isset($_SESSION['empID'])) {
-    header("Location:" . SITEURL . "employee/login");
-}
-include _DIR_ROOT . '/app/views/employee/partials/header.php';
-?>
+   
 <div class="col main-right container-fluid row ">
     <div class="col-md-12 mt-4 mb-3 nav-page">
         <h5 class="text-muted">
@@ -160,6 +98,8 @@ include _DIR_ROOT . '/app/views/employee/partials/header.php';
                 <div>
                     <a type="button" style="width: fit-content;" class="btn col-1 btn-info ms-auto text-light" href="<?php echo SITEURL ?>employee/confirmReceiptp/<?php echo $details[0]['receiptPID'] ?>"> <i class="bi bi-check2"></i>Xác nhận</a>
                     <a type="button" style="width: fit-content;" class="btn col-1 btn-danger ms-auto text-light" href="<?php echo SITEURL ?>employee/refuseReceiptp/<?php echo $details[0]['receiptPID'] ?>"> <i class="bi bi-x"></i>Hủy</a>
+                    <a type="button" href="<?php echo SITEURL; ?>employee/index" class="btn btn-secondary px-4"><i class="bi bi-arrow-return-left"></i>Quay lại</a>
+
                 </div>
             <?php
             } else if ($details[0]['statusR'] == 1) {
