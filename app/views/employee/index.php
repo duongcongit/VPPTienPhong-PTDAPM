@@ -84,13 +84,15 @@
                     echo '</th>';
                     if(!$recp['statusR']){
                         echo '<th>';
-                        echo '<a type="button"  class="btn ms-auto text-success" href="'.SITEURL.'employee/confirmReceiptp/'.$recp['receiptPID'].'"> <i class="bi bi-check2"></i>Xác nhận</a>';
-                        echo '<a type="button"  class="btn ms-auto text-danger" href="'.SITEURL.'employee/refuseReceiptp/'.$recp['receiptPID'].'"> <i class="bi bi-x"></i>Hủy</a>';
+                        echo '<a onclick="return confirm(\'Bạn muốn xác nhận đơn hàng ' . $recp['receiptPID'] . ' chứ?\')" type="button"  class="btn ms-auto text-success" href="'.SITEURL.'employee/confirmReceiptp/'.$recp['receiptPID'].'"> <i class="bi bi-check2"></i>Xác nhận</a>';
+                        echo '<a onclick="return confirm(\'Bạn muốn hủy đơn hàng ' . $recp['receiptPID'] . ' chứ?\')" type="button"  class="btn ms-auto text-danger" href="'.SITEURL.'employee/refuseReceiptp/'.$recp['receiptPID'].'"> <i class="bi bi-x"></i>Hủy</a>';
+                        echo '<a type="button"  class="btn ms-auto text-primary" href="'.SITEURL.'employee/detail/'.$recp['receiptPID'].'"> <i class="bi bi-info"></i>Xem chi tiết</a>';
                         echo '</th>';
                     }
                     else if($recp['statusR']==1){
                         echo '<th>';
-                        echo '<a type="button"  class="btn ms-auto text-danger" href="'.SITEURL.'employee/refuseReceiptp/'.$recp['receiptPID'].'"> <i class="bi bi-x"></i>Hủy</a>';
+                        echo '<a onclick="return confirm(\'Bạn muốn hủy đơn hàng ' . $recp['receiptPID'] . ' chứ?\')" type="button"  class="btn ms-auto text-danger" href="'.SITEURL.'employee/refuseReceiptp/'.$recp['receiptPID'].'"> <i class="bi bi-x"></i>Hủy</a>';
+                        echo '<a type="button"  class="btn ms-auto text-primary" href="'.SITEURL.'employee/detail/'.$recp['receiptPID'].'"> <i class="bi bi-info"></i>Xem chi tiết</a>';
                         echo '</th>';
                     }
                     else if($recp['statusR']==2){

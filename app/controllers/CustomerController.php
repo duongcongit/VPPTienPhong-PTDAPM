@@ -213,20 +213,13 @@ class Customer extends Controller
                 $pass_hash=password_hash($password,PASSWORD_DEFAULT);
                 $res = $customerModel->signupProcess($name,$address,$phone,$email,$user,$pass_hash,$token);
                 if ($res == 1) {
-                    if(sendEmailForAccountActive($email,$res)){
-                        echo "Vui lòng kiểm tra hộp thư của bạn để kích hoạt tài khoản";
-                    }
-                    else{
-                        echo "Xin lỗi email chưa được gửi đi. Vui lòng kiểm tra thông tin tài khoản";
-                    }
+                    header("Location:" .SITEURL. "customer/login");
+                }
+                else{
+                    $_SESSION['error'] = 'Vui lòng kiểm tra lại thông tin đã nhập!';
+                    header("Location:" .SITEURL. "customer/signup");
                 }
             }
-        }
-        public function verifyMail($email,$token){
-            $customerModel = new CustomerModel();
-            $verify = $customerModel->verifyMail($email,$token);
-            
-            require_once _DIR_ROOT.'/app/views/verifyMail.php';
         }
 
         

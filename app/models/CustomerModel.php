@@ -46,37 +46,17 @@ class CustomerModel
     {
         $conn = $this->connectDb();
         // B2. Định nghĩa và thực hiện truy vấn
-        $sql = "INSERT INTO customers (fullname,address, phone,email,username,password,token) VALUES('$name', '$address', '$phone', '$email' ,'$user', '$pass_hash' , '$token')";
+        $sql = "INSERT INTO customers (fullname,address, phone,email,username,password,status,token) VALUES('$name', '$address', '$phone', '$email' ,'$user', '$pass_hash' ,'1', '$token')";
         $result = mysqli_query($conn, $sql);
-        $link = "<a href='" . SITEURL . "/verifyMail/" . $email . "/" . $token . "'>Kích hoạt tài khoản</a>";
         // B3. Xử lý và (KO PHẢI SHOW KẾT QUẢ) TRẢ VỀ KẾT QUẢ
-        if ($result == true) {
-            return $link;
+        if(mysqli_num_rows($result) == 1){
+            $_SESSION['success'] = 'Đăng kí thành công!';
+        }
+        else{
+            $_SESSION['error'] = 'Đăng kí thất bại! Vui lòng kiểm tra lại thông tin';
         }
     }
 
-    public function verifyMail($email, $token)
-    {
-        $conn = $this->connectDb();
-        // B2. Định nghĩa và thực hiện truy vấn
-        $sql = "SELECT * FROM customers WHERE token ='$token' and email ='$email'";
-        $result = mysqli_query($conn, $sql);
-        // B3. Xử lý và (KO PHẢI SHOW KẾT QUẢ) TRẢ VỀ KẾT QUẢ
-        if (mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_array($result);
-            if (!$row['status']) {
-                $sql1 = "UPDATE customers set status= 1 WHERE email='$email'";
-                mysqli_query($conn, $sql1);
-                $msg = "Chúc mừng! Tài khoản của bạn đã được kích hoạt.";
-            } else {
-                $msg = "Tài khoản của bạn đã được kích hoạt rồi!!!";
-            }
-        } else {
-            $msg = "Tài khoản này chưa được đăng kí với chúng tôi. Vui lòng đăng ký lại!";
-        }
-        $this->closeDb($conn);
-        return $msg;
-    }
 
     // Định nghĩa các phương thức để sau này nhận các thao tác tương ứng với các action
     public function getAllCustomers()
