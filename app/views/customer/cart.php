@@ -2,6 +2,10 @@
 include _DIR_ROOT . "/app/views/partials/header.php";
 ?>
 
+<script>
+    document.title = "Giỏ hàng";
+</script>
+
 <style>
     body {
         background-color: rgb(240, 240, 240);
@@ -55,7 +59,9 @@ include _DIR_ROOT . "/app/views/partials/header.php";
                 <!-- Product -->
                 <div class="cart-shadow cart-product-info bg-light mb-0 mt-3 col-md-12 d-flex d-flex align-items-center px-3 pb-2 pt-4">
                     <div style="width: 40%;" class="mb-4 d-flex align-items-center">
-                        <input class="btn-check-product me-1 form-check-input" type="checkbox" style="cursor: pointer;" data-prodid="<?php echo $product['productID']; ?>" value=" <?php echo $product['price'] * $product['quantity']; ?>">
+                        <input class="btn-check-product me-1 form-check-input" type="checkbox" style="cursor: pointer;"
+                        data-prodid="<?php echo $product['productID']; ?>" data-product_name="<?php echo $product['productName']; ?>" data-product_image="<?php echo $product['image1']; ?>"
+                        data-price="<?php echo $product['price']; ?>" data-quantity="<?php echo $product['quantity']; ?>" value="<?php echo $product['price'] * $product['quantity']; ?>">
                         <img src="<?php echo $product['image1']; ?>" alt="" class="product-avatar-list" style="width: 70px;">
                         <span class="product-name ms-2 pe-3" style="word-wrap: break-word; max-width: 70%;"><?php echo $product['productName']; ?></span>
                     </div>
@@ -134,7 +140,10 @@ include _DIR_ROOT . "/app/views/partials/header.php";
 
             <p id="order-help" class="col-md-12 text-danger d-flex justify-content-center d-none" style="font-weight: 500;">(!) Chưa chọn sản phẩm nào.</p>
             
-            <form action="<?php echo SITEURL; ?>customer/order" method="post">
+            <form action="<?php echo SITEURL; ?>customer/order" method="post" id="form-order-cart">
+            <div id="order-data-cart">
+                
+            </div>
                 <button id="btn-order" type="submit" class="btn btn-danger col-md-12 py-2 mb-3">
                     <h4 class="mt-1">Mua hàng</h4>
                 </button>

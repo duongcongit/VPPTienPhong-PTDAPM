@@ -71,11 +71,35 @@ class ReceiptModel
         $conn = $this->connectDb();
 
         $customerID = $data['customerID'];
-        $employeeID = $data['employeeID'];
-        $status = 0;
+        $timeBuy = $data['timeBuy'];
+        $consigneeName = $data['consigneeName'];
+        $phoneNumber = $data['phoneNumber'];
+        $deliveryAddress = $data['deliveryAddress'];
+        $paymentMethod = $data['paymentMethod'];
+        $status = $data['status'];
 
-        $splQuery = "INSERT INTO receiptP (customerID, employeeID, statusR) 
-        VALUES (''{$customerID}'', ''{$employeeID}'', ''{$status}'');";
+        $splQuery = "INSERT INTO receiptP (customerID, timeBuy, consigneeName, phoneNumber, deliveryAddress, paymentMethod, statusR) 
+        VALUES ('{$customerID}', '{$timeBuy}', '{$consigneeName}', '{$phoneNumber}', '{$deliveryAddress}', '{$paymentMethod}', '{$status}');";
+
+        $result = $conn->query($splQuery);
+
+        $this->closeDb($conn);
+
+        return $result;
+    }
+
+    // Tạo chi tiết hóa đơn
+    public function addDetailReceipt($receiptID, $product)
+    {
+        $conn = $this->connectDb();
+
+        $productID = $product['productID'];
+        $price = $product['price'];
+        $quantityBuy = $product['quantity'];
+        $total = $product['amount'];
+
+        $splQuery = "INSERT INTO detailReceiptP (receiptPID, productID, price, quantityBuy, total) 
+        VALUES ('{$receiptID}', '{$productID}', '{$price}', '{$quantityBuy}', '{$total}');";
 
         $result = $conn->query($splQuery);
 
@@ -83,22 +107,62 @@ class ReceiptModel
         return $result;
     }
 
-    // Tạo chi tiết hóa đơn
-    public function addDetailReceipt($data)
+    // 
+    public function getReceiptInfo($customerID, $timeBuy)
     {
         $conn = $this->connectDb();
 
-        $customerID = $data['customerID'];
-        $employeeID = $data['employeeID'];
-        $status = 0;
+        $sql = "SELECT * FROM receiptP WHERE customerID = '{$customerID}' AND timeBuy = '{$timeBuy}'";
 
-        $splQuery = "INSERT INTO receiptP (customerID, employeeID, statusR) 
-        VALUES (''{$customerID}'', ''{$employeeID}'', ''{$status}'');";
-
-        $result = $conn->query($splQuery);
+        $result = $conn->query($sql)->fetch_all(MYSQLI_ASSOC)[0];
 
         $this->closeDb($conn);
         return $result;
+    }
+
+    // Lấy các đơn hàng của khách hàng
+    public function getReceipts($customerID)
+    {
+
+        $conn = $this->connectDb();
+        $sql = "SELECT c.username, c.fullname, r.*, r.statusR
+            FROM receiptP AS r
+            INNER JOIN customers AS c ON r.customerID = c.customerID
+            WHERE c.customerID = '{$customerID}';";
+        $result = mysqli_query($conn, $sql);
+
+        $arr_receipt = [];
+        if (mysqli_num_rows($result) > 0) {
+
+            $arr_receipt = mysqli_fetch_all($result, MYSQLI_ASSOC); //Sử dụng MYSQLI_ASSOC để chỉ định lấy kết quả dạng MẢNG KẾT HỢP
+        }
+
+        return $arr_receipt;
+    }
+
+    // Lấy thông tin một đơn hàng
+    public function getReceiptDetail($id)
+    {
+        $conn = $this->connectDb();
+        $sql = "SELECT d.*,p.productName,pi.imageURL 
+                FROM receiptP AS r
+                INNER JOIN detailReceiptP AS d ON r.receiptPID = d.receiptPID
+                INNER JOIN customers AS c ON r.customerID = c.customerID
+                INNER JOIN products AS p ON d.productID= p.productID
+                INNER JOIN product_image AS pi ON p.productID=pi.productID
+                WHERE r.receiptPID = '{$id}' ";
+        $result = mysqli_query($conn, $sql);
+        // Lấy chi tiết đơn hàng
+
+        $receiptDetail = [];
+        // B3. Xử lý và (KO PHẢI SHOW KẾT QUẢ) TRẢ VỀ KẾT QUẢ
+        if (mysqli_num_rows($result) > 0) {
+            // Lấy tất cả dùng mysqli_fetch_all
+            $receiptDetail = mysqli_fetch_all($result, MYSQLI_ASSOC); //Sử dụng MYSQLI_ASSOC để chỉ định lấy kết quả dạng MẢNG KẾT HỢP
+        }
+
+        $this->closeDb($conn);
+        return $receiptDetail;
     }
 
     public function connectDb()

@@ -70,7 +70,14 @@ require_once _DIR_ROOT . "/app/config/constants.php";
                         </form>
                     </div>
                     <div class="account d-none d-md-flex ms-auto">
-                        <a href="<?php echo SITEURL; ?>customer/login">
+                        <a href="<?php 
+                        if(!isset($_SESSION['customerID'])){
+                            echo SITEURL."customer/login";
+                        }
+                        else{
+                            echo SITEURL."customer";
+                        }
+                        ?>">
                             <i class="bi bi-person text-info fs-3"></i>
                         </a>
 
