@@ -35,7 +35,8 @@
 <h3> 2. Công cụ </h3>
 
 - Visual Studio Code
+- ...
 
 <h3> 3. Framework </h3>
 
-- Bootstrap
+- Frontend: Bootstrap,...
