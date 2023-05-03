@@ -130,7 +130,7 @@ if (!isset($_SESSION['successAddProduct']) && !isset($_SESSION['errorAddProduct'
             ?>
             <h3 class="ms-2" id="label-count-prod"><?php echo $count_products ?> Sản phẩm </h3>
             <div class="box-button">
-                <a type="button" onclick="showConfirmation()" class="btn ms-auto text-white bg-success"><i class="bi bi-plus-circle-fill"></i> Thêm loại hàng</a>
+                <a type="button" onclick="showConfirmation()" class="btn ms-auto text-white bg-success"><i class="bi bi-plus-circle-fill"></i> Thêm danh mục sản phẩm</a>
                 <a type="button" href="./addProduct" class="btn btn-info ms-auto text-white"><i class="bi bi-plus-circle-fill me-1"></i> Thêm 1 sản phẩm mới</a>
             </div>
         </div>
