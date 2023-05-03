@@ -143,8 +143,8 @@ if (!isset($_SESSION['successAddSupplier'])&&!isset($_SESSION['errorAddSupplier'
                     <th>Địa chỉ</th>
                     <th>Email</th>
                     <th>Trạng thái</th>
-                    <th>Sửa tài khoản</th>
-                    <th>Xóa tài khoản</th>
+                    <th>Sửa NCC</th>
+                    <th>Xóa NCC</th>
                 </tr>
             </thead>
             <tbody id="table-products">
