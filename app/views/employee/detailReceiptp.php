@@ -110,7 +110,7 @@
             <?php
             } 
             ?>
-            <a type="button" href="<?php echo SITEURL; ?>employee/index" class="btn btn-secondary px-4"><i class="bi bi-arrow-return-left"></i>Quay lại</a>
+            <a type="button" href="<?php echo SITEURL; ?>employee/index" class="btn btn-secondary px-4 ms-1"><i class="bi bi-arrow-return-left"></i>Quay lại</a>
         </div>
 
     </div>
