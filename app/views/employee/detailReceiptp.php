@@ -98,18 +98,19 @@
                 <div>
                     <a type="button" style="width: fit-content;" class="btn col-1 btn-info ms-auto text-light" href="<?php echo SITEURL ?>employee/confirmReceiptp/<?php echo $details[0]['receiptPID'] ?>"> <i class="bi bi-check2"></i>Xác nhận</a>
                     <a type="button" style="width: fit-content;" class="btn col-1 btn-danger ms-auto text-light" href="<?php echo SITEURL ?>employee/refuseReceiptp/<?php echo $details[0]['receiptPID'] ?>"> <i class="bi bi-x"></i>Hủy</a>
-                    <a type="button" href="<?php echo SITEURL; ?>employee/index" class="btn btn-secondary px-4"><i class="bi bi-arrow-return-left"></i>Quay lại</a>
-
+                    
                 </div>
             <?php
             } else if ($details[0]['statusR'] == 1) {
             ?>
                 <div>
                     <a type="button" style="width: fit-content;" class="btn col-1 btn-danger ms-auto text-light" href="<?php echo SITEURL ?>employee/refuseReceiptp/<?php echo $details[0]['receiptPID'] ?>"> <i class="bi bi-x"></i>Hủy</a>
+                    
                 </div>
             <?php
-            }
+            } 
             ?>
+            <a type="button" href="<?php echo SITEURL; ?>employee/index" class="btn btn-secondary px-4"><i class="bi bi-arrow-return-left"></i>Quay lại</a>
         </div>
 
     </div>
