@@ -1,4 +1,4 @@
-<h1 align="center"> MÔN: PHÂN TÍCH YÊU CẦU PHẦN MỀM </h1>
+<h1 align="center"> MÔN: PHÁT TRIỂN DỰ ÁN PHẦN MỀM </h1>
 
 <h2 align="center"> <br> NHÓM 8 <br> <br> Xây dựng website bán văn phòng phẩm Tiền Phong </h2>
 
